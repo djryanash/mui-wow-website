@@ -262,16 +262,16 @@ img { max-width: 100%; display: block; }
   background-clip: text;
 }
 .hero-script {
-  font-family: 'Pacifico', cursive;
-  font-size: clamp(1.9rem, 5vw, 3.2rem);
+  font-family: 'Yellowtail', cursive;
+  font-size: clamp(2.1rem, 6vw, 3.8rem);
   color: var(--sand);
   padding-top: 0.1em;
   text-shadow: 0 3px 18px rgba(11, 19, 43, 0.55);
 }
 .hero-caps {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 600;
-  font-size: clamp(0.95rem, 2.4vw, 1.45rem);
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2.4vw, 1.4rem);
   text-transform: uppercase;
   letter-spacing: 0.35em;
   color: var(--sand);

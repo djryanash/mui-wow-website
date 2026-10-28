@@ -25,27 +25,30 @@ const eventHref = event ? `/event/${event.slug}` : null;
     <div class="hero-photo" style={`background-image:url('${heroImage}')`} aria-hidden="true"></div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />
-    <div class="container hero-content">
-      <p class="kicker">{formatEventDate(event, locale)} · {t(event.location, locale)}</p>
-      <h1 class="hero-title">{t(event.title, locale)}</h1>
-      {event.subtitle && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
-      <div class="hero-ctas">
-        <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>
-          {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
-          <span class="arrow" aria-hidden="true">→</span>
-        </a>
-        {registerHref ? (
-          <a class="btn btn-teal btn-arrow" href={registerHref} target="_blank" rel="noopener" data-burst>
-            {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+    <div class="container hero-content hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">{formatEventDate(event, locale)} · {t(event.location, locale)}</p>
+        <h1 class="hero-title">{t(event.title, locale)}</h1>
+        {event.subtitle && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
+        <div class="hero-ctas">
+          <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>
+            {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
             <span class="arrow" aria-hidden="true">→</span>
           </a>
-        ) : (
-          <a class="chip status-chip" href={site.instagram} target="_blank" rel="noopener">
-            {t({ en: 'Register on Eventbrite from our Instagram — link in bio', es: 'Inscripciones por Eventbrite — enlace en nuestra bio de Instagram', zh: '喺 Eventbrite 登記 — 連結喺我哋 IG bio' }, locale)}
-          </a>
-        )}
+          {registerHref ? (
+            <a class="btn btn-teal btn-arrow" href={registerHref} target="_blank" rel="noopener" data-burst>
+              {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          ) : (
+            <a class="chip status-chip" href={site.instagram} target="_blank" rel="noopener">
+              {t({ en: 'Register on Eventbrite from our Instagram — link in bio', es: 'Inscripciones por Eventbrite — enlace en nuestra bio de Instagram', zh: '喺 Eventbrite 登記 — 連結喺我哋 IG bio' }, locale)}
+            </a>
+          )}
+        </div>
+        <p class="hero-facts">{formatEventTime(event, locale)}</p>
       </div>
-      <p class="hero-facts">{formatEventTime(event, locale)}</p>
+      {poster && <img class="hero-flyer" src={poster} alt={t(event.title, locale)} />}
     </div>
   </section>
 ) : (

@@ -1,5 +1,6 @@
 ---
-// Site header: brand, nav, language picker (hidden when disabled in site.yaml).
+// Site header: brand, nav, language dropdown (hidden when disabled in site.yaml).
+// The dropdown is a native <select>: works with zero JS beyond a one-line handler.
 import { loadSite, t } from '../data/load.mjs';
 import { LOCALES, DEFAULT_LOCALE } from '../data/events.lib.mjs';
 
@@ -8,9 +9,11 @@ const locale = Astro.props.locale ?? DEFAULT_LOCALE;
 const showPicker =
   site.languagePicker && (site.languages?.es || site.languages?.['zh-hk']);
 
-// Current path normalized for picker URLs (Layout.astro does the same math).
+// Short labels for the dropdown (user-specified: "EN", "ES", "廣東話")
+const SHORT: Record<string, string> = { en: 'EN', es: 'ES', 'zh-hk': '廣東話' };
+
+// Current path normalized for dropdown URLs (Layout.astro does the same math).
 const raw = Astro.url.pathname.replace(/\/$/, '').replace(/^\/(es|zh-hk)(?=\/|$)/, '') || '/';
-const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 const pathFor = (l) => (l === 'en' ? raw : `/${l}${raw}`);
 ---
 
@@ -25,16 +28,29 @@ const pathFor = (l) => (l === 'en' ? raw : `/${l}${raw}`);
         <a href={item.href}>{t(item.label, locale)}</a>
       ))}
       {showPicker && (
-        <div class="lang-picker">
+        <select
+          class="lang-select"
+          aria-label={t({ en: 'Language', es: 'Idioma', zh: '語言' }, locale)}
+          data-current-path={pathFor(locale)}
+        >
           {Object.entries(LOCALES)
             .filter(([l]) => l === 'en' || site.languages?.[l])
             .map(([l, info]) => (
-              <a href={pathFor(l)} aria-current={l === locale ? 'true' : undefined}>
-                {info.label}
-              </a>
+              <option value={l} selected={l === locale}>{SHORT[l]}</option>
             ))}
-        </div>
+        </select>
       )}
     </nav>
   </div>
 </header>
+
+<script>
+  document.querySelectorAll('.lang-select').forEach((el) => {
+    (el as HTMLSelectElement).addEventListener('change', (e) => {
+      const v = (e.target as HTMLSelectElement).value;
+      const base = window.location.pathname.replace(/\/$/, '').replace(/\/(es|zh-hk)(?=\/|$)/, '') || '/';
+      const target = v === 'en' ? base : `/${v}${base}`;
+      window.location.href = target;
+    });
+  });
+</script>

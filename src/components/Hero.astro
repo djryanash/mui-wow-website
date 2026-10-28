@@ -26,6 +26,10 @@ const eventHref = event ? `/event/${event.slug}` : null;
     <div class="hero-photo" style={heroImage.endsWith('.svg') ? undefined : `background-image:url('${heroImage}')`}
          aria-hidden="true">
       {heroImage.endsWith('.svg') && <img class="photo" src={heroImage} alt="" />}
+      {(event.heroOverlays ?? []).map((src, i) => (
+        <img class="photo still" src={src} alt="" style={`--n:${i}`} loading="eager" />
+      ))}
+    </div>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />

@@ -126,6 +126,10 @@ export const eventSchema = z
     registrationUrl: url.optional(),
 
     heroEffect: z.enum(['fireworks', 'petals', 'disco']).default('fireworks'),
+    // Full-frame overlay PNGs (same size as the hero art, the mask is baked
+    // into their transparency): rendered stacked, crossfading/flickering per
+    // event via CSS. e.g. /images/events/coco-screen-01.png
+    heroOverlays: z.array(z.string()).default([]),
 
     // Page assets (not emitted to events.json):
     poster: z.string().min(1).optional(), // path under /images/events/

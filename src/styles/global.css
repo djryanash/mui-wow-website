@@ -283,12 +283,14 @@ img { max-width: 100%; display: block; }
   from { background-position: 0 0; }
   to { background-position: 112px 224px; }
 }
-/* COCO letters pop into existence one at a time (stagger via --i from markup;
-   the drift keeps looping underneath on the same spans) */
+/* COCO letters: sudden appearance, quick expand to 110%, settle at 100%.
+   The opacity pops in one keyframe later (no fade-in), the scale does the
+   expand-and-settle. Stagger via --i from markup; drift keeps looping. */
 @keyframes letter-pop {
-  from { opacity: 0; transform: scale(0); }
-  60% { opacity: 1; transform: scale(1.18); }
-  to { opacity: 1; transform: scale(1); }
+  0%, 12% { opacity: 0; transform: scale(1); }
+  13% { opacity: 1; transform: scale(1); }
+  48% { transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 .hero-fiesta span {
   animation-name: mask-drift, letter-pop;

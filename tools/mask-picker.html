@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Mask coordinate picker — open this file in a browser (double-click),
+     click points on the image, copy the coordinates into the hero SVG. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Mui WoW · mask coordinate picker</title>
+  <style>
+    body { margin: 0; font-family: 'Nunito Sans', sans-serif; background: #0b132b; color: #f5f2ea; }
+    h1 { font-size: 1rem; padding: 12px 16px; margin: 0; color: #f0a500; }
+    p.hint { padding: 0 16px 8px; margin: 0; color: #38a3a5; font-size: 0.85rem; }
+    .wrap { display: flex; flex-direction: column; align-items: center; padding: 0 16px 24px; }
+    #stage { position: relative; width: min(1026px, 96vw); }
+    img { width: 100%; display: block; cursor: crosshair; }
+    .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #ec4b8f; transform: translate(-50%, -50%); pointer-events: none; }
+    .dot:nth-child(even) { background: #38a3a5; }
+    #log { margin-top: 12px; width: min(1026px, 96vw); background: #1d2d44; border-radius: 10px; padding: 12px 16px; font-family: ui-monospace, monospace; font-size: 0.85rem; color: #bfeef2; white-space: pre-wrap; min-height: 3em; }
+    button { margin-top: 8px; padding: 6px 14px; border-radius: 999px; border: 0; background: #00a896; color: #0b132b; font-weight: 800; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Mask coordinate picker — click the image, copy the numbers</h1>
+  <p class="hint">Coordinates are in the image's native space (0–1026 × 0–675). Click the four corners of a screen/area clockwise, then paste the polygon into the SVG's clipPath. The pink/teal dots are your clicks.</p>
+  <div class="wrap">
+    <div id="stage">
+      <img id="img" src="/images/events/coco-under-the-stars-2026-11-01-hero.jpg" alt="hero art" />
+    </div>
+    <div id="log">Clicks appear here…</div>
+    <button onclick="document.querySelectorAll('.dot').forEach(d=>d.remove());clicks=[];log.textContent='Clicks appear here…'">Clear dots</button>
+  </div>
+  <script>
+    const img = document.getElementById('img');
+    const stage = document.getElementById('stage');
+    const log = document.getElementById('log');
+    const clicks = [];
+    img.addEventListener('click', (e) => {
+      const r = img.getBoundingClientRect();
+      const x = Math.round(((e.clientX - r.left) / r.width) * 1026);
+      const y = Math.round(((e.clientY - r.top) / r.height) * 675);
+      clicks.push(`${x},${y}`);
+      const d = document.createElement('span');
+      d.className = 'dot';
+      d.style.left = ((e.clientX - r.left) / r.width) * 100 + '%';
+      d.style.top = ((e.clientY - r.top) / r.height) * 100 + '%';
+      stage.appendChild(d);
+      log.textContent =
+        (clicks.length > 1 ? 'poly points:\n  ' + clicks.join('  ') + '\n' : '') +
+        `last click: ${x},${y}\n` +
+        'polygon copy-paste:\n  <polygon points="' + clicks.join(' ') + '"/>';
+    });
+  </script>
+</body>
+</html>

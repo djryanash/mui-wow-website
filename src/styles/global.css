@@ -439,4 +439,6 @@ img { max-width: 100%; display: block; }
   .hero-sky { animation: none; }
   .btn:hover { transform: none; }
   .event-card:hover { transform: none; }
+  .hero-fiesta span { animation: none; }
+  .brand-name { transform: none; }
 }

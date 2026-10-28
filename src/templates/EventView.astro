@@ -13,7 +13,7 @@ const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : loc
 const banner = event.heroImage ?? null;
 ---
 
-<Layout locale={locale} title={T(event.title)} description={T(event.subtitle) ?? ''} ogImage={event.heroImage ?? event.poster ?? undefined}>
+<Layout locale={locale} title={T(event.title)} description={T(event.subtitle) ?? ''} ogImage={event.poster ?? undefined}>
   {banner ? (
     <section class="hero hero-wide event-banner">
       <div class="hero-photo" style={`background-image:url('${banner}')`} aria-hidden="true"></div>

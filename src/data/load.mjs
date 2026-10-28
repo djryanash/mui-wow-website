@@ -43,4 +43,4 @@ export function loadSite(path = 'src/data/site.yaml') {
   return assertSchema(siteSchema, readYaml(join(ROOT, path)), path);
 }
 
-export { isPast, pickFeatured, pickRecentsPast, pickUpcoming, t } from './events.lib.mjs';
+export { isPast, pickFeatured, pickRecentsPast, pickUpcoming, t, normalizeLights } from './events.lib.mjs';

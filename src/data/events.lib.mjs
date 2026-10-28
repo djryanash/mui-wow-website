@@ -130,9 +130,21 @@ export const eventSchema = z
     // into their transparency): rendered stacked, crossfading/flickering per
     // event via CSS. e.g. /images/events/coco-screen-01.png
     heroOverlays: z.array(z.string()).default([]),
-    // Light-mask PNGs (white bulbs on black, full-frame): rendered additive
-    // (screen blend) + warm tint, flickering in discrete steps.
-    heroLights: z.array(z.string()).default([]),
+    // Light-mask PNGs (white bulbs on black, full-frame). A plain string =
+    // steady cadence; { mask, cadence: 'steady'|'burst' } picks the rhythm.
+    heroLights: z
+      .array(
+        z.union([
+          z.string(),
+          z
+            .object({
+              mask: z.string(),
+              cadence: z.enum(['steady', 'burst']).default('steady'),
+            })
+            .strict(),
+        ]),
+      )
+      .default([]),
 
     // Page assets (not emitted to events.json):
     poster: z.string().min(1).optional(), // path under /images/events/
@@ -160,7 +172,14 @@ export const siteSchema = z
   })
   .strict();
 
-// ── Rotation rules (spec §6, adapted per ADR 0002) ───────────────
+/** Normalize heroLights entries: plain strings become steady-cadence masks. */
+export function normalizeLights(ev) {
+  return (ev.heroLights ?? []).map((e) =>
+    typeof e === 'string' ? { mask: e, cadence: 'steady' } : { mask: e.mask, cadence: e.cadence ?? 'steady' },
+  );
+}
+
+// ── Rotation rules (spec §6, adapted per ADR 0002) ───────────────────────
 
 /** Past if a known `end` has passed, else at the close of its final day. */
 export function isPast(ev, now = new Date()) {

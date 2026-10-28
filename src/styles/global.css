@@ -229,6 +229,29 @@ img { max-width: 100%; display: block; }
   95% { opacity: 0.55; }
   100% { opacity: 0.6; }
 }
+/* 'burst' cadence: rapid sparkle clusters + dips on a longer, offset loop */
+.hero-photo > img.light[data-cadence='burst'] {
+  animation: light-burst calc(5.9s + var(--n) * 0.8s) step-end infinite;
+  animation-delay: calc(var(--n) * -1.7s);
+  filter: brightness(1.6) sepia(1) saturate(3.2) hue-rotate(-10deg) blur(1.4px);
+}
+@keyframes light-burst {
+  0% { opacity: 0.45; }
+  8% { opacity: 0.95; }
+  12% { opacity: 0.5; }
+  19% { opacity: 0.95; }
+  23% { opacity: 0.6; }
+  31% { opacity: 0.4; }
+  39% { opacity: 0.9; }
+  46% { opacity: 0.35; }
+  55% { opacity: 0.8; }
+  61% { opacity: 0.5; }
+  70% { opacity: 0.35; }
+  78% { opacity: 0.9; }
+  85% { opacity: 0.5; }
+  92% { opacity: 0.8; }
+  100% { opacity: 0.45; }
+}
 
 @media (max-width: 720px) {
   .hero-grid { grid-template-columns: 1fr; gap: 26px; }

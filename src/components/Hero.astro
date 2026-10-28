@@ -5,7 +5,7 @@
 //  b) otherwise (poster only, or the Quiet Period) → centered poster on the
 //     breathing sky, as shipped.
 import HeroEffects from './HeroEffects.astro';
-import { loadSite, t } from '../data/load.mjs';
+import { loadSite, t, normalizeLights } from '../data/load.mjs';
 import { formatEventDate, formatEventTime } from '../data/events.lib.mjs';
 
 const { event = null, locale = 'en' } = Astro.props;
@@ -29,8 +29,8 @@ const eventHref = event ? `/event/${event.slug}` : null;
       {(event.heroOverlays ?? []).map((src, i) => (
         <img class="photo still" src={src} alt="" style={`--n:${i}`} loading="eager" />
       ))}
-      {(event.heroLights ?? []).map((src, i) => (
-        <img class="photo light" src={src} alt="" style={`--n:${i}`} loading="eager" />
+      {normalizeLights(event ?? {}).map(({ mask, cadence }, i) => (
+        <img class="photo light" data-cadence={cadence} src={mask} alt="" style={`--n:${i}`} loading="eager" />
       ))}
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>

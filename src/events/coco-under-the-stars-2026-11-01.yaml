@@ -117,3 +117,5 @@ heroLights:
   - '/images/events/coco-lights-mask-01.png'
   - '/images/events/coco-lights-mask-01.png'
   - '/images/events/coco-lights-mask-01.png'
+  - mask: '/images/events/coco-lights-mask-02.png'
+    cadence: 'burst'

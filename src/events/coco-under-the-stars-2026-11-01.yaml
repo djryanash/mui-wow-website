@@ -10,6 +10,21 @@ title:
   en: "Halloween Movie Night: COCO Under the Stars"
   es: "Noche de cine de Halloween: COCO bajo las estrellas"
   zh: "萬聖節電影夜：COCO 星空下"
+titleDisplay:
+  - text:
+      en: 'COCO'
+    style: 'fiesta'
+    colors: ['#F25C2A', '#F0A500', '#EC4B8F', '#3AA7E0'] # flyer letter colors: C O C O
+  - text:
+      en: 'Under the Stars'
+      es: 'Bajo las Estrellas'
+      zh: '星空下'
+    style: 'script'
+  - text:
+      en: 'Halloween Movie Night'
+      es: 'Noche de Cine de Halloween'
+      zh: '萬聖節電影夜'
+    style: 'caps'
 subtitle:
   en: "Día de los Muertos × beach cinema, right on the sand"
   es: "Día de los Muertos × cine en la playa, sobre la arena"

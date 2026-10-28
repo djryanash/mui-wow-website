@@ -10,6 +10,7 @@ import { formatEventDate, formatEventTime } from '../data/events.lib.mjs';
 
 const { event = null, locale = 'en' } = Astro.props;
 const site = loadSite();
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
 
 const poster = event?.poster ?? null;
 const heroImage = event?.heroImage ?? null;
@@ -28,7 +29,26 @@ const eventHref = event ? `/event/${event.slug}` : null;
     <div class="container hero-content hero-grid">
       <div class="hero-copy">
         <p class="kicker">{formatEventDate(event, locale)} · {t(event.location, locale)}</p>
-        <h1 class="hero-title">{t(event.title, locale)}</h1>
+        {event.titleDisplay?.length ? (
+          <div class="hero-title-stack">
+            {event.titleDisplay.map((line) => {
+              const text = T(line.text) ?? '';
+              if (line.style === 'fiesta') {
+                return (
+                  <div class="hero-line hero-fiesta" aria-label={text}>
+                    {text.split('').map((ch, i) => (
+                      <span style={line.colors ? `color:${line.colors[i % line.colors.length]}` : undefined}>{ch}</span>
+                    ))}
+                  </div>
+                );
+              }
+              if (line.style === 'script') return <div class="hero-line hero-script">{text}</div>;
+              return <div class="hero-line hero-caps">{text}</div>;
+            })}
+          </div>
+        ) : (
+          <h1 class="hero-title">{t(event.title, locale)}</h1>
+        )}
         {event.subtitle && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
         <div class="hero-ctas">
           <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>

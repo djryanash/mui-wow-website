@@ -92,6 +92,20 @@ export const eventSchema = z
 
     title: languageObject,
     subtitle: languageObject.optional(),
+    // Optional art-directed hero title lines (poster-style typography).
+    // Each line: { text: languageObject, style: fiesta|script|caps, colors?: [] }.
+    // 'fiesta' colors per letter; absent → plain t(title) one-liner.
+    titleDisplay: z
+      .array(
+        z
+          .object({
+            text: languageObject,
+            style: z.enum(['fiesta', 'script', 'caps']),
+            colors: z.array(z.string()).optional(),
+          })
+          .strict(),
+      )
+      .optional(),
 
     start: isoWithOffset,
     // Optional: known end wins over the midnight rule. Without `end`,

@@ -25,6 +25,11 @@ titleDisplay:
       es: 'Noche de Cine de Halloween'
       zh: '萬聖節電影夜'
     style: 'caps'
+  - text:
+      en: 'Día de los Muertos × Beach Cinema'
+      es: 'Día de Los Muertos × Cine en la Playa'
+      zh: '亡靈節 × 沙灘電影'
+    style: 'caps'
 subtitle:
   en: "Día de los Muertos × beach cinema, right on the sand"
   es: "Día de los Muertos × cine en la playa, sobre la arena"

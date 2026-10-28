@@ -240,9 +240,12 @@ img { max-width: 100%; display: block; }
   margin-bottom: 0.25em;
 }
 
-/* Poster-style title stack (event titleDisplay: fiesta / script / caps) */
+/* Poster-style title stack. Negative top margin on the script line counteracts
+   Yellowtail's tall metrics (removes visible gap, not glyphs). Caps lines sit
+   close; the date/venue kicker above the stack gets tripled room. */
 .hero-title-stack { margin: 0 0 0.3em; }
 .hero-line { line-height: 1; }
+.hero-copy .kicker { margin-bottom: 1.1rem; }
 .hero-fiesta {
   font-family: 'Bevan', Georgia, serif;
   font-weight: 400;

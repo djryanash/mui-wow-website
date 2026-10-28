@@ -49,7 +49,7 @@ const eventHref = event ? `/event/${event.slug}` : null;
         ) : (
           <h1 class="hero-title">{t(event.title, locale)}</h1>
         )}
-        {event.subtitle && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
+        {event.subtitle && !event.titleDisplay?.length && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
         <div class="hero-ctas">
           <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>
             {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}

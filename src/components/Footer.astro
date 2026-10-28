@@ -1,0 +1,21 @@
+---
+// Footer: contact slots, brand links, legal name.
+import { loadSite, t } from '../data/load.mjs';
+import { DEFAULT_LOCALE } from '../data/events.lib.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? DEFAULT_LOCALE;
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <span class="contact-line">
+      {site.contact.name} · <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{site.contact.phone}</a>
+    </span>
+    <span>
+      <a href={site.instagram} target="_blank" rel="noopener">Instagram · @{site.instagram.split('/').filter(Boolean).pop()}</a>
+    </span>
+    <span class="legal">{site.legalName} — {t(site.tagline, locale)}</span>
+    <span class="legal">{t(site.footerNote, locale)}</span>
+  </div>
+</footer>

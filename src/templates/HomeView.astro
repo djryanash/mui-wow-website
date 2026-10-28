@@ -1,0 +1,50 @@
+---
+// Home: hero (featured or quiet period) + upcoming cards + past strip.
+import Layout from '../components/Layout.astro';
+import Hero from '../components/Hero.astro';
+import EventCard from '../components/EventCard.astro';
+import { loadEvents, loadSite } from '../data/load.mjs';
+import { pickFeatured, pickRecentsPast, pickUpcoming } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+
+const featured = pickFeatured(loadEvents());
+const CAP = 6; // cap + "More events" link (per the home-page decision)
+const upcoming = pickUpcoming(loadEvents(), new Date(), CAP + 1).filter((e) => e.slug !== featured?.slug);
+const visible = upcoming.slice(0, CAP);
+const past = pickRecentsPast(loadEvents());
+---
+
+<Layout locale={locale} title={site.name} description={T(site.tagline)} ogImage={featured?.poster ?? '/images/brand/mui-wow-logo.png'}>
+  <Hero event={featured} locale={locale} />
+
+  {visible.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>{T(chrome.upcoming)}</h2>
+          <a href={locale === 'en' ? '/events' : `/${locale}/events`}>{T(chrome.seeAll)}</a>
+        </div>
+        <div class="cards">
+          {visible.map((e) => <EventCard event={e} locale={locale} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {past.length > 0 && (
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="section-head">
+          <h2>{T(chrome.past)}</h2>
+        </div>
+        <div class="cards">
+          {past.map((e) => <EventCard event={e} locale={locale} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

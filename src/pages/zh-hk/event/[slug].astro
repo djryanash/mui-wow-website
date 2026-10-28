@@ -1,0 +1,10 @@
+---
+import EventView from '../../../templates/EventView.astro';
+import { loadEvents } from '../../../data/load.mjs';
+
+export function getStaticPaths() {
+  return loadEvents().map((event) => ({ params: { slug: event.slug }, props: { event } }));
+}
+---
+
+<EventView locale="zh-hk" event={Astro.props.event} />

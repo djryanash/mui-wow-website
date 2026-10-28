@@ -1,0 +1,91 @@
+# ── COCO Under the Stars · Halloween Movie Night ─────────────────
+# Data from the flyer (tmp/next-event.png + txt) and Gaston's email.
+# Slug is permanent once in the wild (spec §4).
+
+slug: 'coco-under-the-stars-2026-11-01'
+published: true
+unlisted: false
+
+title:
+  en: "Halloween Movie Night: COCO Under the Stars"
+  es: "Noche de cine de Halloween: COCO bajo las estrellas"
+  zh: "萬聖節電影夜：COCO 星空下"
+subtitle:
+  en: "Día de los Muertos × beach cinema, right on the sand"
+  es: "Día de los Muertos × cine en la playa, sobre la arena"
+  zh: "亡靈節 × 沙灘電影，喺沙灘上睇戲"
+
+start: '2026-11-01T17:00:00+08:00'
+end: '2026-11-01T22:00:00+08:00' # from Gaston: 5pm to 10pm
+
+location:
+  en: "Silvermine Beach, Mui Wo"
+  es: "Playa Silvermine, Mui Wo"
+  zh: "梅窩銀礦灣沙灘"
+
+details:
+  en: >-
+    An evening on the beach: music, games and Halloween crafts while the
+    sun sets, then COCO on the big screen under the stars. Come as you
+    are or in costume. Bring your own blanket or picnic setup, or rent a
+    seat. Every reservation and bit of support keeps these community
+    events going.
+  es: >-
+    Una tarde en la playa: música, juegos y manualidades de Halloween
+    mientras se pone el sol, y luego COCO en la pantalla grande bajo las
+    estrellas. Ven como eres o disfrazado. Trae tu manta o tu picnic, o
+    alquila un asiento. Cada reserva y cada poco de apoyo mantiene
+    vivos estos eventos comunitarios.
+  zh: >-
+    一個喺沙灘上嘅黃昏：日落時分有音樂、遊戲同萬聖節手作堂，之後喺星空下
+    再睇《COCO》大銀幕。扮鬼扮馬、隨心而嚟。可以自己帶毛氈同野餐墊，
+    或者租個座位。你嘅每次登記同支持，都令呢啲社區活動繼續辦得成。
+
+highlights:
+  - en: "Come as you are or in costume"
+    es: "Ven como eres o disfrazado"
+    zh: "隨心而嚟，化唔化妝都得"
+  - en: "Bring your own blanket or picnic setup"
+    es: "Trae tu propia manta o kit de picnic"
+    zh: "自備毛氈或者野餐墊"
+
+schedule:
+  - time: '17:00'
+    label:
+      en: "Doors, crafts, games and DJ"
+      es: "Apertura, manualidades, juegos y DJ"
+      zh: "開場：手作、遊戲同 DJ"
+  - time: '18:30'
+    label:
+      en: "COCO starts on the big screen"
+      es: "Empieza COCO en la pantalla grande"
+      zh: "COCO 開場放映"
+
+registrationItems:
+  - name:
+      en: "Halloween craft sessions"
+      es: "Talleres de manualidades de Halloween"
+      zh: "萬聖節手作堂"
+    note:
+      en: "Sign up in advance through Eventbrite."
+      es: "Regístrate con antelación en Eventbrite."
+      zh: "請提前喺 Eventbrite 登記。"
+    status:
+      en: "Limited spots!"
+      es: "¡Plazas limitadas!"
+      zh: "名額有限！"
+    # registrationUrl: ← the real Eventbrite link goes here once Gaston sends it;
+    # with the field absent the CTA renders as "link coming soon".
+
+rentalItems:
+  - name:
+      en: "Rented seat"
+      es: "Asiento alquilado"
+      zh: "租賃座位"
+    note:
+      en: "Just a few seats left to rent."
+      es: "Quedan unos pocos asientos por alquilar."
+      zh: "租賃座位買少見少。"
+
+heroEffect: 'fireworks'
+poster: '/images/events/coco-under-the-stars-2026-11-01.jpg'

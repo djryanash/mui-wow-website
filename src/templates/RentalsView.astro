@@ -1,0 +1,29 @@
+---
+// Rentals / supplies: "Coming Soon" until the owner's catalogue lands (phase 2).
+import Layout from '../components/Layout.astro';
+import HeroEffects from '../components/HeroEffects.astro';
+import { loadSite } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+---
+
+<Layout locale={locale} title={T(chrome.comingSoonTitle)} description={T(chrome.comingSoonBody)}>
+  <section class="coming-soon" style="position:relative; overflow:hidden;">
+    <div class="hero-sky" aria-hidden="true"></div>
+    <div class="container" style="position:relative; z-index:1">
+      <img src="/images/brand/mui-wow-logo.png" alt={site.name} style="height:110px; margin:0 auto 20px;" />
+      <h1>{T(chrome.comingSoonTitle)}</h1>
+      <p class="coming-soon-body" style="margin:0 auto 26px">{T(chrome.comingSoonBody)}</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+        <a class="btn btn-gold" href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>
+          {T({ en: `Call ${site.contact.name}`, es: `Llamar a ${site.contact.name}`, zh: `打畀 ${site.contact.name}` })}
+          {site.contact.phone}
+        </a>
+        <a class="btn btn-teal" href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </section>
+</Layout>

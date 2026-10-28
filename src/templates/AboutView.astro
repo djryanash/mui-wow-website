@@ -1,0 +1,31 @@
+---
+// About: brand story + contact + links. Legal name appears here.
+import Layout from '../components/Layout.astro';
+import { loadSite } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+---
+
+<Layout locale={locale} title={T(chrome.aboutTitle)} description={T(chrome.aboutBody)}>
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <img src="/images/brand/mui-wow-logo.png" alt={site.name} style="max-height:200px; margin:0 auto 26px;" />
+      <p class="kicker"><span style="text-align:center">{site.legalName}</span></p>
+      <h1>{T(chrome.aboutTitle)}</h1>
+      <p style="font-size:1.1rem">{T(chrome.aboutBody)}</p>
+
+      <div class="info-block">
+        <h2>{T(chrome.contactTitle)}</h2>
+        <p class="contact-line">
+          {site.contact.name} · <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{site.contact.phone}</a>
+        </p>
+        <p>
+          {T(chrome.follow)}: <a href={site.instagram} target="_blank" rel="noopener">Instagram @{site.instagram.split('/').filter(Boolean).pop()}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,45 @@
+# Site-wide settings. Edit freely; the validator runs on every build.
+
+name: 'Mui WoW'
+legalName: 'MUI WOW by KRAF CONCEPTS'
+tagline:
+  en: 'Events • Supplies • Rentals • Fun for all ages'
+  es: 'Eventos • Artículos • Alquileres • Diversión para todas las edades'
+  zh: '活動 • 用品 • 租賃 • 大家都玩得'
+
+contact:
+  name: 'Gaston'
+  phone: '+852 6201 5337'
+
+instagram: 'https://www.instagram.com/mui.wow/'
+# eventbriteOrganizer: 'https://www.eventbrite.com/o/mui-wow-...'  # ← fill when known
+
+# Flip to false to hide the language picker (per ADR 0003, this is the
+# "hide it easily" switch; per-locale switches live right below).
+languagePicker: true
+languages:
+  es: true
+  zh-hk: true
+
+nav:
+  - label: { en: 'Events', es: 'Eventos', zh: '活動' }
+    href: '/events'
+  - label: { en: 'Rentals', es: 'Alquileres', zh: '租賃' }
+    href: '/rentals'
+  - label: { en: 'About', es: 'Sobre nosotros', zh: '關於我們' }
+    href: '/about'
+
+footerNote:
+  en: 'Entrance is always free. Come as you are.'
+  es: 'La entrada es siempre gratis. Ven como eres.'
+  zh: '入場永遠免費，隨時歡迎你嚟。'
+
+quietPeriod:
+  title:
+    en: 'Our next event is being planned'
+    es: 'Estamos preparando nuestro próximo evento'
+    zh: '下一場活動正在籌備中'
+  body:
+    en: 'Nothing on the calendar just yet. Meanwhile, get ready for the beach: follow us or take a look at rentals.'
+    es: 'Nada en el calendario por ahora. Mientras tanto, prepárate para la playa: síguenos o mira los alquileres.'
+    zh: '行事曆暫時未有新場。唔緊要，先睇沙灘租賃服務，或者追蹤我哋等最新消息。'

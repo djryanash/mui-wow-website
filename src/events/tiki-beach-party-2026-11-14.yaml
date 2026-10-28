@@ -1,0 +1,56 @@
+# ── Tiki Beach Party ─────────────────────────────────────────────
+# From Gaston's email: Saturday November 14, 5pm–10pm, Silvermine Bay Beach.
+# Poster/photos to come from the owner.
+
+slug: 'tiki-beach-party-2026-11-14'
+published: true
+unlisted: false
+
+title:
+  en: "Tiki Beach Party"
+  es: "Fiesta playera Tiki"
+  zh: "沙灘夏威夷派對"
+subtitle:
+  en: "An island beach party on Silvermine Bay"
+  es: "Una fiesta playera isleña en la bahía Silvermine"
+  zh: "銀礦灣嘅海島沙灘派對"
+
+start: '2026-11-14T17:00:00+08:00'
+end: '2026-11-14T22:00:00+08:00'
+
+location:
+  en: "Silvermine Bay Beach, Mui Wo"
+  es: "Playa Silvermine Bay, Mui Wo"
+  zh: "梅窩銀礦灣沙灘"
+
+details:
+  en: >-
+    A Tiki-flavoured beach party: music, games and good vibes as the sun
+    drops behind Lantau. Details are still coming together — check back
+    soon or follow us on Instagram.
+  es: >-
+    Una fiesta playera con toque tiki: música, juegos y buen ambiente
+    mientras el sol cae tras Lantau. Los detalles se están armando -
+    vuelve pronto o síguenos en Instagram.
+  zh: >-
+    夏威夷風沙灘派對：音樂、遊戲，同大嶼山日落嘅好時光。詳情即將公佈，
+    記得返嚟睇或者喺 Instagram 追蹤我哋。
+
+highlights:
+  - en: "Sunset vibes on the sand"
+    es: "Puesta de sol sobre la arena"
+    zh: "沙灘日落好時光"
+
+schedule: []
+
+rentalItems:
+  - name:
+      en: "Beach chair"
+      es: "Silla de playa"
+      zh: "沙灘椅"
+  - name:
+      en: "Bean bag seat"
+      es: "Puf de playa"
+      zh: "豆袋座位"
+
+heroEffect: 'fireworks'

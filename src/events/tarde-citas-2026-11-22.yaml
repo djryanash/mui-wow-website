@@ -1,0 +1,59 @@
+# ── Tarde-citas · Sunset Live Music + BBQ ────────────────────────
+# From Gaston's email: Sunday November 22, 6pm–11pm, Silvermine Beach Resort.
+# The Spanish name is the event's proper name; it carries into all locales.
+
+slug: 'tarde-citas-2026-11-22'
+published: true
+unlisted: false
+
+title:
+  en: 'Tarde-citas: Sunset Live Music + BBQ'
+  es: 'Tarde-citas: música en vivo al atardecer + BBQ'
+  zh: 'Tarde-citas：黃昏 Live 音樂 ＋ BBQ'
+subtitle:
+  en: "A sunset music evening with a barbecue, by the water"
+  es: "Una velada musical al atardecer con barbacoa, junto al agua"
+  zh: "海邊黃昏音樂會，燒烤埋一齊"
+
+start: '2026-11-22T18:00:00+08:00'
+end: '2026-11-22T23:00:00+08:00'
+
+location:
+  en: "Silvermine Beach Resort, Mui Wo"
+  es: "Silvermine Beach Resort, Mui Wo"
+  zh: "梅窩銀礦灣渡假酒店"
+
+details:
+  en: >-
+    Live music as the sun goes down, with a barbecue going. The name
+    says it: a late afternoon made of citas. Line-up and food details
+    coming soon.
+  es: >-
+    Música en vivo mientras cae el sol, con barbacoa. El nombre lo dice:
+    una tarde hecha de citas. El line-up y los detalles de comida
+    llegan pronto.
+  zh: >-
+    日落時分現場音樂，仲有燒烤。顧名思義，係一個充滿約會氛圍嘅黃昏。
+    演出陣容同美食資訊即將公佈。
+
+highlights:
+  - en: "Live sunset music"
+    es: "Música en vivo al atardecer"
+    zh: "黃昏 Live 音樂"
+  - en: "BBQ by the water"
+    es: "BBQ junto al agua"
+    zh: "海邊燒烤"
+
+schedule: []
+
+rentalItems:
+  - name:
+      en: "Beach chair"
+      es: "Silla de playa"
+      zh: "沙灘椅"
+  - name:
+      en: "Bean bag seat"
+      es: "Puf de playa"
+      zh: "豆袋座位"
+
+heroEffect: 'petals' # sunset music night — softer ambience than fireworks

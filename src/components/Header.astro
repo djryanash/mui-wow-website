@@ -1,0 +1,40 @@
+---
+// Site header: brand, nav, language picker (hidden when disabled in site.yaml).
+import { loadSite, t } from '../data/load.mjs';
+import { LOCALES, DEFAULT_LOCALE } from '../data/events.lib.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? DEFAULT_LOCALE;
+const showPicker =
+  site.languagePicker && (site.languages?.es || site.languages?.['zh-hk']);
+
+// Current path normalized for picker URLs (Layout.astro does the same math).
+const raw = Astro.url.pathname.replace(/\/$/, '').replace(/^\/(es|zh-hk)(?=\/|$)/, '') || '/';
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const pathFor = (l) => (l === 'en' ? raw : `/${l}${raw}`);
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href={locale === 'en' ? '/' : `/${locale}/`} aria-label={site.name}>
+      <img class="logo" src="/images/brand/mui-wow-logo.png" alt={site.name} />
+    </a>
+    <span class="brand-name">{site.name}</span>
+    <nav>
+      {site.nav.map((item) => (
+        <a href={item.href}>{t(item.label, locale)}</a>
+      ))}
+      {showPicker && (
+        <div class="lang-picker">
+          {Object.entries(LOCALES)
+            .filter(([l]) => l === 'en' || site.languages?.[l])
+            .map(([l, info]) => (
+              <a href={pathFor(l)} aria-current={l === locale ? 'true' : undefined}>
+                {info.label}
+              </a>
+            ))}
+        </div>
+      )}
+    </nav>
+  </div>
+</header>

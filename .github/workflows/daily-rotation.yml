@@ -1,0 +1,30 @@
+# Daily hero rotation + branch safety net (ADR 0002).
+# POSTs the Vercel Deploy Hook at 16:05 UTC = 00:05 HKT: a rebuild of the
+# commit already on main rolls the Featured Event over the moment a past
+# event's day closes. GIT remains the only deploy path; nothing here ships
+# code to Vercel.
+#
+# Setup requirement (fails loudly, per the Brightwater lesson): if
+# VERCEL_DEPLOY_HOOK_URL is missing from repo secrets, this workflow exits
+# non-zero immediately on every run instead of passing silently.
+
+name: daily-rotation
+on:
+  schedule:
+    - cron: '5 16 * * *' # 16:05 UTC = 00:05 next day in Asia/Hong_Kong
+  workflow_dispatch: {} # manual trigger for testing
+
+jobs:
+  rollover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel rebuild of latest main commit
+        env:
+          HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "::error::VERCEL_DEPLOY_HOOK_URL not configured in repo secrets."
+            echo "::error::Create it: Vercel → Project Settings → Git → Deploy Hook (branch: main)."
+            exit 1
+          fi
+          curl -sS -X POST "$HOOK_URL" -o /dev/null -w "deploy-hook POST → HTTP %{http_code}\n" --fail

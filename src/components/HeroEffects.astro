@@ -1,0 +1,150 @@
+---
+// Hero effect layer: one canvas, three modes ('fireworks' | 'petals' | 'disco').
+// Hand-rolled and small on purpose; honors prefers-reduced-motion (falls back
+// to the CSS breathing glow on .hero-sky, which is already static under
+// reduced motion). Canvas pauses when the tab is hidden.
+interface Props {
+  effect: 'fireworks' | 'petals' | 'disco';
+}
+const { effect } = Astro.props;
+---
+
+<canvas class="fx" data-effect={effect} aria-hidden="true"></canvas>
+
+<script>
+  function initFx() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvas = document.querySelector('canvas.fx');
+    if (!canvas) return;
+    const effect = canvas.dataset.effect ?? 'fireworks';
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let running = true;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = innerWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
+    }
+    resize();
+    addEventListener('resize', resize);
+
+    // Palette: gold, bright gold, teal, turquoise, pink (brand range).
+    const COLORS = ['#f0a500', '#d4af37', '#00a896', '#38a3a5', '#ec4b8f'];
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+
+    type P = { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; c: string; size: number; g: number };
+    let particles: P[] = [];
+    const budget = () => (innerWidth < 700 ? 120 : 260); // mobile-friendly cap
+
+    function burst(x: number, y: number, count = 50, speed = 3.2) {
+      const c = pick(COLORS);
+      for (let i = 0; i < count; i++) {
+        const a = rand(0, Math.PI * 2);
+        const s = rand(speed * 0.25, speed) * (innerWidth < 700 ? 0.8 : 1);
+        particles.push({
+          x, y,
+          vx: Math.cos(a) * s,
+          vy: Math.sin(a) * s,
+          life: 0,
+          maxLife: rand(50, 90),
+          c,
+          size: rand(1.2, 2.6) * dpr,
+          g: 0.03,
+        });
+      }
+      if (particles.length > budget()) particles = particles.slice(-budget());
+    }
+
+    function petalize(x: number, y: number, count = 8) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x + rand(-40, 40), y: y + rand(-10, 10),
+          vx: rand(-0.3, 0.3), vy: rand(0.4, 0.9),
+          life: 0, maxLife: rand(120, 200),
+          c: pick(['#f0a500', '#ec4b8f', '#d4af37']),
+          size: rand(2, 4) * dpr, g: 0.004,
+        });
+      }
+    }
+
+    function tick() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        p.x += p.vx * dpr; p.y += p.vy * dpr; p.vy += p.g * dpr;
+        p.life++;
+        const alpha = 1 - p.life / p.maxLife;
+        if (alpha <= 0) continue;
+        ctx.globalAlpha = Math.max(alpha, 0);
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      particles = particles.filter((p) => p.life < p.maxLife);
+      ctx.globalAlpha = 1;
+    }
+
+    function loop() {
+      if (!running) return;
+      tick();
+      requestAnimationFrame(loop);
+    }
+
+    // Ambient spawners
+    let lastRocket = 0;
+    function schedule() {
+      const inner = () => {
+        if (!running) return;
+        const now = performance.now();
+        if (now - lastRocket > rand(2200, 5200)) {
+          lastRocket = now;
+          const x = rand(0.15, 0.85) * canvas.width, y = rand(0.1, 0.45) * canvas.height;
+          if (effect === 'fireworks') burst(x, y);
+          else if (effect === 'petals') petalize(x, y, 10);
+          else {
+            // disco: sparkles in place
+            burst(x, y, 14, 0.9);
+          }
+        }
+        setTimeout(inner, 500);
+      };
+      inner();
+    }
+    schedule();
+
+    // CTA click bursts: [data-burst] clicks fire a celebratory pop. External
+    // links open in a new tab (the pop is visible); internal links get a
+    // short delay so the burst reads before the page turns.
+    document.addEventListener('click', (e) => {
+      const el = (e.target as HTMLElement)?.closest?.('[data-burst]') as HTMLElement | null;
+      if (!el || (effect !== 'fireworks' && effect !== 'disco')) return;
+      const r = el.getBoundingClientRect();
+      burst((r.left + r.width / 2) * dpr, (r.top + r.height / 2) * dpr, 36, 2.6);
+      const href = el.getAttribute('href');
+      if (href && !el.getAttribute('target')) {
+        e.preventDefault();
+        setTimeout(() => (location.href = href), 180);
+      }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      running = !document.hidden;
+      if (running) loop();
+    });
+
+    loop();
+  }
+
+  document.addEventListener('astro:page-load', initFx);
+  // First load (no view-transitions router in this build):
+  if (!document.querySelector('canvas.fx[data-initialized]')) {
+    const c = document.querySelector('canvas.fx');
+    if (c) { c.setAttribute('data-initialized', '1'); initFx(); }
+  }
+</script>

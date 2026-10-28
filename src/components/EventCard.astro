@@ -1,0 +1,19 @@
+---
+// A compact card for an upcoming or past event.
+import { t, formatEventDate } from '../data/events.lib.mjs';
+
+const { event, locale = 'en' } = Astro.props;
+---
+
+<a class="event-card" href={`/event/${event.slug}`}>
+  {event.poster ? (
+    <img class="thumb" src={event.poster} alt={t(event.title, locale)} loading="lazy" />
+  ) : (
+    <div class="fallback-thumb">{t(event.title, locale)}</div>
+  )}
+  <div class="body">
+    <h3>{t(event.title, locale)}</h3>
+    <div class="when">{formatEventDate(event, locale)}</div>
+    <div class="where">{t(event.location, locale)}</div>
+  </div>
+</a>

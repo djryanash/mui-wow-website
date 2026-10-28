@@ -1,0 +1,104 @@
+---
+// Event detail page: poster, facts, schedule, registrations, rentals.
+import Layout from '../components/Layout.astro';
+import HeroEffects from '../components/HeroEffects.astro';
+import { loadEvents, loadSite, t } from '../data/load.mjs';
+import { formatEventDate, formatEventTime } from '../data/events.lib.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const site = loadSite();
+const { event, locale = 'en' } = Astro.props;
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+---
+
+<Layout locale={locale} title={T(event.title)} description={T(event.subtitle) ?? ''} ogImage={event.poster ?? undefined}>
+  <section class="event-hero">
+    <div class="hero-sky" aria-hidden="true"></div>
+    <HeroEffects effect={event.heroEffect} />
+    <div class="container event-hero-wrap">
+      <div>
+        <p class="kicker">{T(chrome.eventsPageTitle)}</p>
+        <h1>{T(event.title)}</h1>
+        {event.subtitle && <p style="font-size:1.15rem; color:var(--sand); margin-top:-4px">{T(event.subtitle)}</p>}
+        <div class="fact-row">
+          <span class="fact"><strong>{T({ en: 'When', es: 'Cuándo', zh: '日期' })}:</strong> {formatEventDate(event, locale)}</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact"><strong>{T({ en: 'Time', es: 'Hora', zh: '時間' })}:</strong> {formatEventTime(event, locale)}</span>
+          <span class="fact"><strong>{T({ en: 'Where', es: 'Dónde', zh: '地點' })}:</strong> {T(event.location)}</span>
+        </div>
+
+        {event.schedule.length > 0 && (
+          <div class="info-block">
+            <h2>{T(chrome.schedule)}</h2>
+            <ul class="schedule-strip">
+              {event.schedule.map((s) => (
+                <li><span class="time">{s.time}</span><span>{T(s.label)}</span></li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="info-block">
+          <h2>{T({ en: 'Come as you are', es: 'Ven como eres', zh: '隨時歡迎' })}</h2>
+          <p>{T(event.details)}</p>
+          {event.highlights.length > 0 && (
+            <div class="chip-row">
+              {event.highlights.map((h) => <span class="chip">{T(h)}</span>)}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <aside>
+        {event.poster && <img class="event-poster" src={event.poster} alt={T(event.title)} />}
+
+        {event.registrationItems.length > 0 && (
+          <div class="info-block">
+            <h2>{T(chrome.registerItemsTitle)}</h2>
+            <ul class="item-list">
+              {event.registrationItems.map((r) => (
+                <li>
+                  <span class="grow">{T(r.name)}</span>
+                  {r.status && <span class="chip status-chip">{T(r.status)}</span>}
+                  {r.registrationUrl ? (
+                    <a class="btn btn-teal" href={r.registrationUrl} target="_blank" rel="noopener" data-burst>{T(chrome.registerCta)}</a>
+                  ) : (
+                    <a class="chip" href={site.instagram} target="_blank" rel="noopener">{T(chrome.linkSoon)}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {event.registrationItems.length === 0 && event.registrationUrl && (
+          <div class="info-block">
+            <a class="btn btn-teal" href={event.registrationUrl} target="_blank" rel="noopener" data-burst>{T(chrome.registerCta)}</a>
+          </div>
+        )}
+
+        {event.rentalItems.length > 0 && (
+          <div class="info-block">
+            <h2>{T(chrome.rentalsTitle)}</h2>
+            <ul class="item-list">
+              {event.rentalItems.map((r) => (
+                <li>
+                  <span class="grow">{T(r.name)}</span>
+                  {r.price && <span class="chip">{T(r.price)}</span>}
+                  {r.note && <span class="note" style="width:100%">{T(r.note)}</span>}
+                  {r.bookingUrl ? (
+                    <a class="btn btn-gold" href={r.bookingUrl} target="_blank" rel="noopener" data-burst>{T(chrome.reserveCta)}</a>
+                  ) : (
+                    <a class="btn btn-ghost" href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{T(chrome.reserveCta)}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <p><a href={locale === 'en' ? '/events' : `/${locale}/events`}>{T(chrome.backToEvents)}</a></p>
+      </aside>
+    </div>
+  </section>
+</Layout>

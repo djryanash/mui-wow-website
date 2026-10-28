@@ -1,0 +1,36 @@
+---
+// All-events index: upcoming then past, both grids.
+import Layout from '../components/Layout.astro';
+import EventCard from '../components/EventCard.astro';
+import { loadEvents } from '../data/load.mjs';
+import { pickUpcoming, isPast } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const events = loadEvents();
+const upcoming = pickUpcoming(events);
+const past = events.filter((e) => e.published && !e.unlisted && isPast(e));
+---
+
+<Layout locale={locale} title={T(chrome.eventsPageTitle)} description={T(chrome.eventsPageTitle)}>
+  <section class="section">
+    <div class="container">
+      <p class="kicker">Mui WoW</p>
+      <h1>{T(chrome.eventsPageTitle)}</h1>
+      {upcoming.length > 0 && (
+        <div class="cards" style="margin-top:26px">
+          {upcoming.map((e) => <EventCard event={e} locale={locale} />)}
+        </div>
+      )}
+      {past.length > 0 && (
+        <>
+          <h2 style="margin-top:48px; font-size:1.3rem">{T(chrome.past)}</h2>
+          <div class="cards">
+            {past.map((e) => <EventCard event={e} locale={locale} />)}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</Layout>

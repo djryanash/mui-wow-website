@@ -1,0 +1,56 @@
+---
+// The hero. Featured event poster + meta bar, or the Quiet Period state.
+import HeroEffects from './HeroEffects.astro';
+import { loadSite, t } from '../data/load.mjs';
+import { formatEventDate, formatEventTime } from '../data/events.lib.mjs';
+
+const { event = null, locale = 'en' } = Astro.props;
+const site = loadSite();
+
+const poster = event?.poster ?? null;
+const registerHref =
+  event?.registrationItems?.find((r) => r.registrationUrl)?.registrationUrl ??
+  event?.registrationUrl ??
+  null;
+const eventHref = event ? `/event/${event.slug}` : null;
+---
+
+<section class="hero">
+  <div class="hero-sky" aria-hidden="true"></div>
+  <HeroEffects effect={event ? event.heroEffect : 'fireworks'} />
+
+  {event ? (
+    <>
+      {poster ? (
+        <img class="hero-poster" src={poster} alt={t(event.title, locale)} />
+      ) : (
+        <div class="hero-poster fallback-thumb" aria-hidden="true" style="display:grid; height:60vh;">
+          <h1 style="margin:0">{t(event.title, locale)}</h1>
+        </div>
+      )}
+      <div class="hero-meta">
+        <strong>{formatEventDate(event, locale)}</strong>
+        <span>{formatEventTime(event, locale)}</span>
+        <span>{t(event.location, locale)}</span>
+        <a class="btn btn-gold" href={eventHref} data-burst>
+          {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
+        </a>
+        {registerHref && (
+          <a class="btn btn-teal" href={registerHref} target="_blank" rel="noopener" data-burst>
+            {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+          </a>
+        )}
+      </div>
+    </>
+  ) : (
+    <>
+      <img class="hero-poster" src="/images/brand/mui-wow-logo.png" alt={site.name} style="max-height:48vh; object-fit:contain; background:transparent;" />
+      <div class="hero-meta">
+        <span style="font-weight:800">{t(site.quietPeriod.title, locale)}</span>
+        <a class="btn btn-gold" href="/rentals" data-burst>
+          {locale === 'es' ? 'Ver alquileres' : locale === 'zh-hk' ? '睇租賃服務' : 'Beach rentals'}
+        </a>
+      </div>
+    </>
+  )}
+</section>

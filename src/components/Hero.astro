@@ -23,7 +23,10 @@ const eventHref = event ? `/event/${event.slug}` : null;
 
 {event?.heroImage ? (
   <section class="hero hero-wide">
-    <div class="hero-photo" style={`background-image:url('${heroImage}')`} aria-hidden="true"></div>
+    <div class="hero-photo" style={heroImage.endsWith('.svg') ? undefined : `background-image:url('${heroImage}')`}
+         aria-hidden="true">
+      {heroImage.endsWith('.svg') && <img class="photo" src={heroImage} alt="" />}
+    </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />
     <div class="container hero-content hero-grid">
@@ -37,7 +40,7 @@ const eventHref = event ? `/event/${event.slug}` : null;
                 return (
                   <div class="hero-line hero-fiesta" aria-label={text}>
                     {text.split('').map((ch, i) => (
-                      <span style={line.colors ? `--lc:${line.colors[i % line.colors.length]}` : undefined}>{ch}</span>
+                      <span style={line.colors ? `--lc:${line.colors[i % line.colors.length]};--i:${i}` : undefined}>{ch}</span>
                     ))}
                   </div>
                 );

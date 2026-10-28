@@ -215,6 +215,19 @@ img { max-width: 100%; display: block; }
 
 .hero-wide { min-height: 88vh; }
 .event-banner { min-height: 54vh; }
+/* Animated hero art (svg): the img is cover-fitted and carries its own
+   vector lights/screen contents; plain jpgs keep the css background. */
+.hero-photo > img.photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
 .hero-photo {
   position: absolute;
   inset: 0;
@@ -226,9 +239,10 @@ img { max-width: 100%; display: block; }
   position: absolute;
   inset: 0;
   z-index: -1;
+  /* Lighter by design: the art carries its own atmosphere, the scrim only
+     grounds the text near the bottom. */
   background:
-    linear-gradient(180deg, rgba(11, 19, 43, 0.20) 0%, rgba(11, 19, 43, 0.30) 45%, rgba(11, 19, 43, 0.82) 100%),
-    radial-gradient(70% 60% at 18% 70%, rgba(11, 19, 43, 0.42), transparent 70%);
+    linear-gradient(180deg, rgba(11, 19, 43, 0.06) 0%, rgba(11, 19, 43, 0.12) 45%, rgba(11, 19, 43, 0.55) 100%);
 }
 .hero-content { text-align: left; padding-top: 90px; padding-bottom: 70px; }
 .hero-title {
@@ -264,14 +278,35 @@ img { max-width: 100%; display: block; }
   background-size: 56px 56px, auto;
   -webkit-background-clip: text;
   background-clip: text;
-  /* Pattern always moving: a slow diagonal drift (tiled → seamless loop).
-     CSS cannot rotate a background image; the drift reads as motion under
-     the glyphs. Disabled for reduced-motion. */
-  animation: mask-drift 22s linear infinite;
 }
 @keyframes mask-drift {
   from { background-position: 0 0; }
   to { background-position: 112px 224px; }
+}
+/* COCO letters pop into existence one at a time (stagger via --i from markup;
+   the drift keeps looping underneath on the same spans) */
+@keyframes letter-pop {
+  from { opacity: 0; transform: scale(0); }
+  60% { opacity: 1; transform: scale(1.18); }
+  to { opacity: 1; transform: scale(1); }
+}
+.hero-fiesta span {
+  animation-name: mask-drift, letter-pop;
+  animation-duration: 22s, 0.5s;
+  animation-delay: 0s, calc(0.35s + var(--i, 0) * 0.16s);
+  animation-timing-function: linear, cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-iteration-count: infinite, 1;
+  animation-fill-mode: none, both;
+  transform-origin: 50% 78%;
+}
+/* Under the Stars: slight looping wave (sway + bob, Yellowtail-safe) */
+@keyframes script-wave {
+  0%, 100% { transform: rotate(-0.7deg) translateY(-2px); }
+  50% { transform: rotate(0.7deg) translateY(2px); }
+}
+.hero-script {
+  animation: script-wave 7s ease-in-out infinite;
+  transform-origin: 50% 60%;
 }
 .hero-script {
   font-family: 'Yellowtail', cursive;
@@ -449,6 +484,7 @@ img { max-width: 100%; display: block; }
   .hero-sky { animation: none; }
   .btn:hover { transform: none; }
   .event-card:hover { transform: none; }
-  .hero-fiesta span { animation: none; }
+  .hero-fiesta span { animation: none; opacity: 1; }
+  .hero-script { animation: none; }
   .brand-name { transform: none; }
 }

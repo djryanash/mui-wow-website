@@ -213,8 +213,8 @@ img { max-width: 100%; display: block; }
   z-index: 2;
   mix-blend-mode: screen;
   filter: brightness(1.45) sepia(1) saturate(3.2) hue-rotate(-10deg) blur(1.6px);
-  animation: light-flicker calc(2.4s + var(--n) * 0.7s) step-end infinite;
-  animation-delay: calc(var(--n) * -1.1s);
+  animation: light-flicker calc(4.8s + var(--n) * 1.4s) step-end infinite;
+  animation-delay: calc(var(--n) * -2.2s);
 }
 @keyframes light-flicker {
   0% { opacity: 1; }

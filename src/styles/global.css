@@ -242,7 +242,7 @@ img { max-width: 100%; display: block; }
 
 /* Poster-style title stack (event titleDisplay: fiesta / script / caps) */
 .hero-title-stack { margin: 0 0 0.3em; }
-.hero-line { line-height: 1.05; }
+.hero-line { line-height: 1; }
 .hero-fiesta {
   font-family: 'Bevan', Georgia, serif;
   font-weight: 400;
@@ -265,7 +265,7 @@ img { max-width: 100%; display: block; }
   font-family: 'Yellowtail', cursive;
   font-size: clamp(2.1rem, 6vw, 3.8rem);
   color: var(--sand);
-  padding-top: 0.1em;
+  padding-top: 0.025em;
   text-shadow: 0 3px 18px rgba(11, 19, 43, 0.55);
 }
 .hero-caps {
@@ -275,7 +275,7 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   letter-spacing: 0.35em;
   color: var(--sand);
-  padding-top: 0.35em;
+  padding-top: 0.09em;
   text-shadow: 0 2px 16px rgba(11, 19, 43, 0.6);
 }
 .hero-sub {

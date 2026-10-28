@@ -318,7 +318,18 @@ img { max-width: 100%; display: block; }
    close; the date/venue kicker above the stack gets tripled room. */
 .hero-title-stack { margin: 0 0 0.3em; }
 .hero-line { line-height: 1; }
-.hero-copy .kicker { margin-bottom: 1.1rem; }
+/* Kicker: black fill with a 1px light outline (punches against bright sky) */
+.hero-copy .kicker {
+  margin-bottom: 1.1rem;
+  color: #000;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.95);
+  paint-order: stroke fill;
+  text-shadow: 0 1px 6px rgba(11, 19, 43, 0.25);
+}
 .hero-fiesta {
   font-family: 'Bevan', Georgia, serif;
   font-weight: 400;

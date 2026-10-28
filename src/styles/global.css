@@ -229,12 +229,16 @@ img { max-width: 100%; display: block; }
   max-width: none;
 }
 /* Overlay stills (masks baked in, full-frame transparent PNGs): three frames,
-   0.8s each (2.4s total), crossfading in and out (±0.16s fades, hard holds). */
+   0.8s each (2.4s total), true crossfade: each frame fades up at its slot's
+   start, holds, fades down across the next frame's fade-up. Keyframes in
+   fractions of the full 2.4s cycle. */
 .hero-photo > img.still { opacity: 0; z-index: 1; animation: still-cycle 2.4s linear infinite; animation-delay: calc(var(--n) * -0.8s); }
 @keyframes still-cycle {
   0% { opacity: 0; }
-  6.5%, 75% { opacity: 1; }
-  83%, 100% { opacity: 0; }
+  6.67% { opacity: 1; }
+  33.33% { opacity: 1; }
+  40% { opacity: 0; }
+  100% { opacity: 0; }
 }
 .hero-photo {
   position: absolute;

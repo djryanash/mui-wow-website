@@ -115,6 +115,7 @@ export const eventSchema = z
 
     // Page assets (not emitted to events.json):
     poster: z.string().min(1).optional(), // path under /images/events/
+    heroImage: z.string().min(1).optional(), // wide background photo for the hero
     gallery: z.array(z.string()).default([]),
   })
   .strict();

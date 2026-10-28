@@ -1,5 +1,9 @@
 ---
-// The hero. Featured event poster + meta bar, or the Quiet Period state.
+// The hero. Two variants:
+//  a) event.heroImage  → full-bleed photo, big display typography, arrow CTA
+//     (the "thumble" direction), fireworks canvas over the photo.
+//  b) otherwise (poster only, or the Quiet Period) → centered poster on the
+//     breathing sky, as shipped.
 import HeroEffects from './HeroEffects.astro';
 import { loadSite, t } from '../data/load.mjs';
 import { formatEventDate, formatEventTime } from '../data/events.lib.mjs';
@@ -8,6 +12,7 @@ const { event = null, locale = 'en' } = Astro.props;
 const site = loadSite();
 
 const poster = event?.poster ?? null;
+const heroImage = event?.heroImage ?? null;
 const registerHref =
   event?.registrationItems?.find((r) => r.registrationUrl)?.registrationUrl ??
   event?.registrationUrl ??
@@ -15,42 +20,72 @@ const registerHref =
 const eventHref = event ? `/event/${event.slug}` : null;
 ---
 
-<section class="hero">
-  <div class="hero-sky" aria-hidden="true"></div>
-  <HeroEffects effect={event ? event.heroEffect : 'fireworks'} />
-
-  {event ? (
-    <>
-      {poster ? (
-        <img class="hero-poster" src={poster} alt={t(event.title, locale)} />
-      ) : (
-        <div class="hero-poster fallback-thumb" aria-hidden="true" style="display:grid; height:60vh;">
-          <h1 style="margin:0">{t(event.title, locale)}</h1>
-        </div>
-      )}
-      <div class="hero-meta">
-        <strong>{formatEventDate(event, locale)}</strong>
-        <span>{formatEventTime(event, locale)}</span>
-        <span>{t(event.location, locale)}</span>
-        <a class="btn btn-gold" href={eventHref} data-burst>
+{event?.heroImage ? (
+  <section class="hero hero-wide">
+    <div class="hero-photo" style={`background-image:url('${heroImage}')`} aria-hidden="true"></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <HeroEffects effect={event.heroEffect} />
+    <div class="container hero-content">
+      <p class="kicker">{formatEventDate(event, locale)} · {t(event.location, locale)}</p>
+      <h1 class="hero-title">{t(event.title, locale)}</h1>
+      {event.subtitle && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
+      <div class="hero-ctas">
+        <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>
           {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
+          <span class="arrow" aria-hidden="true">→</span>
         </a>
-        {registerHref && (
-          <a class="btn btn-teal" href={registerHref} target="_blank" rel="noopener" data-burst>
+        {registerHref ? (
+          <a class="btn btn-teal btn-arrow" href={registerHref} target="_blank" rel="noopener" data-burst>
             {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <a class="chip status-chip" href={site.instagram} target="_blank" rel="noopener">
+            {t({ en: 'Register on Eventbrite from our Instagram — link in bio', es: 'Inscripciones por Eventbrite — enlace en nuestra bio de Instagram', zh: '喺 Eventbrite 登記 — 連結喺我哋 IG bio' }, locale)}
           </a>
         )}
       </div>
-    </>
-  ) : (
-    <>
-      <img class="hero-poster" src="/images/brand/mui-wow-logo.png" alt={site.name} style="max-height:48vh; object-fit:contain; background:transparent;" />
-      <div class="hero-meta">
-        <span style="font-weight:800">{t(site.quietPeriod.title, locale)}</span>
-        <a class="btn btn-gold" href="/rentals" data-burst>
-          {locale === 'es' ? 'Ver alquileres' : locale === 'zh-hk' ? '睇租賃服務' : 'Beach rentals'}
-        </a>
-      </div>
-    </>
-  )}
-</section>
+      <p class="hero-facts">{formatEventTime(event, locale)}</p>
+    </div>
+  </section>
+) : (
+  <section class="hero">
+    <div class="hero-sky" aria-hidden="true"></div>
+    <HeroEffects effect={event ? event.heroEffect : 'fireworks'} />
+
+    {event ? (
+      <>
+        {poster ? (
+          <img class="hero-poster" src={poster} alt={t(event.title, locale)} />
+        ) : (
+          <div class="hero-poster fallback-thumb" aria-hidden="true" style="display:grid; height:60vh;">
+            <h1 style="margin:0">{t(event.title, locale)}</h1>
+          </div>
+        )}
+        <div class="hero-meta">
+          <strong>{formatEventDate(event, locale)}</strong>
+          <span>{formatEventTime(event, locale)}</span>
+          <span>{t(event.location, locale)}</span>
+          <a class="btn btn-gold" href={eventHref} data-burst>
+            {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
+          </a>
+          {registerHref && (
+            <a class="btn btn-teal" href={registerHref} target="_blank" rel="noopener" data-burst>
+              {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+            </a>
+          )}
+        </div>
+      </>
+    ) : (
+      <>
+        <img class="hero-poster" src="/images/brand/mui-wow-logo.png" alt={site.name} style="max-height:48vh; object-fit:contain; background:transparent;" />
+        <div class="hero-meta">
+          <span style="font-weight:800">{t(site.quietPeriod.title, locale)}</span>
+          <a class="btn btn-gold" href="/rentals" data-burst>
+            {locale === 'es' ? 'Ver alquileres' : locale === 'zh-hk' ? '睇租賃服務' : 'Beach rentals'}
+          </a>
+        </div>
+      </>
+    )}
+  </section>
+)}

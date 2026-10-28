@@ -244,12 +244,21 @@ img { max-width: 100%; display: block; }
 .hero-title-stack { margin: 0 0 0.3em; }
 .hero-line { line-height: 1.05; }
 .hero-fiesta {
-  font-family: 'Titan One', 'Nunito Sans', sans-serif;
-  font-size: clamp(3rem, 9vw, 5.6rem);
-  letter-spacing: 0.04em;
+  font-family: 'Bevan', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.9rem, 8.5vw, 5.4rem);
+  letter-spacing: 0.03em;
   filter: drop-shadow(0 4px 10px rgba(11, 19, 43, 0.7));
 }
+/* Pattern masked into the letters: colored fill underneath (per-letter --lc),
+   papel-picado style pattern cliped on top. */
 .hero-fiesta span {
+  color: transparent;
+  background-color: var(--lc, var(--gold-bright));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M2 30 q13 -20 26 0 q-13 20 -26 0z' fill='rgba(255,255,255,0.42)'/%3E%3Cpath d='M34 40 q11 -13 22 -2 q-11 13 -22 2z' fill='rgba(0,0,0,0.20)'/%3E%3Ccircle cx='44' cy='13' r='5' fill='rgba(255,255,255,0.45)'/%3E%3Ccircle cx='44' cy='13' r='2' fill='rgba(0,0,0,0.22)'/%3E%3Ccircle cx='15' cy='48' r='4' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
+  background-size: 56px 56px, auto;
+  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-stroke: 2px rgba(255, 255, 255, 0.85);
   paint-order: stroke fill;
 }

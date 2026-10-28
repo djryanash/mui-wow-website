@@ -37,7 +37,7 @@ const eventHref = event ? `/event/${event.slug}` : null;
                 return (
                   <div class="hero-line hero-fiesta" aria-label={text}>
                     {text.split('').map((ch, i) => (
-                      <span style={line.colors ? `color:${line.colors[i % line.colors.length]}` : undefined}>{ch}</span>
+                      <span style={line.colors ? `--lc:${line.colors[i % line.colors.length]}` : undefined}>{ch}</span>
                     ))}
                   </div>
                 );

@@ -139,7 +139,7 @@ export const eventSchema = z
           z
             .object({
               mask: z.string(),
-              cadence: z.enum(['steady', 'burst']).default('steady'),
+              cadence: z.enum(['steady', 'burst', 'wisp']).default('steady'),
             })
             .strict(),
         ]),

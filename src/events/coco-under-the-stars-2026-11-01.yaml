@@ -113,6 +113,16 @@ heroOverlays:
   - '/images/events/coco-screen-01.png'
   - '/images/events/coco-screen-02.png'
   - '/images/events/coco-screen-03.png'
+heroTagline:
+  en: 'Everyone is welcome'
+  es: 'Todos son bienvenidos'
+  zh: '人人歡迎'
+heroCta:
+  label:
+    en: 'Rent a Sunset Picnic Hamper'
+    es: 'Alquila una cesta de picnic al atardecer'
+    zh: '租用黃昏野餐藍'
+  href: '/rentals'
 heroLights:
   - '/images/events/coco-lights-mask-01.png'
   - '/images/events/coco-lights-mask-01.png'

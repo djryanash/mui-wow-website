@@ -145,6 +145,15 @@ export const eventSchema = z
         ]),
       )
       .default([]),
+    // Hero copy extras (replacing the generic CTA row):
+    heroTagline: languageObject.optional(),
+    heroCta: z
+      .object({
+        label: languageObject,
+        href: z.string().refine((h) => h.startsWith('/') || h.startsWith('https://'), 'site path or https URL'),
+      })
+      .strict()
+      .optional(),
 
     // Page assets (not emitted to events.json):
     poster: z.string().min(1).optional(), // path under /images/events/

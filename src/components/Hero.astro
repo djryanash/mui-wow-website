@@ -59,19 +59,12 @@ const eventHref = event ? `/event/${event.slug}` : null;
           <h1 class="hero-title">{t(event.title, locale)}</h1>
         )}
         {event.subtitle && !event.titleDisplay?.length && <p class="hero-sub">{t(event.subtitle, locale)}</p>}
+        {event.heroTagline && <p class="hero-tagline">{t(event.heroTagline, locale)}</p>}
         <div class="hero-ctas">
-          <a class="btn btn-gold btn-arrow" href={eventHref} data-burst>
-            {locale === 'es' ? 'Ver el evento' : locale === 'zh-hk' ? '睇活動詳情' : 'Event details'}
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-          {registerHref ? (
-            <a class="btn btn-teal btn-arrow" href={registerHref} target="_blank" rel="noopener" data-burst>
-              {locale === 'es' ? 'Regístrate en Eventbrite' : locale === 'zh-hk' ? 'Eventbrite 登記' : 'Register'}
+          {event.heroCta && (
+            <a class="btn btn-gold btn-arrow" href={event.heroCta.href} data-burst>
+              {T(event.heroCta.label).toUpperCase()}
               <span class="arrow" aria-hidden="true">→</span>
-            </a>
-          ) : (
-            <a class="chip status-chip" href={site.instagram} target="_blank" rel="noopener">
-              {t({ en: 'Register on Eventbrite from our Instagram — link in bio', es: 'Inscripciones por Eventbrite — enlace en nuestra bio de Instagram', zh: '喺 Eventbrite 登記 — 連結喺我哋 IG bio' }, locale)}
             </a>
           )}
         </div>

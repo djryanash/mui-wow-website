@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T13:41:11.488Z",
+  "generatedAt": "2026-10-28T13:43:57.760Z",
   "site": {
     "name": "Mui WoW",
     "legalName": "MUI WOW by KRAF CONCEPTS",
@@ -28,7 +28,7 @@
       "published": true,
       "unlisted": false,
       "heroEffect": "fireworks",
-      "poster": "/images/events/coco-under-the-stars-2026-11-01.jpg"
+      "poster": null
     },
     {
       "slug": "tiki-beach-party-2026-11-14",

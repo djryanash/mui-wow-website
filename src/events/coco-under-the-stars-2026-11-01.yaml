@@ -108,7 +108,6 @@ rentalItems:
       zh: "租賃座位買少見少。"
 
 heroEffect: 'fireworks'
-poster: '/images/events/coco-under-the-stars-2026-11-01.jpg'
 heroImage: '/images/events/coco-under-the-stars-2026-11-01-hero.svg'
 heroOverlays:
   - '/images/events/coco-screen-01.png'

@@ -228,14 +228,14 @@ img { max-width: 100%; display: block; }
   height: auto;
   max-width: none;
 }
-/* Overlay stills (masks baked in, full-frame transparent PNGs): stacked on the
-   photo and stepped in a hard-switch slideshow. 0.5s per frame, no fades. */
-.hero-photo > img.still { opacity: 0; z-index: 1; }
+/* Overlay stills (masks baked in, full-frame transparent PNGs): three frames,
+   0.8s each (2.4s total), crossfading in and out (±0.16s fades, hard holds). */
+.hero-photo > img.still { opacity: 0; z-index: 1; animation: still-cycle 2.4s linear infinite; animation-delay: calc(var(--n) * -0.8s); }
 @keyframes still-cycle {
-  0%, 33% { opacity: 1; }
-  33.01%, 100% { opacity: 0; }
+  0% { opacity: 0; }
+  6.5%, 75% { opacity: 1; }
+  83%, 100% { opacity: 0; }
 }
-.hero-photo > img.still { animation: still-cycle 1.5s step-end infinite; animation-delay: calc(var(--n) * -0.5s); }
 .hero-photo {
   position: absolute;
   inset: 0;

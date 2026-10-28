@@ -213,6 +213,7 @@ img { max-width: 100%; display: block; }
 /* ── Hero: full-bleed photo variant (wide heroImage) ── */
 
 .hero-wide { min-height: 88vh; }
+.event-banner { min-height: 54vh; }
 .hero-photo {
   position: absolute;
   inset: 0;

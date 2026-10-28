@@ -1,5 +1,6 @@
 ---
-// Event detail page: poster, facts, schedule, registrations, rentals.
+// Event detail page: photo banner (when heroImage exists), poster aside
+// otherwise, then facts, schedule, registrations, rentals.
 import Layout from '../components/Layout.astro';
 import HeroEffects from '../components/HeroEffects.astro';
 import { loadEvents, loadSite, t } from '../data/load.mjs';
@@ -9,22 +10,36 @@ import { chrome } from '../data/chrome.mjs';
 const site = loadSite();
 const { event, locale = 'en' } = Astro.props;
 const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const banner = event.heroImage ?? null;
 ---
 
-<Layout locale={locale} title={T(event.title)} description={T(event.subtitle) ?? ''} ogImage={event.poster ?? undefined}>
-  <section class="event-hero">
-    <div class="hero-sky" aria-hidden="true"></div>
-    <HeroEffects effect={event.heroEffect} />
+<Layout locale={locale} title={T(event.title)} description={T(event.subtitle) ?? ''} ogImage={event.heroImage ?? event.poster ?? undefined}>
+  {banner ? (
+    <section class="hero hero-wide event-banner">
+      <div class="hero-photo" style={`background-image:url('${banner}')`} aria-hidden="true"></div>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <HeroEffects effect={event.heroEffect} />
+      <div class="container hero-content">
+        <p class="kicker">{formatEventDate(event, locale)}</p>
+        <h1 class="hero-title">{T(event.title)}</h1>
+        {event.subtitle && <p class="hero-sub">{T(event.subtitle)}</p>}
+      </div>
+    </section>
+  ) : (
+    <section class="event-hero">
+      <div class="hero-sky" aria-hidden="true"></div>
+      <HeroEffects effect={event.heroEffect} />
+    </section>
+  )}
+
+  <section class="section" style={banner ? '' : 'margin-top:-40px; position:relative; z-index:1;'}>
     <div class="container event-hero-wrap">
       <div>
-        <p class="kicker">{T(chrome.eventsPageTitle)}</p>
-        <h1>{T(event.title)}</h1>
-        {event.subtitle && <p style="font-size:1.15rem; color:var(--sand); margin-top:-4px">{T(event.subtitle)}</p>}
         <div class="fact-row">
           <span class="fact"><strong>{T({ en: 'When', es: 'Cuándo', zh: '日期' })}:</strong> {formatEventDate(event, locale)}</span>
+          <span class="fact"><strong>{T({ en: 'Time', es: 'Hora', zh: '時間' })}:</strong> {formatEventTime(event, locale)}</span>
         </div>
         <div class="fact-row">
-          <span class="fact"><strong>{T({ en: 'Time', es: 'Hora', zh: '時間' })}:</strong> {formatEventTime(event, locale)}</span>
           <span class="fact"><strong>{T({ en: 'Where', es: 'Dónde', zh: '地點' })}:</strong> {T(event.location)}</span>
         </div>
 
@@ -51,7 +66,7 @@ const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : loc
       </div>
 
       <aside>
-        {event.poster && <img class="event-poster" src={event.poster} alt={T(event.title)} />}
+        {!banner && event.poster && <img class="event-poster" src={event.poster} alt={T(event.title)} />}
 
         {event.registrationItems.length > 0 && (
           <div class="info-block">
@@ -84,7 +99,7 @@ const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : loc
               {event.rentalItems.map((r) => (
                 <li>
                   <span class="grow">{T(r.name)}</span>
-                  {r.price && <span class="chip">{T(r.price)}</span>}
+                  {r.price && <span>{T(r.price)}</span>}
                   {r.note && <span class="note" style="width:100%">{T(r.note)}</span>}
                   {r.bookingUrl ? (
                     <a class="btn btn-gold" href={r.bookingUrl} target="_blank" rel="noopener" data-burst>{T(chrome.reserveCta)}</a>

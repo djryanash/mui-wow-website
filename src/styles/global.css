@@ -92,11 +92,12 @@ img { max-width: 100%; display: block; }
 }
 .site-header .logo { height: 44px; width: auto; }
 .brand-name {
-  font-family: 'Fraunces', serif;
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-family: 'Permanent Marker', cursive;
+  font-weight: 400;
+  font-size: 1.3rem;
   color: var(--gold);
-  letter-spacing: 0.04em;
+  display: inline-block;
+  transform: perspective(180px) rotate(-10deg) rotateY(-10deg);
 }
 .site-header nav {
   margin-left: auto;
@@ -263,12 +264,21 @@ img { max-width: 100%; display: block; }
   background-size: 56px 56px, auto;
   -webkit-background-clip: text;
   background-clip: text;
+  /* Pattern always moving: a slow diagonal drift (tiled → seamless loop).
+     CSS cannot rotate a background image; the drift reads as motion under
+     the glyphs. Disabled for reduced-motion. */
+  animation: mask-drift 22s linear infinite;
+}
+@keyframes mask-drift {
+  from { background-position: 0 0; }
+  to { background-position: 112px 224px; }
 }
 .hero-script {
   font-family: 'Yellowtail', cursive;
   font-size: clamp(2.1rem, 6vw, 3.8rem);
   color: var(--sand);
-  padding-top: 0.025em;
+  margin-top: -0.18em;
+  padding-top: 0;
   text-shadow: 0 3px 18px rgba(11, 19, 43, 0.55);
 }
 .hero-caps {
@@ -278,7 +288,7 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   letter-spacing: 0.175em;
   color: var(--sand);
-  padding-top: 0.09em;
+  padding-top: 0.02em;
   text-shadow: 0 2px 16px rgba(11, 19, 43, 0.6);
 }
 .hero-sub {

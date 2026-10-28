@@ -318,7 +318,7 @@ img { max-width: 100%; display: block; }
    close; the date/venue kicker above the stack gets tripled room. */
 .hero-title-stack { margin: 0 0 0.3em; }
 .hero-line { line-height: 1; }
-/* Kicker: black fill with a 2px outline (punches against bright sky) */
+/* Kicker: black fill, 25% bigger than the section default */
 .hero-copy .kicker {
   margin-bottom: 1.1rem;
   color: #000;
@@ -326,8 +326,6 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 800;
-  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.95);
-  paint-order: stroke fill;
   text-shadow: 0 1px 6px rgba(11, 19, 43, 0.25);
 }
 .hero-fiesta {

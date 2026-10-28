@@ -113,3 +113,5 @@ heroOverlays:
   - '/images/events/coco-screen-01.png'
   - '/images/events/coco-screen-02.png'
   - '/images/events/coco-screen-03.png'
+heroLights:
+  - '/images/events/coco-lights-mask-01.png'

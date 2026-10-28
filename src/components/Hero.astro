@@ -29,6 +29,9 @@ const eventHref = event ? `/event/${event.slug}` : null;
       {(event.heroOverlays ?? []).map((src, i) => (
         <img class="photo still" src={src} alt="" style={`--n:${i}`} loading="eager" />
       ))}
+      {(event.heroLights ?? []).map((src, i) => (
+        <img class="photo light" src={src} alt="" style={`--n:${i}`} loading="eager" />
+      ))}
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />

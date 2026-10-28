@@ -206,6 +206,28 @@ img { max-width: 100%; display: block; }
   border: 5px solid #fff;
   box-shadow: 0 18px 44px rgba(11, 19, 43, 0.55);
 }
+/* Light-mask layer: white bulbs on black, rendered additively (screen blend
+   leaves the photo untouched under black), warmed and softened by filter.
+   Discrete-step flicker via step-end (no fades — bulbs, not candles). */
+.hero-photo > img.light {
+  z-index: 2;
+  mix-blend-mode: screen;
+  filter: brightness(1.05) sepia(1) saturate(2.6) hue-rotate(-10deg) blur(1.2px);
+  animation: light-flicker 2.6s step-end infinite;
+  animation-delay: calc(var(--n) * -0.9s);
+}
+@keyframes light-flicker {
+  0% { opacity: 0.9; }
+  12% { opacity: 0.55; }
+  23% { opacity: 0.85; }
+  31% { opacity: 0.6; }
+  47% { opacity: 0.95; }
+  58% { opacity: 0.65; }
+  71% { opacity: 0.8; }
+  85% { opacity: 0.55; }
+  100% { opacity: 0.75; }
+}
+
 @media (max-width: 720px) {
   .hero-grid { grid-template-columns: 1fr; gap: 26px; }
   .hero-flyer { width: min(200px, 55vw); transform: rotate(-2deg); }
@@ -500,5 +522,6 @@ img { max-width: 100%; display: block; }
   .hero-fiesta span { animation: none; opacity: 1; }
   .hero-script { animation: none; }
   .hero-photo > img.still { animation: none; opacity: 0; }
+  .hero-photo > img.light { animation: none; opacity: 0.75; }
   .brand-name { transform: none; }
 }

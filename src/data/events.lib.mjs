@@ -59,8 +59,12 @@ const isoWithOffset = z
 
 const slug = z
   .string()
-  .regex(/^[a-z0-9]+(?:-(?!$)[a-z0-9]+)*$/, 'lowercase letters, digits, hyphens')
-  .refine((s) => /-\d{4}-\d{2}-\d{2}$/.test(s), 'must end in -yyyy-mm-dd');
+  .regex(/^[a-z0-9]+(?:-(?!$)[a-z0-9]+)*$/, 'lowercase letters, digits, hyphens');
+
+const datedSlug = slug.refine(
+  (s) => /-\d{4}-\d{2}-\d{2}$/.test(s),
+  'must end in -yyyy-mm-dd',
+);
 
 const url = z.string().url();
 
@@ -86,7 +90,7 @@ const rentalItem = z
 
 export const eventSchema = z
   .object({
-    slug,
+    slug: datedSlug,
     published: z.boolean().default(true),
     unlisted: z.boolean().default(false),
 
@@ -178,6 +182,42 @@ export const siteSchema = z
     nav: z.array(z.object({ label: languageObject, href: z.string() }).strict()),
     footerNote: languageObject.optional(),
     quietPeriod: z.object({ title: languageObject, body: languageObject }).strict(),
+  })
+  .strict();
+
+// ── Product schema (the shop: one product = one YAML in src/products/) ──
+
+export const productSchema = z
+  .object({
+    slug,
+    published: z.boolean().default(true),
+    kind: z.enum(['rental', 'consumable']).default('rental'),
+
+    name: languageObject,
+    subtitle: languageObject.optional(),
+    details: languageObject.optional(),
+    highlights: z.array(languageObject).default([]),
+    pickupNote: languageObject.optional(),
+
+    // amount in the smallest currency unit (HKD cents); cross-checked live.
+    displayPrice: z
+      .object({
+        amount: z.number().int().positive(),
+        currency: z.string().toUpperCase().length(3),
+        formatted: z.string().min(1),
+      })
+      .strict(),
+    stripePriceId: z.string().startsWith('price_').optional(),
+
+    inventory: z
+      .object({
+        perEvent: z.boolean().default(true),
+        stock: z.number().int().nonnegative().optional(),
+      })
+      .strict()
+      .default({}),
+
+    images: z.array(z.string()).default([]),
   })
   .strict();
 

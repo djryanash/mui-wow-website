@@ -5,7 +5,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import yaml from 'js-yaml';
-import { eventSchema, siteSchema } from './events.lib.mjs';
+import { eventSchema, siteSchema, productSchema } from './events.lib.mjs';
 
 const ROOT = process.cwd();
 
@@ -41,6 +41,16 @@ export function loadEvents(dir = 'src/events') {
 
 export function loadSite(path = 'src/data/site.yaml') {
   return assertSchema(siteSchema, readYaml(join(ROOT, path)), path);
+}
+
+/** All published products (catalog order = file order, then sorted by name). */
+export function loadProducts(dir = 'src/products') {
+  const full = join(ROOT, dir);
+  return readdirSync(full)
+    .filter((f) => f.endsWith('.yaml') && !f.startsWith('_')) // _-prefixed = docs only
+    .map((f) => assertSchema(productSchema, readYaml(join(full, f)), `src/products/${f}`))
+    .filter((p) => p.published)
+    .sort((a, b) => t(a.name, 'en').localeCompare(t(b.name, 'en')));
 }
 
 export { isPast, pickFeatured, pickRecentsPast, pickUpcoming, t, normalizeLights } from './events.lib.mjs';

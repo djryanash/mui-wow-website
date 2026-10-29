@@ -94,4 +94,16 @@ export const chrome = {
   },
   phone: { en: 'Phone', es: 'Teléfono', zh: '電話' },
   follow: { en: 'Follow', es: 'Síguenos', zh: '追蹤我哋' },
+  // shop chrome
+  shopTitle: { en: 'Rentals & Supplies', es: 'Alquileres y Artículos', zh: '租賃與用品' },
+  addToCart: { en: 'Add to cart', es: 'Añadir', zh: '加入購物車' },
+  cart: { en: 'Cart', es: 'Carrito', zh: '購物車' },
+  cartEmpty: { en: 'Your cart is empty.', es: 'Tu carrito está vacío.', zh: '購物車空空如也。' },
+  checkout: { en: 'Checkout', es: 'Pagar', zh: '結帳' },
+  remove: { en: 'Remove', es: 'Quitar', zh: '移除' },
+  total: { en: 'Total', es: 'Total', zh: '合計' },
+  comingSoonCta: { en: 'Bookings open soon', es: 'Reservas muy pronto', zh: '開放預訂在即' },
+  checkoutPending: { en: 'Checkout wiring lands with the live keys — coming right up.',
+    es: 'El pago llega con las llaves en vivo — un momento.',
+    zh: '結帳功能即將接通，請稍等。' },
 };

@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-10-29T01:06:46.493Z",
+  "products": [
+    {
+      "slug": "sunset-picnic-hamper",
+      "kind": "rental",
+      "name": {
+        "en": "Sunset Picnic Hamper",
+        "es": "Cesta de Picnic al Atardecer",
+        "zh": "黃昏野餐藍"
+      },
+      "subtitle": {
+        "en": "Everything for two at the sands: blanket, lanterns, cups and more.",
+        "es": "Todo para dos en la arena: manta, farolillos, vasos y más.",
+        "zh": "兩人沙灘所需：毛氈、燈籠、杯具等一應俱全。"
+      },
+      "displayPrice": {
+        "amount": 1000,
+        "currency": "HKD",
+        "formatted": "HK$10 [test]"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/sunset-picnic-hamper/picnic-hamper-card-face.jpeg"
+      ]
+    }
+  ]
+}

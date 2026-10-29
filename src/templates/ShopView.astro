@@ -1,0 +1,142 @@
+---
+// Rentals & Supplies: the shop. Grid of products + cart drawer (localStorage).
+// Coming-soon state only when the catalogue is empty.
+import Layout from '../components/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { loadProducts, loadSite } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const site = loadSite();
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const products = loadProducts();
+---
+
+<Layout locale={locale} title={T(chrome.shopTitle)} description={T(chrome.shopTitle)}>
+  <section class="section">
+    <div class="container">
+      <p class="kicker">Mui WoW</p>
+      <h1>{T(chrome.shopTitle)}</h1>
+
+      {products.length === 0 ? (
+        <p style="max-width:56ch">{T(chrome.comingSoonBody)}</p>
+      ) : (
+        <>
+          <p class="cart-note">{T({ en: 'Payment runs on Stripe. Pickup at the beach.', es: 'Pago con Stripe. Recogida en la playa.', zh: 'Stripe 付款，沙灘自取。' })}</p>
+          <div class="cards">
+            {products.map((p) => <ProductCard product={p} locale={locale} />)}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  <!-- Cart drawer -->
+  <aside class="cart-drawer" id="cart-drawer" aria-label={T(chrome.cart)}
+    data-total={T(chrome.total)}
+    data-checkout-label={T(chrome.checkout)}
+    data-cart-empty={T(chrome.cartEmpty)}
+    data-remove-label={T(chrome.remove)}
+    data-checkout-pending={T(chrome.checkoutPending)}>
+    <div class="cart-head">
+      <strong>{T(chrome.cart)}</strong>
+      <button class="cart-close" aria-label="Close">×</button>
+    </div>
+    <div class="cart-items"></div>
+    <p class="cart-empty">{T(chrome.cartEmpty)}</p>
+    <div class="cart-total">
+      <span>{T(chrome.total)}</span>
+      <strong data-cart-total>—</strong>
+    </div>
+    <button class="btn btn-gold cart-checkout" data-cart-checkout>{T(chrome.checkout)}</button>
+    <p class="cart-note-after" data-checkout-note hidden></p>
+  </aside>
+  <button class="cart-fab" aria-label={T(chrome.cart)} data-cart-open hidden>🧺 <span data-cart-badge></span></button>
+</Layout>
+
+<script>
+  // Cart: localStorage, one item per product, quantities, checkout stub.
+  const KEY = 'muiwow-cart';
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) ?? {}; } catch { return {}; } };
+  const write = (c) => { localStorage.setItem(KEY, JSON.stringify(c)); render(); };
+  const isZh = (l) => l === 'zh-hk';
+
+  // Locale + chrome injected at build: checkout strings come from data attrs.
+  const drawer = document.getElementById('cart-drawer');
+  const page = document.documentElement.getAttribute('lang');
+  const totalLabel = drawer?.dataset.total ?? 'Total';
+  const checkoutLabel = drawer?.dataset.checkoutLabel ?? 'Checkout';
+  const emptyLabel = drawer?.dataset.cartEmpty ?? 'Your cart is empty.';
+  const removeLabel = drawer?.dataset.removeLabel ?? 'Remove';
+  const pendingLabel = drawer?.dataset.checkoutPending ?? 'Checkout coming soon.';
+  drawer.querySelector('.cart-checkout').textContent = checkoutLabel;
+  const fmtHkd = (cents) => `HK$${(cents / 100).toLocaleString(isZh(page) ? 'zh-HK' : 'en-HK')}`;
+
+  function render() {
+    if (!drawer) return;
+    const cart = read();
+    const items = document.querySelector('.cart-items');
+    items.textContent = '';
+    const slugs = Object.keys(cart);
+    document.querySelector('.cart-empty').hidden = slugs.length > 0;
+    const fab = document.querySelector('[data-cart-open]');
+    const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
+    fab.hidden = false;
+    drawer.querySelector('[data-cart-badge]').textContent = count || '';
+    let total = 0;
+    for (const slug of slugs) {
+      total += cart[slug].cents * cart[slug].qty;
+      const row = document.createElement('div');
+      row.className = 'cart-row';
+      row.innerHTML = `<div><div class="cart-name">${cart[slug].name}</div><div class="cart-line">${cart[slug].price} × ${cart[slug].qty}</div></div>`;
+      const btn = document.createElement('button');
+      btn.className = 'cart-remove';
+      btn.textContent = removeLabel;
+      btn.onclick = () => { const c = read(); delete c[slug]; write(c); };
+      row.appendChild(btn);
+      items.appendChild(row);
+    }
+    drawer.querySelector('[data-cart-total]').textContent = slugs.length ? fmtHkd(total) : '—';
+  }
+
+  document.addEventListener('click', (e) => {
+    const add = e.target.closest?.('[data-add-to-cart]');
+    if (add) {
+      const slug = add.dataset.addToCart;
+      const c = read();
+      c[slug] = { name: add.dataset.name, price: add.dataset.price, cents: Number(add.dataset.cents), qty: Math.min((c[slug]?.qty ?? 0) + 1, 20) };
+      write(c);
+      drawer.classList.add('open');
+      return;
+    }
+    const open = e.target.closest?.('[data-cart-open]');
+    if (open) { drawer.classList.add('open'); return; }
+    const close = e.target.closest?.('.cart-close');
+    if (close) { drawer.classList.remove('open'); return; }
+    const go = e.target.closest?.('[data-cart-checkout]');
+    if (go) {
+      const cart = read();
+      const slugs = Object.keys(cart);
+      if (!slugs.length) return;
+      go.disabled = true;
+      fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: slugs.map((s) => ({ slug: s, qty: cart[s].qty })) }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.url) location.href = d.url;
+          else throw new Error(d.error ?? 'no url');
+        })
+        .catch(() => {
+          const note = drawer.querySelector('[data-checkout-note]');
+          note.textContent = pendingLabel;
+          note.hidden = false;
+          go.disabled = false;
+        });
+    }
+  });
+
+  render();
+</script>

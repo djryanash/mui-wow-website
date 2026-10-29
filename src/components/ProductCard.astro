@@ -1,0 +1,31 @@
+---
+// Product card: image (first = card face), name, price, add-to-cart.
+import { t } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const { product, locale = 'en' } = Astro.props;
+const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const hasLivePrice = !!product.stripePriceId;
+---
+
+<div class="product-card">
+  {product.images?.[0] ? (
+    <img class="thumb" src={product.images[0]} alt={T(product.name)} loading="lazy" />
+  ) : (
+    <div class="fallback-thumb" aria-hidden="true">{T(product.name)}</div>
+  )}
+  <div class="body">
+    <h3>{T(product.name)}</h3>
+    {product.subtitle && <p class="sub">{T(product.subtitle)}</p>}
+    <div class="price-row">
+      <span class="price">{product.displayPrice?.formatted}</span>
+      {hasLivePrice ? (
+        <button class="btn btn-gold" data-add-to-cart={product.slug} data-name={T(product.name)} data-price={product.displayPrice?.formatted} data-cents={product.displayPrice?.amount}>
+          {T(chrome.addToCart)} <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      ) : (
+        <span class="chip">{T(chrome.comingSoonCta)}</span>
+      )}
+    </div>
+  </div>
+</div>

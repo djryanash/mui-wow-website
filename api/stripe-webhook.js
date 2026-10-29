@@ -12,6 +12,9 @@
 // Env: STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET, KV_REST_API_URL,
 //      KV_REST_API_TOKEN, RESEND_API_KEY (optional), SITE_URL (optional).
 // Failures are loud and named (RAK lesson).
+// IMPORTANT: bodyParser disabled — the signature is verified over Stripe's
+// EXACT original bytes; a re-serialized body fails the HMAC.
+export const config = { api: { bodyParser: false } };
 
 import QRCode from 'qrcode';
 import crypto from 'node:crypto';
@@ -165,7 +168,13 @@ async function sendBookingEmail(origin, ref, email, items, amount) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  const payload = typeof req.body === 'string' ? req.body : JSON.stringify(req.body ?? {});
+  const raw = await new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', (c) => chunks.push(c));
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    req.on('error', reject);
+  });
+  const payload = raw;
   const sigHeader = req.headers['stripe-signature'];
 
   let event;
@@ -174,6 +183,7 @@ export default async function handler(req, res) {
     verifyStripeSignature(sigHeader, payload, process.env.STRIPE_WEBHOOK_SECRET);
     event = JSON.parse(payload);
   } catch (e) {
+    console.error(`webhook delivery rejected: ${e.message}`);
     return res.status(400).json({ error: e.message });
   }
 

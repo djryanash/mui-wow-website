@@ -55,9 +55,9 @@ const copy = {
   function row(b) {
     const items = (b.items ?? []).map((i) => `${esc(i.name)} × ${i.qty}`).join(', ');
     const acts = b.state === 'reserved'
-      ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="collect">${copy.collect}</button>`
+      ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="collect">${esc(L(copy.collect))}</button>`
       : b.state === 'collected'
-        ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="return">${copy.doReturn}</button>`
+        ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="return">${esc(L(copy.doReturn))}</button>`
         : '';
     return `<div class="cart-row" style="margin-bottom:10px">
       <div><div class="cart-name"><a href="/booking/${esc(b.ref)}">${esc(b.ref)}</a></div>

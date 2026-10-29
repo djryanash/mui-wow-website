@@ -127,6 +127,12 @@ async function sessionItems(sessionId) {
 
 async function sendBookingEmail(origin, ref, email, items, amount) {
   if (!email || !process.env.RESEND_API_KEY) return 'skipped (no email/key)';
+  // Test-sandbox rule: Resend's unverified domain can only deliver to the
+  // account owner's own address. RESEND_REDIRECT_TO (set while testing)
+  // redirects EVERY booking email there so the QR is receivable; the buyer's
+  // original address stays in the record and in the template's own line.
+  const to = process.env.RESEND_REDIRECT_TO || email;
+  if (!to) return 'skipped (no recipient)';
   const qr = await QRCode.toDataURL(`${origin}/booking/${ref}`, {
     width: 460,
     color: { dark: '#0b132b', light: '#ffffff' },
@@ -140,7 +146,7 @@ async function sendBookingEmail(origin, ref, email, items, amount) {
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from,
-      to: email,
+      to,
       subject: `Your Mui WoW booking · ${ref}`,
       html: `<div style="font-family:Helvetica,Arial,sans-serif;background:#0b132b;color:#f5f2ea;padding:28px;border-radius:16px">
         <h1 style="color:#f0a500;margin-top:0">Mui WoW — your booking 💛</h1>

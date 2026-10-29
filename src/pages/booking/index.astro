@@ -2,8 +2,8 @@
 // Booking page: /booking/:ref (rewritten to this static page by vercel.json).
 // Reads state from /api/booking; renders read-only facts, plus the action
 // buttons only when the API says this visitor is staff.
-import Layout from '../components/Layout.astro';
-import { t } from '../data/load.mjs';
+import Layout from '../../components/Layout.astro';
+import { t } from '../../data/load.mjs';
 
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);

@@ -23,14 +23,14 @@ subtitle:
 # amount+currency are cross-checked against the LIVE Stripe price at
 # build time (scripts/check-stripe.mjs) — a mismatch fails the build.
 displayPrice:
-  amount: 60000 # cents: HK$600 confirmed against the live Stripe price
+  amount: 1000 # cents: HK$10 — TEST price until checkout goes live (HK$600 retired, deactivated)
   currency: 'HKD'
-  formatted: 'HK$600'
+  formatted: 'HK$10 [test]'
 
 # The live Stripe price object id (created once per product).
 # Optional while the product is display-only: absent → the button shows
 # "coming soon" instead of checkout. NEVER put secret keys here.
-stripePriceId: 'price_1UVh9yELihTI1DD4rqAoMvDs' # live, HK$600 — created by scripts/stripe-product.mjs
+stripePriceId: 'price_1UVhFXELihTI1DD4gsxbnzOv' # live, HK$10 TEST — raise a real price before selling
 
 # Inventory semantics (decided per ADR 0004; adjust when wiring checkout):
 #   perEvent: true  → stock is per event; sold out = gone for that event.

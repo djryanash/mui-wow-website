@@ -34,6 +34,7 @@ const copy = {
   const ref = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
   const view = document.getElementById('booking-view');
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const L = (o) => (o && typeof o === 'object' ? o[locale === 'zh-hk' ? 'zh' : locale] ?? o.en : o);
 
   async function load() {
     const r = await fetch(`/api/booking?ref=${ref}`).then((x) => x.json());
@@ -44,16 +45,16 @@ const copy = {
     const items = (r.items ?? []).map((i) => `<li>${esc(i.name)} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}</li>`).join('');
     const actions = r.staff
       ? `<div class="booking-actions">
-          ${r.state === 'reserved' ? `<button class="btn btn-gold" data-action="collect">${copy.collect}</button>` : ''}
-          ${r.state === 'collected' ? `<button class="btn btn-gold" data-action="return">${copy.doReturn}</button>` : ''}
+          ${r.state === 'reserved' ? `<button class="btn btn-gold" data-action="collect">${esc(L(copy.collect))}</button>` : ''}
+          ${r.state === 'collected' ? `<button class="btn btn-gold" data-action="return">${esc(L(copy.doReturn))}</button>` : ''}
         </div>`
       : '';
     view.innerHTML = `
       <div class="fact"><strong>Ref:</strong> <span class="ref">${esc(r.ref)}</span></div>
-      <div class="fact"><strong>${esc(r.state ? copy.state[r.state][locale] ?? copy.state[r.state].en : '')}</strong></div>
+      <div class="fact"><strong>${esc(r.state && r.state !== '' ? L(copy.state[r.state]) : '')}</strong></div>
       <ul class="schedule-strip" style="margin:18px 0">${items}</ul>
       ${r.amount ? `<div class="fact"><strong>HK$${(r.amount / 100).toLocaleString('en-HK')}</strong></div>` : ''}
-      <p class="hint">${esc(copy.show)}</p>
+      <p class="hint">${esc(L(copy.show))}</p>
       ${actions}`;
   }
 

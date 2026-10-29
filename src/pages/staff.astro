@@ -70,7 +70,7 @@ const copy = {
     if (r.error) { dash.hidden = true; gateView.hidden = false; return; }
     gateView.hidden = true;
     dash.hidden = false;
-    bookEl.innerHTML = r.bookings.map(row).join('') || `<p>${esc(r.createdAtToday === 0 ? copy.out : '')}</p>`;
+    bookEl.innerHTML = r.bookings.map(row).join('') || `<p>${esc(L(copy.out))}</p>`;
   }
 
   gateForm.addEventListener('submit', async (e) => {

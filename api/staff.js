@@ -14,11 +14,6 @@ import { kvGet, kvSet, kvKeys } from './stripe-webhook.js';
 import crypto from 'node:crypto';
 
 const COOKIE = 'muiwow_staff';
-const json = (code, obj, extraHeaders = {}) => ({
-  statusCode: code,
-  headers: { 'Content-Type': 'application/json', ...extraHeaders },
-  body: JSON.stringify(obj),
-});
 
 function expectedCookie() {
   const secret = process.env.STAFF_GATE;
@@ -54,13 +49,14 @@ export default async function handler(req, res) {
     if (provided) {
       if (gate && provided === gate) {
         const cookieValue = expectedCookie();
-        return json(200, await dashboard(), {
-          'Set-Cookie': `${COOKIE}=${cookieValue}; Path=/; Max-Age=7776000; Secure; HttpOnly; SameSite=Lax`,
-        });
+        res.setHeader('Set-Cookie', `${COOKIE}=${cookieValue}; Path=/; Max-Age=7776000; Secure; HttpOnly; SameSite=Lax`);
+        return res.status(200).json(await dashboard());
       }
       return res.status(401).json({ error: 'wrong gate' });
     }
-    if (hasStaffCookie(req)) return json(200, await dashboard());
+    if (hasStaffCookie(req)) {
+      return res.status(200).json(await dashboard());
+    }
     return res.status(401).json({ error: 'staff gate required' });
   }
 
@@ -97,7 +93,7 @@ export default async function handler(req, res) {
       { action, at: now },
     ];
     await kvSet(`booking:${ref}`, booking);
-    return json(200, { ref, state: booking.state });
+    return res.status(200).json({ ref, state: booking.state });
   }
 
   return res.status(405).json({ error: 'GET or POST' });

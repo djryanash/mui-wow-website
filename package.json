@@ -13,6 +13,7 @@
   "dependencies": {
     "astro": "^5.7.0",
     "js-yaml": "^4.1.0",
+    "qrcode": "^1.5.4",
     "zod": "^3.24.0"
   }
 }

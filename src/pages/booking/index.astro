@@ -1,0 +1,78 @@
+---
+// Booking page: /booking/:ref (rewritten to this static page by vercel.json).
+// Reads state from /api/booking; renders read-only facts, plus the action
+// buttons only when the API says this visitor is staff.
+import Layout from '../components/Layout.astro';
+import { t } from '../data/load.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const copy = {
+  title: { en: 'Your booking', es: 'Tu reserva', zh: '你嘅預訂' },
+  show: { en: 'Show this page at the beach', es: 'Muestra esta página en la playa', zh: '到沙灘時出示此頁' },
+  state: { reserved: { en: 'Awaiting collection', es: 'Pendiente de recogida', zh: '待提取' }, collected: { en: 'Collected', es: 'Recogido', zh: '已提取' }, returned: { en: 'Returned', es: 'Devuelto', zh: '已歸還' } },
+  collect: { en: 'Mark collected', es: 'Marcar recogido', zh: '標記已提取' },
+  doReturn: { en: 'Mark returned', es: 'Marcar devuelto', zh: '標記已歸還' },
+  loading: { en: 'Loading…', es: 'Cargando…', zh: '載入中…' },
+  none: { en: 'Booking not found.', es: 'Reserva no encontrada.', zh: '搵唔到此預訂。' },
+};
+---
+
+<Layout locale={locale} title={`${T(copy.title)} · Mui WoW`} description={T(copy.show)}>
+  <section class="section">
+    <div class="container booking" style="max-width:620px">
+      <p class="kicker">Mui WoW</p>
+      <h1>{T(copy.title)}</h1>
+      <div id="booking-view">
+        <p>{T(copy.loading)}</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ locale, copy: JSON.parse(JSON.stringify(copy)) }}>
+  const ref = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
+  const view = document.getElementById('booking-view');
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  async function load() {
+    const r = await fetch(`/api/booking?ref=${ref}`).then((x) => x.json());
+    if (r.error) {
+      view.innerHTML = `<p>${esc(r.error === 'unknown booking' ? copy.none : r.error)}</p>`;
+      return;
+    }
+    const items = (r.items ?? []).map((i) => `<li>${esc(i.name)} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}</li>`).join('');
+    const actions = r.staff
+      ? `<div class="booking-actions">
+          ${r.state === 'reserved' ? `<button class="btn btn-gold" data-action="collect">${copy.collect}</button>` : ''}
+          ${r.state === 'collected' ? `<button class="btn btn-gold" data-action="return">${copy.doReturn}</button>` : ''}
+        </div>`
+      : '';
+    view.innerHTML = `
+      <div class="fact"><strong>Ref:</strong> <span class="ref">${esc(r.ref)}</span></div>
+      <div class="fact"><strong>${esc(r.state ? copy.state[r.state][locale] ?? copy.state[r.state].en : '')}</strong></div>
+      <ul class="schedule-strip" style="margin:18px 0">${items}</ul>
+      ${r.amount ? `<div class="fact"><strong>HK$${(r.amount / 100).toLocaleString('en-HK')}</strong></div>` : ''}
+      <p class="hint">${esc(copy.show)}</p>
+      ${actions}`;
+  }
+
+  view.addEventListener('click', async (e) => {
+    const btn = e.target.closest?.('[data-action]');
+    if (!btn) return;
+    btn.disabled = true;
+    const r = await fetch('/api/staff', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref, action: btn.dataset.action }),
+    }).then((x) => x.json());
+    if (r.error) {
+      btn.disabled = false;
+      view.querySelector('.booking-actions')?.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`);
+      return;
+    }
+    load();
+  });
+
+  load();
+</script>

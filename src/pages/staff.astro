@@ -1,0 +1,101 @@
+---
+// Staff page: gate form on first visit (cookie set), dashboard afterwards.
+// The dashboard is served by /api/staff with the cookie; this page is the UI.
+import Layout from '../components/Layout.astro';
+import { t } from '../data/load.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const copy = {
+  title: { en: 'Mui WoW — staff', es: 'Mui WoW — personal', zh: 'Mui WoW — 工作台' },
+  gatePrompt: { en: 'Enter the staff access word', es: 'Introduce la palabra de acceso', zh: '輸入工作人員密語' },
+  enter: { en: 'Enter', es: 'Entrar', zh: '進入' },
+  wrong: { en: 'That word is wrong.', es: 'Esa palabra no es correcta.', zh: '密語唔正確。' },
+  out: { en: 'Items out', es: 'Artículos fuera', zh: '未歸還物品' },
+  collected: { en: 'Collected, not returned', es: 'Recogidos, no devueltos', zh: '已提未還' },
+  reserved: { en: 'Awaiting pickup', es: 'Pendiente de recogida', zh: '待提取' },
+  collect: { en: 'Mark collected', es: 'Marcar recogido', zh: '標記已提取' },
+  doReturn: { en: 'Mark returned', es: 'Marcar devuelto', zh: '標記已歸還' },
+};
+---
+
+<Layout locale={locale} title={T(copy.title)} description="Mui WoW staff">
+  <section class="section">
+    <div class="container" style="max-width:720px">
+      <p class="kicker">Mui WoW</p>
+      <h1>{T(copy.title)}</h1>
+
+      <div id="staff-gate">
+        <p>{T(copy.gatePrompt)}</p>
+        <form id="gate-form" style="display:flex; gap:10px; max-width:380px">
+          <input name="gate" type="password" autocomplete="off" style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid rgba(56,163,165,.5); background:#1d2d44; color:#f5f2ea" />
+          <button class="btn btn-gold" type="submit">{T(copy.enter)}</button>
+        </form>
+        <p id="gate-error" class="flash-error" hidden>{T(copy.wrong)}</p>
+      </div>
+
+      <div id="staff-view" hidden>
+        <h2>{T(copy.out)}</h2>
+        <div id="bookings"></div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ locale, copy: JSON.parse(JSON.stringify(copy)) }}>
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const gateForm = document.getElementById('gate-form');
+  const gateView = document.getElementById('staff-gate');
+  const dash = document.getElementById('staff-view');
+  const bookEl = document.getElementById('bookings');
+
+  const stateLabel = (s) => (s === 'collected' ? copy.collected : s === 'reserved' ? copy.reserved : s);
+
+  function row(b) {
+    const items = (b.items ?? []).map((i) => `${esc(i.name)} × ${i.qty}`).join(', ');
+    const acts = b.state === 'reserved'
+      ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="collect">${copy.collect}</button>`
+      : b.state === 'collected'
+        ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="return">${copy.doReturn}</button>`
+        : '';
+    return `<div class="cart-row" style="margin-bottom:10px">
+      <div><div class="cart-name"><a href="/booking/${esc(b.ref)}">${esc(b.ref)}</a></div>
+      <div class="cart-line">${items || '—'} · HK$${((b.amount ?? 0) / 100).toLocaleString('en-HK')} · ${esc(stateLabel(b.state))}</div></div>
+      <div class="booking-actions">${acts}</div></div>`;
+  }
+
+  async function load() {
+    const r = await fetch('/api/staff').then((x) => x.json());
+    if (r.error) { dash.hidden = true; gateView.hidden = false; return; }
+    gateView.hidden = true;
+    dash.hidden = false;
+    bookEl.innerHTML = r.bookings.map(row).join('') || `<p>${esc(r.createdAtToday === 0 ? copy.out : '')}</p>`;
+  }
+
+  gateForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const gate = new FormData(gateForm).get('gate');
+    const r = await fetch(`/api/staff?gate=${encodeURIComponent(String(gate))}`).then((x) => x.json());
+    if (r.error) {
+      document.getElementById('gate-error').hidden = false;
+      return;
+    }
+    document.getElementById('gate-error').hidden = true;
+    load();
+  });
+
+  bookEl.addEventListener('click', async (e) => {
+    const btn = e.target.closest?.('[data-action]');
+    if (!btn) return;
+    btn.disabled = true;
+    const r = await fetch('/api/staff', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: btn.dataset.ref, action: btn.dataset.action }),
+    }).then((x) => x.json());
+    if (r.error) { btn.disabled = false; btn.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`); return; }
+    load();
+  });
+
+  load();
+</script>

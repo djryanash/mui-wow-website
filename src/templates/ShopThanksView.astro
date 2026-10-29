@@ -1,0 +1,27 @@
+---
+import Layout from '../components/Layout.astro';
+import { t } from '../data/load.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const copy = {
+  title: { en: 'Thank you — see you at the beach!', es: '¡Gracias — te esperamos en la playa!', zh: '多謝你 — 沙灘見！' },
+  body: {
+    en: 'Your booking is confirmed. A confirmation email with your QR code is on its way — show it at the beach and we hand over your items.',
+    es: 'Tu reserva está confirmada. Te llega un email con tu código QR — muéstralo en la playa y te entregamos tus artículos.',
+    zh: '你嘅預訂已確認。確認電郵連 QR 二維碼正在路上 — 到沙灘時出示，我哋即刻交貨俾你。',
+  },
+  back: { en: '← Back to rentals', es: '← Volver a alquileres', zh: '← 返回租賃' },
+};
+---
+
+<Layout locale={locale} title={T(copy.title)} description={T(copy.body)}>
+  <section class="coming-soon">
+    <div class="container">
+      <img src="/images/brand/mui-wow-logo.png" alt="Mui WoW" style="height:100px; margin:0 auto 18px;" />
+      <h1>{T(copy.title)}</h1>
+      <p style="max-width:52ch; margin:14px auto">{T(copy.body)}</p>
+      <a href="/rentals">{T(copy.back)}</a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,77 @@
+# fall back to English (ADR 0003). Edit src/data/site.yaml for chrome.
+
+slug: 'sunset-picnic-hamper'
+
+# Gate: published=false hides from the catalogue (page 404s politely).
+published: true
+
+# Rental = physical equipment, returned after the event, re-rented later.
+# Consumable = food/one-off items (hampers), sold per event.
+kind: 'rental' # 'rental' | 'consumable'
+
+# Public name and one-line pitch.
+name:
+  en: 'Sunset Picnic Hamper'
+  es: 'Cesta de Picnic al Atardecer'
+  zh: '黃昏野餐藍'
+subtitle:
+  en: 'Everything for two at the sands: blanket, lanterns, cups and more.'
+  es: 'Todo para dos en la arena: manta, farolillos, vasos y más.'
+  zh: '兩人沙灘所需：毛氈、燈籠、杯具等一應俱全。'
+
+# What the buyer pays. The `formatted` string is what the page shows;
+# amount+currency are cross-checked against the LIVE Stripe price at
+# build time (scripts/check-stripe.mjs) — a mismatch fails the build.
+displayPrice:
+  amount: 60000 # cents: HK$600 confirmed against the live Stripe price
+  currency: 'HKD'
+  formatted: 'HK$600'
+
+# The live Stripe price object id (created once per product).
+# Optional while the product is display-only: absent → the button shows
+# "coming soon" instead of checkout. NEVER put secret keys here.
+stripePriceId: 'price_1UVh9yELihTI1DD4rqAoMvDs' # live, HK$600 — created by scripts/stripe-product.mjs
+
+# Inventory semantics (decided per ADR 0004; adjust when wiring checkout):
+#   perEvent: true  → stock is per event; sold out = gone for that event.
+#   perEvent: false → always rentable, no event tie-in.
+#   stock: display/validation number (the checkout is the real source of truth).
+inventory:
+  perEvent: true
+  stock: 10
+
+# Image paths, relative to / on the site. FIRST image = the card face.
+# Convention: put the files in:
+#   public/images/products/<slug>/<name>.png|jpg
+# Any full-frame overlay/mask artwork (light masks, stills) stays in
+# /images/events/, which belongs to the event it decorates.
+images:
+  - '/images/products/sunset-picnic-hamper/picnic-hamper-card-face.jpeg'
+
+# Longer page copy + bullet highlights (all three languages welcome).
+details:
+  en: >-
+    A hamper for two: a blanket, lanterns, cups, and everything the
+    evening needs. Collected at the beach when you arrive.
+  es: >-
+    Una cesta para dos: manta, farolillos, vasos y todo lo que la tarde
+    pide. Se recoge en la playa al llegar.
+  zh: >-
+    兩人份野餐藍：毛氈、燈籠、杯具，黃昏所需一應俱全。到達沙灘時自取。
+highlights:
+  - en: 'Fits a couple, scales with a family'
+    es: 'Para pareja, ampliable con familia'
+    zh: '情侶二人份，家庭可加購'
+
+# Optional logistics note shown with the CTA.
+pickupNote:
+  en: 'Collected and returned at Silvermine Beach on the day.'
+  es: 'Se recoge y devuelve en la playa Silvermine el mismo día.'
+  zh: '活動當日喺銀礦灣沙灘取還。'
+
+# ─────────────────────────────────────────────────────────────────
+# * HKD note: displayPrice.amount is what Stripe stores — HKD uses
+# two decimal places, so amounts are in CENTS: HK$100 → '10000'.
+# The `formatted` string is hand-written display copy; the live
+# cross-check compares amount+currency against Stripe and fails the
+# build on drift (e.g. a price changed in the dashboard).

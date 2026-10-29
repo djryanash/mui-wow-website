@@ -82,7 +82,7 @@ const products = loadProducts();
     const fab = document.querySelector('[data-cart-open]');
     const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
     fab.hidden = false;
-    drawer.querySelector('[data-cart-badge]').textContent = count || '';
+    document.querySelector('[data-cart-badge]').textContent = count || '';
     let total = 0;
     for (const slug of slugs) {
       total += cart[slug].cents * cart[slug].qty;

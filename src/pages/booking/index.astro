@@ -87,7 +87,7 @@ const copy = {
         body: JSON.stringify({ ref, action: 'deliver', orderId: d.dataset.deliver }),
       }).then((x) => x.json());
       if (rr.error) { d.disabled = false; return; }
-      load();
+      loadAndPaint();
       return;
     }
     const btn = e.target.closest?.('[data-action]');
@@ -103,13 +103,18 @@ const copy = {
       view.querySelector('.booking-actions')?.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`);
       return;
     }
-    load();
+    loadAndPaint();
   });
 
-  load().then(() => {
+  function refreshQr() {
     const el = document.getElementById('addons-qr');
     if (el && window.QRCode) {
       window.QRCode.toCanvas(el, decodeURIComponent(location.origin + '/addons/' + ref), { width: 200, color: { dark: '#0b132b', light: '#ffffff' } });
     }
-  });
+  }
+
+  // after EVERY re-render (initial load, and every staff state change) —
+  // the fresh canvas gets the add-on menu QR repainted.
+  async function loadAndPaint() { await load(); refreshQr(); }
+  loadAndPaint();
 </script>

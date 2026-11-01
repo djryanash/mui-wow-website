@@ -76,6 +76,7 @@ export default async function handler(req, res) {
   } catch {
     return res.status(400).json({ error: 'bad request body' });
   }
+  const parentRef = String((typeof req.body === 'string' ? JSON.parse(req.body) : req.body)?.ref ?? (req.headers['x-booking-ref'] ?? '')).toUpperCase();
   if (!Array.isArray(items) || items.length === 0 || items.length > 20) {
     return res.status(400).json({ error: 'empty or oversized cart' });
   }
@@ -95,12 +96,15 @@ export default async function handler(req, res) {
     }
 
     const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
+    const successUrl = parentRef
+      ? `${origin}/addons/${encodeURIComponent(parentRef)}?paid=1`
+      : `${origin}/shop-thanks`;
     const session = await stripe('POST', '/checkout/sessions', {
       mode: 'payment',
-      success_url: `${origin}/shop-thanks`,
-      cancel_url: `${origin}/rentals`,
+      success_url: successUrl,
+      cancel_url: parentRef ? `${origin}/addons/${encodeURIComponent(parentRef)}` : `${origin}/rentals`,
       line_items,
-      metadata: { site: 'mui-wow' },
+      metadata: { site: 'mui-wow', ...(parentRef ? { parentRef } : {}) },
     });
     return res.status(200).json({ url: session.url, id: session.id });
   } catch (e) {

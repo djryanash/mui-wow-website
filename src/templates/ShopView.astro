@@ -9,7 +9,7 @@ import { chrome } from '../data/chrome.mjs';
 const site = loadSite();
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
-const products = loadProducts();
+const products = loadProducts().filter((p) => !p.isAddon);
 ---
 
 <Layout locale={locale} title={T(chrome.shopTitle)} description={T(chrome.shopTitle)}>

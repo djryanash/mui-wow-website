@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     { "source": "/booking/:ref", "destination": "/booking/index.html" },
-    { "source": "/booking/:ref/", "destination": "/booking/index.html" }
+    { "source": "/booking/:ref/", "destination": "/booking/index.html" },
+    { "source": "/addons/:ref", "destination": "/addons/index.html" },
+    { "source": "/addons/:ref/", "destination": "/addons/index.html" }
   ]
 }

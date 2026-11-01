@@ -112,6 +112,7 @@ async function dashboard() {
       createdAt: b.createdAt,
       email: b.email,
       items: b.items ?? [],
+      orders: b.orders ?? [],
       history: b.history ?? [],
     })),
   };

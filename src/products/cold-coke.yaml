@@ -1,0 +1,19 @@
+slug: 'cold-coke'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name:
+  en: 'Soft Drink'
+  es: 'Refresco'
+  zh: '汽水'
+subtitle:
+  en: 'Cola, lemon tea or water, ice cold.'
+  es: 'Cola, té de limón o agua, bien fría.'
+  zh: '可樂、檸檬茶或水，冰鎮。'
+displayPrice:
+  amount: 1500
+  currency: 'HKD'
+  formatted: 'HK$15'
+
+stripePriceId: 'price_1UWxUSCzy81v9aNt4hqYddSy' # sandbox (test) — live price created when these go real

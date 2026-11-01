@@ -59,10 +59,15 @@ const copy = {
       : b.state === 'collected'
         ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="return">${esc(L(copy.doReturn))}</button>`
         : '';
+    const orders = (b.orders ?? []).map((o) => `
+      <div class="cart-row" style="background:rgba(29,45,68,0.35)">
+        <div><div class="cart-line">${(o.items ?? []).map((i) => esc(i.name) + ' × ' + i.qty).join(', ') || '—'} · HK$${((o.amount ?? 0) / 100).toLocaleString('en-HK')} · ${o.state === 'delivered' ? (copy.delivered[locale === 'zh-hk' ? 'zh' : locale] ?? copy.delivered.en) : (locale === 'es' ? 'Pendiente' : locale === 'zh-hk' ? '待送' : 'Awaiting delivery')}</div></div>
+        ${o.state === 'reserved' ? `<button class="btn btn-gold" data-chain="${esc(b.ref)}" data-order="${esc(o.id)}" data-action="deliver">✓</button>` : ''}
+      </div>`).join('');
     return `<div class="cart-row" style="margin-bottom:10px">
       <div><div class="cart-name"><a href="/booking/${esc(b.ref)}">${esc(b.ref)}</a></div>
       <div class="cart-line">${items || '—'} · HK$${((b.amount ?? 0) / 100).toLocaleString('en-HK')} · ${esc(stateLabel(b.state))}</div></div>
-      <div class="booking-actions">${acts}</div></div>`;
+      <div class="booking-actions">${acts}</div>${orders}</div>`;
   }
 
   async function load() {
@@ -86,6 +91,18 @@ const copy = {
   });
 
   bookEl.addEventListener('click', async (e) => {
+    const d = e.target.closest?.('[data-action="deliver"]');
+    if (d) {
+      d.disabled = true;
+      const r = await fetch('/api/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: d.dataset.chain, action: 'deliver', orderId: d.dataset.order }),
+      }).then((x) => x.json());
+      if (r.error) { d.disabled = false; d.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`); return; }
+      load();
+      return;
+    }
     const btn = e.target.closest?.('[data-action]');
     if (!btn) return;
     btn.disabled = true;

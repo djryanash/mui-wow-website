@@ -18,6 +18,7 @@ const copy = {
 };
 ---
 
+<script src="/js/qrcode.min.js" is:inline></script>
 <Layout locale={locale} title={`${T(copy.title)} · Mui WoW`} description={T(copy.show)}>
   <section class="section">
     <div class="container booking" style="max-width:620px">
@@ -43,11 +44,29 @@ const copy = {
       return;
     }
     const items = (r.items ?? []).map((i) => `<li>${esc(i.name)} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}</li>`).join('');
+    const addonsTitle = locale === 'es' ? 'Extras pedidos' : locale === 'zh-hk' ? '已落嘅加購' : 'Add-on orders';
+    const orderRow = (o) => `
+      <div class="cart-row">
+        <div>
+          <div class="cart-line">${(o.items ?? []).map((i) => esc(i.name) + ' × ' + i.qty).join(', ')} · HK$${((o.amount ?? 0) / 100).toLocaleString('en-HK')}</div>
+          <div class="cart-line">${esc(o.state === 'reserved' ? (locale === 'es' ? 'Pendiente' : locale === 'zh-hk' ? '待送' : 'Awaiting delivery') : (locale === 'es' ? 'Entregado' : locale === 'zh-hk' ? '已送達' : 'Delivered'))}</div>
+        </div>
+        ${r.staff && o.state === 'reserved' ? `<button class="btn btn-gold" data-deliver="${esc(o.id)}">✓</button>` : ''}
+      </div>`;
+    const ordersBlock = (r.orders ?? []).length
+      ? `<div class="info-block"><h3>${addonsTitle}</h3>${r.orders.map(orderRow).join('')}</div>`
+      : '';
+    const addonsQr = r.staff
+      ? `<div class="addons-qr-block">
+          <p class="hint-strong">${locale === 'es' ? 'Que el cliente escanee esto para pedir más:' : locale === 'zh-hk' ? '俾客人掃描以下二維碼加購:' : 'Let the customer scan this to order add-ons:'}</p>
+          <canvas id="addons-qr" class="qr-frame" width="200" height="200"></canvas>
+        </div>`
+      : '';
     const actions = r.staff
       ? `<div class="booking-actions">
           ${r.state === 'reserved' ? `<button class="btn btn-gold" data-action="collect">${esc(L(copy.collect))}</button>` : ''}
           ${r.state === 'collected' ? `<button class="btn btn-gold" data-action="return">${esc(L(copy.doReturn))}</button>` : ''}
-        </div>`
+        </div>${ordersBlock}${addonsQr}`
       : '';
     view.innerHTML = `
       <div class="fact"><strong>Ref:</strong> <span class="ref">${esc(r.ref)}</span></div>
@@ -59,6 +78,18 @@ const copy = {
   }
 
   view.addEventListener('click', async (e) => {
+    const d = e.target.closest?.('[data-deliver]');
+    if (d) {
+      d.disabled = true;
+      const rr = await fetch('/api/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref, action: 'deliver', orderId: d.dataset.deliver }),
+      }).then((x) => x.json());
+      if (rr.error) { d.disabled = false; return; }
+      load();
+      return;
+    }
     const btn = e.target.closest?.('[data-action]');
     if (!btn) return;
     btn.disabled = true;
@@ -75,5 +106,10 @@ const copy = {
     load();
   });
 
-  load();
+  load().then(() => {
+    const el = document.getElementById('addons-qr');
+    if (el && window.QRCode) {
+      window.QRCode.toCanvas(el, decodeURIComponent(location.origin + '/addons/' + ref), { width: 200, color: { dark: '#0b132b', light: '#ffffff' } });
+    }
+  });
 </script>

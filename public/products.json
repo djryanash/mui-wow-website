@@ -1,9 +1,115 @@
 {
-  "generatedAt": "2026-10-29T03:38:39.155Z",
+  "generatedAt": "2026-11-01T12:08:29.292Z",
   "products": [
+    {
+      "slug": "movie-popcorn",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Beach Popcorn",
+        "es": "Palomitas",
+        "zh": "沙灘爆谷"
+      },
+      "subtitle": {
+        "en": "Fresh popcorn, delivered to your blanket.",
+        "es": "Palomitas recién hechas.",
+        "zh": "新鮮爆谷，送到你張毛氈。"
+      },
+      "displayPrice": {
+        "amount": 2000,
+        "currency": "HKD",
+        "formatted": "HK$20"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": null
+      },
+      "images": []
+    },
+    {
+      "slug": "sunset-beer",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Ice-Cold Beer",
+        "es": "Cerveza fría",
+        "zh": "冰凍啤酒"
+      },
+      "subtitle": {
+        "en": "Chilled at the beach bar, opened on request.",
+        "es": "Enfriada en el bar de la playa.",
+        "zh": "沙灘小賣部冰鎮，即開即飲。"
+      },
+      "displayPrice": {
+        "amount": 2500,
+        "currency": "HKD",
+        "formatted": "HK$25"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": null
+      },
+      "images": []
+    },
+    {
+      "slug": "beach-nachos",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Nachos Plate",
+        "es": "Plato de Nachos",
+        "zh": "芝士粟米片"
+      },
+      "subtitle": {
+        "en": "Warm nachos with cheese salsa, for sharing.",
+        "es": "Nachos calientes con salsa de queso.",
+        "zh": "熱辣辣芝士醬粟米片，多人分享。"
+      },
+      "displayPrice": {
+        "amount": 3000,
+        "currency": "HKD",
+        "formatted": "HK$30"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": null
+      },
+      "images": []
+    },
+    {
+      "slug": "cold-coke",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Soft Drink",
+        "es": "Refresco",
+        "zh": "汽水"
+      },
+      "subtitle": {
+        "en": "Cola, lemon tea or water, ice cold.",
+        "es": "Cola, té de limón o agua, bien fría.",
+        "zh": "可樂、檸檬茶或水，冰鎮。"
+      },
+      "displayPrice": {
+        "amount": 1500,
+        "currency": "HKD",
+        "formatted": "HK$15"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": null
+      },
+      "images": []
+    },
     {
       "slug": "sunset-picnic-hamper",
       "kind": "rental",
+      "isAddon": false,
+      "orderable": true,
       "name": {
         "en": "Sunset Picnic Hamper",
         "es": "Cesta de Picnic al Atardecer",

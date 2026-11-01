@@ -1,0 +1,88 @@
+---
+// Add-on menu: /addons/:ref (rewritten to this page by vercel.json).
+// Reached when the customer scans the QR shown on the staff's device.
+// Quick-order: each item checks out on its own Stripe session with the
+// booking ref attached, so the order joins the chain. Payment returns here.
+import Layout from '../../components/Layout.astro';
+import { t, loadProducts } from '../../data/load.mjs';
+import { chrome } from '../../data/chrome.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const addons = loadProducts().filter((p) => p.isAddon && p.orderable);
+const title = T(chrome.addonsTitle);
+---
+
+<Layout locale={locale} title={title} description={T(chrome.addonsHint)}>
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <p class="kicker">Mui WoW</p>
+      <h1>{title}</h1>
+      <p class="cart-note">{T(chrome.addonsHint)}</p>
+      <div class="cards addons-grid">
+        {addons.map((p) => (
+          <div class="product-card">
+            {p.images?.[0] ? (
+              <img class="thumb" src={p.images[0]} alt={T(p.name)} loading="lazy" />
+            ) : (
+              <div class="fallback-thumb">
+                <span style="font-size:2rem">🍺</span>
+              </div>
+            )}
+            <div class="body">
+              <h3>{T(p.name)}</h3>
+              {p.subtitle && <p class="sub">{T(p.subtitle)}</p>}
+              <div class="price-row">
+                <span class="price">{p.displayPrice.formatted}</span>
+                <button class="btn btn-gold" data-quick-order={p.slug} data-price={p.displayPrice.formatted}>
+                  {T(chrome.quickOrder)} <span class="arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p id="addons-note" class="flash-error" hidden></p>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  (function () {
+    const lang = document.documentElement.getAttribute('lang');
+    const ref = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
+    if (!/^[A-Z0-9]{6,16}$/.test(ref)) return;
+
+    // came back from payment?
+    if (new URLSearchParams(location.search).get('paid')) {
+      history.replaceState(null, '', '/addons/' + ref);
+      document.getElementById('addons-note').hidden = false;
+      document.getElementById('addons-note').textContent =
+        lang === 'es' ? '¡Pedido recibido! Lo llevamos enseguida.' :
+        lang === 'zh-hk' ? '落單成功！即刻送上。' :
+        'Order received! The team is bringing it over.';
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest?.('[data-quick-order]');
+      if (!btn) return;
+      btn.disabled = true;
+      const note = document.getElementById('addons-note');
+      fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ slug: btn.dataset.quickOrder, qty: 1 }], ref }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.url) location.href = d.url;
+          else throw new Error(d.error ?? 'failed');
+        })
+        .catch((err) => {
+          btn.disabled = false;
+          note.hidden = false;
+          note.textContent = (lang === 'es' ? 'Todavía no se puede pedir: ' : lang === 'zh-hk' ? '暫時未能落單：' : 'Ordering not ready yet: ') + (err.message ?? '');
+        });
+    });
+  })();
+</script>

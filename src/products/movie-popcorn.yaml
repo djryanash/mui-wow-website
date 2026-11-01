@@ -1,0 +1,19 @@
+slug: 'movie-popcorn'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name:
+  en: 'Beach Popcorn'
+  es: 'Palomitas'
+  zh: '沙灘爆谷'
+subtitle:
+  en: 'Fresh popcorn, delivered to your blanket.'
+  es: 'Palomitas recién hechas.'
+  zh: '新鮮爆谷，送到你張毛氈。'
+displayPrice:
+  amount: 2000
+  currency: 'HKD'
+  formatted: 'HK$20'
+
+stripePriceId: 'price_1UWxURCzy81v9aNtQVvb1iJZ' # sandbox (test) — live price created when these go real

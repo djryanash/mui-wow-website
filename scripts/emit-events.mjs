@@ -22,6 +22,8 @@ const events = loadEvents().map((e) => ({
 const products = loadProducts().map((p) => ({
   slug: p.slug,
   kind: p.kind,
+  isAddon: p.isAddon,
+  orderable: p.orderable || !!p.stripePriceId,
   name: p.name,
   subtitle: p.subtitle ?? null,
   displayPrice: p.displayPrice,

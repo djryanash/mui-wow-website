@@ -4,6 +4,7 @@ slug: 'sunset-picnic-hamper'
 
 # Gate: published=false hides from the catalogue (page 404s politely).
 published: true
+orderable: true
 
 # Rental = physical equipment, returned after the event, re-rented later.
 # Consumable = food/one-off items (hampers), sold per event.

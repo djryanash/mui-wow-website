@@ -50,7 +50,8 @@ export function loadProducts(dir = 'src/products') {
     .filter((f) => f.endsWith('.yaml') && !f.startsWith('_')) // _-prefixed = docs only
     .map((f) => assertSchema(productSchema, readYaml(join(full, f)), `src/products/${f}`))
     .filter((p) => p.published)
-    .sort((a, b) => t(a.name, 'en').localeCompare(t(b.name, 'en')));
+    .sort((a, b) => _t(a.name, 'en').localeCompare(_t(b.name, 'en')));
 }
 
 export { isPast, pickFeatured, pickRecentsPast, pickUpcoming, t, normalizeLights } from './events.lib.mjs';
+import { t as _t } from './events.lib.mjs';

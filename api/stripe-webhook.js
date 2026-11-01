@@ -113,13 +113,51 @@ async function stripeGet(path) {
   return b;
 }
 
-/** Items from the session's checked-out line items, named from the product YAML convention. */
+const ORIGIN = () => (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
+
+/** products.json from the site's own origin (spec §5 runtime contract). */
+let productsCache = null;
+async function muiWowProducts() {
+  if (productsCache) return productsCache;
+  const r = await fetch(ORIGIN() + '/products.json', { cache: 'no-cache' });
+  productsCache = (await r.json()).products ?? [];
+  return productsCache;
+}
+
+/** Map of each active price id → its product slug, via Stripe price metadata
+ *  (world-correct: the sandbox and live keys each see their own prices). */
+async function slugByPriceId() {
+  const out = {};
+  let startAfter = null;
+  for (;;) {
+    const page = await stripeGet(`/prices?limit=100&active=true${startAfter ? `&starting_after=${startAfter}` : ''}`);
+    for (const p of page.data) if (p.metadata?.site === 'mui-wow' && p.metadata?.slug) out[p.id] = p.metadata.slug;
+    if (!page.has_more) break;
+    startAfter = page.data.at(-1)?.id;
+  }
+  return out;
+}
+
+/** Items from the session's checked-out line items, each slugged + kinded
+ *  (slug via Stripe price metadata; kind via products.json by slug). */
 async function sessionItems(sessionId) {
   const si = await stripeGet(`checkout/sessions/${sessionId}?expand[]=line_items`);
   const lines = si?.line_items?.data ?? [];
   if (!lines.length) return [];
+  const [slugs, catalog] = await Promise.all([slugByPriceId(), muiWowProducts()]);
   const byPriceId = {};
-  for (const li of lines) byPriceId[li.price.id] = { name: li.description ?? li.price.nickname ?? 'item', qty: li.quantity, subtotal: li.amount_total, priceId: li.price.id };
+  for (const li of lines) {
+    const slug = slugs[li.price.id] ?? null;
+    const p = catalog.find((c) => c.slug === slug);
+    byPriceId[li.price.id] = {
+      slug,
+      kind: p?.kind ?? 'consumable',
+      name: li.description ?? li.price.nickname ?? 'item',
+      qty: li.quantity,
+      subtotal: li.amount_total,
+      priceId: li.price.id,
+    };
+  }
   return Object.values(byPriceId);
 }
 
@@ -130,34 +168,44 @@ async function sendBookingEmail(origin, ref, email, items, amount) {
   // Test-sandbox rule: Resend's unverified domain can only deliver to the
   // account owner's own address. RESEND_REDIRECT_TO (set while testing)
   // redirects EVERY booking email there so the QR is receivable; the buyer's
-  // original address stays in the record and in the template's own line.
+  // original address stays in the record.
   const to = process.env.RESEND_REDIRECT_TO || email;
   if (!to) return 'skipped (no recipient)';
-  const qr = await QRCode.toDataURL(`${origin}/booking/${ref}`, {
-    width: 460,
-    color: { dark: '#0b132b', light: '#ffffff' },
-  });
-  const line = items
-    .map((i) => `${i.name} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}`)
-    .join('<br/>');
+  const qr = await QRCode.toDataURL(`${origin}/booking/${ref}`, { width: 460, color: { dark: '#0b132b', light: '#ffffff' } });
+  const line = items.map((i) => `${i.name} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}`).join('<br/>');
   const from = process.env.RESEND_FROM ?? 'Mui WoW <onboarding@resend.dev>'; // sandbox from-address until the domain is verified
+  return sendResend(to, `${origin}/booking/${ref}`, `Your Mui WoW booking · ${ref}`, from, ref, line, amount, 'Show this QR code when you arrive — our team scans it and hands over your items:');
+}
+
+/** Add-on order confirmation: carries the menu link back to the customer. */
+async function sendAddonsEmail(origin, parentRef, email, items, amount) {
+  if (!email || !process.env.RESEND_API_KEY) return 'skipped (no email/key)';
+  const to = process.env.RESEND_REDIRECT_TO || email;
+  if (!to) return 'skipped (no recipient)';
+  const line = items.map((i) => `${i.name} × ${i.qty} — HK$${(i.subtotal / 100).toLocaleString('en-HK')}`).join('<br/>');
+  const from = process.env.RESEND_FROM ?? 'Mui WoW <onboarding@resend.dev>';
+  return sendResend(to, `${origin}/addons/${parentRef}`, `Your second round · Mui WoW · ${parentRef}`, from, parentRef, line, amount, 'Order more anytime — scan or open your add-on menu:');
+}
+
+async function sendResend(to, targetUrl, subject, from, ref, line, amount, qrCaption) {
+  const qr = await QRCode.toDataURL(targetUrl, { width: 460, color: { dark: '#0b132b', light: '#ffffff' } });
   const out = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from,
       to,
-      subject: `Your Mui WoW booking · ${ref}`,
+      subject,
       html: `<div style="font-family:Helvetica,Arial,sans-serif;background:#0b132b;color:#f5f2ea;padding:28px;border-radius:16px">
         <h1 style="color:#f0a500;margin-top:0">Mui WoW — your booking 💛</h1>
         <p>Booking reference: <b style="font-size:1.2em">${ref}</b></p>
         ${line ? `<p>${line}</p>` : ''}
         ${amount ? `<p>Paid: <b>HK$${(amount / 100).toLocaleString('en-HK')}</b></p>` : ''}
-        <p style="margin:22px 0">Show this QR code when you arrive — our team scans it and hands over your items:</p>
+        <p style="margin:22px 0">${qrCaption}</p>
         <div style="background:#fff;display:inline-block;border-radius:12px;padding:14px">
-          <img src="${qr}" width="240" height="240" alt="booking QR code" />
+          <img src="${qr}" width="240" height="240" alt="QR code" />
         </div>
-        <p style="color:#38a3a5;font-size:0.9em">Or open this link: ${origin}/booking/${ref}</p>
+        <p style="color:#38a3a5;font-size:0.9em">Or open: ${targetUrl}</p>
         <p style="color:#8fa3b8;font-size:0.85em">Questions? DM @mui.wow on Instagram.</p>
       </div>`,
     }),
@@ -166,7 +214,7 @@ async function sendBookingEmail(origin, ref, email, items, amount) {
     const b = await out.json().catch(() => ({}));
     throw new Error(`Resend send → ${out.status}: ${b.message ?? ''}`);
   }
-  return 'sent';
+  return `sent to ${to}`;
 }
 
 // ── The handler ─────────────────────────────────────────────────
@@ -203,10 +251,30 @@ export default async function handler(req, res) {
   if (!claimed) return res.status(200).json({ received: true, duplicate: true });
 
   try {
-    const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
+    const origin = ORIGIN();
+    const parentRef = String(session.metadata?.parentRef ?? '').toUpperCase();
     const ref = session.id.replace(/^cs_(test|live)_/, '').slice(0, 12).toUpperCase();
     const items = await sessionItems(session.id);
 
+    if (parentRef && parentRef !== ref) {
+      // Add-on re-order: attach to the parent booking's chain.
+      const raw = await kvGet(`booking:${parentRef}`);
+      if (!raw) throw new Error(`add-on order for unknown booking ${parentRef}`);
+      const booking = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      const order = {
+        id: ref, items, amount: session.amount_total, state: 'reserved', createdAt: new Date().toISOString(),
+      };
+      booking.orders = [...(booking.orders ?? []), order];
+      await kvSet(`booking:${parentRef}`, booking);
+      const emailResult = await sendAddonsEmail(origin, parentRef, booking.email, items, session.amount_total)
+        .then((r) => r)
+        .catch((e) => `failed (order still recorded): ${e.message}`);
+      console.log(`add-on order ${ref} → ${parentRef}; email: ${emailResult}`);
+      return res.status(200).json({ received: true, ref, chain: parentRef, email: emailResult });
+    }
+
+    // Root order (hamper booking, or a standalone add-on order from the
+    // post-payment upsell): a first-class booking record.
     await kvSet(`booking:${ref}`, {
       ref,
       email: session.customer_details?.email ?? '',
@@ -214,6 +282,7 @@ export default async function handler(req, res) {
       amount: session.amount_total,
       sessionId: session.id,
       items,
+      orders: [],
       createdAt: new Date().toISOString(),
     });
 

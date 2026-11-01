@@ -1,5 +1,7 @@
 ---
 import Layout from '../components/Layout.astro';
+import { loadProducts } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
 import { t } from '../data/load.mjs';
 
 const locale = Astro.props.locale ?? 'en';
@@ -12,6 +14,7 @@ const copy = {
     zh: '你嘅預訂已確認。確認電郵連 QR 二維碼正在路上 — 到沙灘時出示，我哋即刻交貨俾你。',
   },
   back: { en: '← Back to rentals', es: '← Volver a alquileres', zh: '← 返回租賃' },
+  orderNow: { en: 'Order', es: 'Pedir', zh: '落單' },
 };
 ---
 
@@ -21,7 +24,48 @@ const copy = {
       <img src="/images/brand/mui-wow-logo.png" alt="Mui WoW" style="height:100px; margin:0 auto 18px;" />
       <h1>{T(copy.title)}</h1>
       <p style="max-width:52ch; margin:14px auto">{T(copy.body)}</p>
-      <a href="/rentals">{T(copy.back)}</a>
+      <div class="info-block" style="margin-top:34px; text-align:left">
+        <h2>{T(chrome.addonsTitle)}</h2>
+        <p class="cart-note">{T(chrome.addonsHint)}</p>
+        <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+          {loadProducts().filter((p) => p.isAddon && p.orderable).map((p) => (
+            <div class="product-card">
+              <div class="body">
+                <h3>{T(p.name)}</h3>
+                <div class="price-row">
+                  <span class="price">{p.displayPrice.formatted}</span>
+                  <button class="btn btn-gold" data-quick-order={p.slug} data-price={p.displayPrice.formatted}>{T(chrome.quickOrder)} <span class="arrow" aria-hidden="true">→</span></button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p id="thanks-note" class="flash-error" hidden></p>
+      <p style="margin-top:26px"><a href="/rentals">{T(copy.back)}</a></p>
     </div>
   </section>
 </Layout>
+<script>
+  (function () {
+    const lang = document.documentElement.getAttribute('lang');
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest?.('[data-quick-order]');
+      if (!btn) return;
+      btn.disabled = true;
+      const note = document.getElementById('thanks-note');
+      fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ slug: btn.dataset.quickOrder, qty: 1 }] }),
+      })
+        .then((r) => r.json())
+        .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'failed'); })
+        .catch((err) => {
+          btn.disabled = false;
+          note.hidden = false;
+          note.textContent = (lang === 'es' ? 'Todavía no: ' : lang === 'zh-hk' ? '暫時未能：' : 'Not ready yet: ') + (err.message ?? '');
+        });
+    });
+  })();
+</script>

@@ -1,0 +1,19 @@
+slug: 'sunset-beer'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name:
+  en: 'Ice-Cold Beer'
+  es: 'Cerveza fría'
+  zh: '冰凍啤酒'
+subtitle:
+  en: 'Chilled at the beach bar, opened on request.'
+  es: 'Enfriada en el bar de la playa.'
+  zh: '沙灘小賣部冰鎮，即開即飲。'
+displayPrice:
+  amount: 2500
+  currency: 'HKD'
+  formatted: 'HK$25'
+
+stripePriceId: 'price_1UWxUPCzy81v9aNtxQFAoNdC' # sandbox (test) — live price created when these go real

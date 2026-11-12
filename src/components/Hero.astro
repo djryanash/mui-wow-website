@@ -86,26 +86,6 @@ const eventHref = event ? `/event/${event.slug}` : null;
     )}
   </section>
 ) : (
-  <script>
-    (function () {
-      function position() {
-        const box = document.getElementById('hero-minimal');
-        const img = document.querySelector('.hero-photo > img.photo');
-        if (!box || !img) return;
-        const section = box.closest('.hero');
-        const s = section.getBoundingClientRect();
-        const r = img.getBoundingClientRect();
-        box.style.left = (r.left - s.left) + 'px';
-        box.style.top = (r.top - s.top) + 'px';
-        box.style.width = r.width + 'px';
-        box.style.height = r.height + 'px';
-      }
-      position();
-      addEventListener('resize', position);
-      const img = document.querySelector('.hero-photo > img.photo');
-      if (img && !img.complete) img.addEventListener('load', position);
-    })();
-  </script>
   <section class="hero">
     <div class="hero-sky" aria-hidden="true"></div>
     <HeroEffects effect={event ? event.heroEffect : 'fireworks'} />

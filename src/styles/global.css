@@ -411,11 +411,20 @@ img { max-width: 100%; display: block; }
 }
 .hero-minimal {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding-top: 90px;
-  padding-bottom: 60px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 48px 20px;
 }
+/* The minimal hero's CTA: double size, red, top-left */
+.hero-minimal .btn {
+  font-size: 2rem;
+  padding: 1em 1.8em;
+  background: linear-gradient(120deg, #ff5252, #c62828);
+  color: #fff;
+  text-shadow: none;
+  box-shadow: 0 10px 34px rgba(198, 40, 40, 0.45);
+}
+.hero-minimal .btn .arrow { margin-left: 0.5em; font-size: 1em; }
 .hero-minimal .btn { box-shadow: 0 8px 30px rgba(11, 19, 43, 0.5); }
 .hero-minimal::before { content: none; }
 

@@ -1,13 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    { "source": "/booking/:ref", "destination": "/booking/index.html" },
-    { "source": "/booking/:ref/", "destination": "/booking/index.html" },
-    { "source": "/addons/:ref", "destination": "/addons/index.html" },
-    { "source": "/addons/:ref/", "destination": "/addons/index.html" },
+  "redirects": [
     { "source": "/event/tiki-beach-party-2026-11-14", "destination": "/event/tiki-sessions-2026-11-15", "permanent": true },
     { "source": "/event/tiki-beach-party-2026-11-14/", "destination": "/event/tiki-sessions-2026-11-15", "permanent": true },
     { "source": "/es/event/tiki-beach-party-2026-11-14", "destination": "/es/event/tiki-sessions-2026-11-15", "permanent": true },
     { "source": "/zh-hk/event/tiki-beach-party-2026-11-14", "destination": "/zh-hk/event/tiki-sessions-2026-11-15", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/booking/:ref", "destination": "/booking/index.html" },
+    { "source": "/booking/:ref/", "destination": "/booking/index.html" },
+    { "source": "/addons/:ref", "destination": "/addons/index.html" },
+    { "source": "/addons/:ref/", "destination": "/addons/index.html" }
   ]
 }

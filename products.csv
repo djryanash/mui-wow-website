@@ -1,0 +1,4 @@
+slug,name_en,name_es,name_zh,subtitle_en,price,kind,isAddon,image
+coffee-mug,Premium Cold Coffee,Café Frío,特凍咖啡,Your own mug on the sand,22,consumable,true,/images/products/coffee-mug/mug.jpg
+polaroid-frame,Instant Photo Frame,Marco Polaroid,即影即有相框,Take a print home from the night,38,consumable,true,/images/products/polaroid-frame/polaroid.jpg
+coolbox-hire,Cool Box Hire,Caixa Fría,冰桶租賃,Keep your drinks cold all night,45,rental,false,/images/products/coolbox-hire/coolbox.jpg

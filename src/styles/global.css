@@ -409,6 +409,16 @@ img { max-width: 100%; display: block; }
   margin-top: 10px;
   text-shadow: 0 2px 20px rgba(11, 19, 43, 0.6);
 }
+.hero-minimal {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-top: 90px;
+  padding-bottom: 60px;
+}
+.hero-minimal .btn { box-shadow: 0 8px 30px rgba(11, 19, 43, 0.5); }
+.hero-minimal::before { content: none; }
+
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 22px; }
 .btn-arrow .arrow { margin-left: 10px; display: inline-block; transition: transform 0.2s ease; }
 .btn-arrow:hover .arrow { transform: translateX(4px); }

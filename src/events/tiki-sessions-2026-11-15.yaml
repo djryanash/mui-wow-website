@@ -70,6 +70,7 @@ registrationItems:
       en: 'Register in advance to get your two drinks.'
       es: 'Regístrate con antelación para tus dos bebidas.'
       zh: '提前登記，到場自取兩杯飲品。'
+    registrationUrl: 'https://wa.me/85261694649?text=Hi%20Mui%20WoW%20team%2C%20I%27d%20like%20to%20register%20for%20Tiki%20Sessions%20(November%2015)%20to%20receive%20my%20two%20drinks'
 
 rentalItems:
   - name:
@@ -82,5 +83,14 @@ rentalItems:
       zh: '沙灘 VIP 沙發卡座，可供租用。'
 
 heroEffect: 'fireworks'
+# The poster carries all its own copy — no text written over it.
+heroOverlay: 'none'
+# The poster's WhatsApp line is the booking door for this event.
+heroCta:
+  label:
+    en: 'Book'
+    es: 'Reservar'
+    zh: '登記訂位'
+  href: 'https://wa.me/85261694649?text=Hi%20Mui%20WoW%20team%2C%20I%27d%20like%20to%20book%20for%20Tiki%20Sessions%20on%20November%2015%20at%20Silvermine%20Beach'
 poster: '/images/events/tiki-sessions-2026-11-15-hero.jpg'
 heroImage: '/images/events/tiki-sessions-2026-11-15-hero.jpg'

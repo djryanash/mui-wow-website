@@ -35,6 +35,16 @@ const eventHref = event ? `/event/${event.slug}` : null;
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />
+    {event.heroOverlay === 'none' ? (
+      <div class="container hero-content hero-minimal">
+        {event.heroCta && (
+          <a class="btn btn-gold btn-arrow" href={event.heroCta.href} target={event.heroCta.href?.startsWith('http') ? '_blank' : undefined} rel="noopener" data-burst>
+            {T(event.heroCta.label).toUpperCase()}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        )}
+      </div>
+    ) : (
     <div class="container hero-content hero-grid">
       <div class="hero-copy">
         <p class="kicker">{formatEventDate(event, locale)} · {t(event.location, locale)}</p>
@@ -72,6 +82,7 @@ const eventHref = event ? `/event/${event.slug}` : null;
       </div>
       {poster && <img class="hero-flyer" src={poster} alt={t(event.title, locale)} />}
     </div>
+    )}
   </section>
 ) : (
   <section class="hero">

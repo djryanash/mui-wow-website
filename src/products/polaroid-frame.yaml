@@ -1,0 +1,18 @@
+slug: 'polaroid-frame'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Instant Photo Frame', es: 'Marco Polaroid', zh: '即影即有相框'
+  }
+subtitle: { en: 'Take a print home from the night' }
+displayPrice:
+  amount: 3800
+  currency: 'HKD'
+  formatted: 'HK$38'
+stripePriceId: 'price_1UaqYACzy81v9aNteTNXOSXx' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/polaroid-frame/polaroid.jpg'

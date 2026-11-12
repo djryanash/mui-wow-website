@@ -1,0 +1,18 @@
+slug: 'coffee-mug'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Premium Cold Coffee', es: 'Café Frío', zh: '特凍咖啡'
+  }
+subtitle: { en: 'Your own mug on the sand' }
+displayPrice:
+  amount: 2200
+  currency: 'HKD'
+  formatted: 'HK$22'
+stripePriceId: 'price_1UaqY9Czy81v9aNtd6KBiuG2' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/coffee-mug/mug.jpg'

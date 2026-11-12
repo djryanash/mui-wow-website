@@ -134,6 +134,10 @@ export const eventSchema = z
     registrationUrl: url.optional(),
 
     heroEffect: z.enum(['fireworks', 'petals', 'disco']).default('fireworks'),
+    // 'full' = kicker + title stack + tagline + CTA (poster-less heroes).
+    // 'none' = the image alone; only heroCta (if set) floats on it — for
+    // posters that already carry all the copy.
+    heroOverlay: z.enum(['full', 'none']).default('full'),
     // Full-frame overlay PNGs (same size as the hero art, the mask is baked
     // into their transparency): rendered stacked, crossfading/flickering per
     // event via CSS. e.g. /images/events/coco-screen-01.png

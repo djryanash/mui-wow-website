@@ -1,109 +1,83 @@
 {
-  "generatedAt": "2026-11-12T05:20:47.323Z",
+  "generatedAt": "2026-11-12T05:28:01.967Z",
   "products": [
     {
-      "slug": "movie-popcorn",
-      "kind": "consumable",
-      "isAddon": true,
+      "slug": "coolbox-hire",
+      "kind": "rental",
+      "isAddon": false,
       "orderable": true,
       "name": {
-        "en": "Beach Popcorn",
-        "es": "Palomitas",
-        "zh": "沙灘爆谷"
+        "en": "Cool Box Hire",
+        "es": "Caixa Fría",
+        "zh": "冰桶租賃"
       },
       "subtitle": {
-        "en": "Fresh popcorn, delivered to your blanket.",
-        "es": "Palomitas recién hechas.",
-        "zh": "新鮮爆谷，送到你張毛氈。"
+        "en": "Keep your drinks cold all night"
       },
       "displayPrice": {
-        "amount": 2000,
+        "amount": 4500,
         "currency": "HKD",
-        "formatted": "HK$20"
+        "formatted": "HK$45"
       },
       "inventory": {
         "perEvent": true,
-        "stock": null
+        "stock": 10
       },
-      "images": []
+      "images": [
+        "/images/products/coolbox-hire/coolbox.jpg"
+      ]
     },
     {
-      "slug": "sunset-beer",
+      "slug": "polaroid-frame",
       "kind": "consumable",
       "isAddon": true,
       "orderable": true,
       "name": {
-        "en": "Ice-Cold Beer",
-        "es": "Cerveza fría",
-        "zh": "冰凍啤酒"
+        "en": "Instant Photo Frame",
+        "es": "Marco Polaroid",
+        "zh": "即影即有相框"
       },
       "subtitle": {
-        "en": "Chilled at the beach bar, opened on request.",
-        "es": "Enfriada en el bar de la playa.",
-        "zh": "沙灘小賣部冰鎮，即開即飲。"
+        "en": "Take a print home from the night"
       },
       "displayPrice": {
-        "amount": 2500,
+        "amount": 3800,
         "currency": "HKD",
-        "formatted": "HK$25"
+        "formatted": "HK$38"
       },
       "inventory": {
         "perEvent": true,
-        "stock": null
+        "stock": 10
       },
-      "images": []
+      "images": [
+        "/images/products/polaroid-frame/polaroid.jpg"
+      ]
     },
     {
-      "slug": "beach-nachos",
+      "slug": "coffee-mug",
       "kind": "consumable",
       "isAddon": true,
       "orderable": true,
       "name": {
-        "en": "Nachos Plate",
-        "es": "Plato de Nachos",
-        "zh": "芝士粟米片"
+        "en": "Premium Cold Coffee",
+        "es": "Café Frío",
+        "zh": "特凍咖啡"
       },
       "subtitle": {
-        "en": "Warm nachos with cheese salsa, for sharing.",
-        "es": "Nachos calientes con salsa de queso.",
-        "zh": "熱辣辣芝士醬粟米片，多人分享。"
+        "en": "Your own mug on the sand"
       },
       "displayPrice": {
-        "amount": 3000,
+        "amount": 2200,
         "currency": "HKD",
-        "formatted": "HK$30"
+        "formatted": "HK$22"
       },
       "inventory": {
         "perEvent": true,
-        "stock": null
+        "stock": 10
       },
-      "images": []
-    },
-    {
-      "slug": "cold-coke",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Soft Drink",
-        "es": "Refresco",
-        "zh": "汽水"
-      },
-      "subtitle": {
-        "en": "Cola, lemon tea or water, ice cold.",
-        "es": "Cola, té de limón o agua, bien fría.",
-        "zh": "可樂、檸檬茶或水，冰鎮。"
-      },
-      "displayPrice": {
-        "amount": 1500,
-        "currency": "HKD",
-        "formatted": "HK$15"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": null
-      },
-      "images": []
+      "images": [
+        "/images/products/coffee-mug/mug.jpg"
+      ]
     },
     {
       "slug": "sunset-picnic-hamper",

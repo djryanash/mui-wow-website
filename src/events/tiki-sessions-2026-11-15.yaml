@@ -88,9 +88,9 @@ heroOverlay: 'none'
 # The poster's WhatsApp line is the booking door for this event.
 heroCta:
   label:
-    en: 'Book'
-    es: 'Reservar'
-    zh: '登記訂位'
+    en: "I'm going"
+    es: 'Voy'
+    zh: '我去'
   href: 'https://wa.me/85261694649?text=Hi%20Mui%20WoW%20team%2C%20I%27d%20like%20to%20book%20for%20Tiki%20Sessions%20on%20November%2015%20at%20Silvermine%20Beach'
 poster: '/images/events/tiki-sessions-2026-11-15-hero.jpg'
 heroImage: '/images/events/tiki-sessions-2026-11-15-hero.jpg'

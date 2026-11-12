@@ -14,6 +14,7 @@ const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : loc
 
 const poster = event?.poster ?? null;
 const heroImage = event?.heroImage ?? null;
+const showPhoto = !!event?.heroImage && (event.heroOverlay === 'none' || heroImage?.endsWith('.svg'));
 const registerHref =
   event?.registrationItems?.find((r) => r.registrationUrl)?.registrationUrl ??
   event?.registrationUrl ??
@@ -23,9 +24,9 @@ const eventHref = event ? `/event/${event.slug}` : null;
 
 {event?.heroImage ? (
   <section class="hero hero-wide">
-    <div class="hero-photo" style={heroImage.endsWith('.svg') ? undefined : `background-image:url('${heroImage}')`}
+    <div class="hero-photo" style={!showPhoto && !heroImage.endsWith('.svg') ? `background-image:url('${heroImage}')` : undefined}
          aria-hidden="true">
-      {heroImage.endsWith('.svg') && <img class="photo" src={heroImage} alt="" />}
+      {showPhoto && <img class="photo" src={heroImage} alt="" />}
       {(event.heroOverlays ?? []).map((src, i) => (
         <img class="photo still" src={src} alt="" style={`--n:${i}`} loading="eager" />
       ))}
@@ -36,7 +37,7 @@ const eventHref = event ? `/event/${event.slug}` : null;
     <div class="hero-scrim" aria-hidden="true"></div>
     <HeroEffects effect={event.heroEffect} />
     {event.heroOverlay === 'none' ? (
-      <div class="container hero-content hero-minimal">
+      <div class="hero-minimal" id="hero-minimal">
         {event.heroCta && (
           <a class="btn btn-gold btn-arrow" href={event.heroCta.href} target={event.heroCta.href?.startsWith('http') ? '_blank' : undefined} rel="noopener" data-burst>
             {T(event.heroCta.label).toUpperCase()}
@@ -85,6 +86,26 @@ const eventHref = event ? `/event/${event.slug}` : null;
     )}
   </section>
 ) : (
+  <script>
+    (function () {
+      function position() {
+        const box = document.getElementById('hero-minimal');
+        const img = document.querySelector('.hero-photo > img.photo');
+        if (!box || !img) return;
+        const section = box.closest('.hero');
+        const s = section.getBoundingClientRect();
+        const r = img.getBoundingClientRect();
+        box.style.left = (r.left - s.left) + 'px';
+        box.style.top = (r.top - s.top) + 'px';
+        box.style.width = r.width + 'px';
+        box.style.height = r.height + 'px';
+      }
+      position();
+      addEventListener('resize', position);
+      const img = document.querySelector('.hero-photo > img.photo');
+      if (img && !img.complete) img.addEventListener('load', position);
+    })();
+  </script>
   <section class="hero">
     <div class="hero-sky" aria-hidden="true"></div>
     <HeroEffects effect={event ? event.heroEffect : 'fireworks'} />

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T12:16:17.547Z",
+  "generatedAt": "2026-11-12T05:20:47.323Z",
   "site": {
     "name": "Mui WoW",
     "legalName": "MUI WOW by KRAF CONCEPTS",
@@ -31,28 +31,28 @@
       "poster": null
     },
     {
-      "slug": "tiki-beach-party-2026-11-14",
+      "slug": "tiki-sessions-2026-11-15",
       "title": {
-        "en": "Tiki Beach Party",
-        "es": "Fiesta playera Tiki",
-        "zh": "沙灘夏威夷派對"
+        "en": "Tiki Sessions",
+        "es": "Tiki Sessions",
+        "zh": "夏威夷沙灘 Tiki Sessions"
       },
       "subtitle": {
-        "en": "An island beach party on Silvermine Bay",
-        "es": "Una fiesta playera isleña en la bahía Silvermine",
-        "zh": "銀礦灣嘅海島沙灘派對"
+        "en": "Sunset · house music · island vibes, on the sand",
+        "es": "Atardecer · house · ambiente isleño, sobre la arena",
+        "zh": "日落 · House 音樂 · 島嶼氣息，盡在沙灘"
       },
-      "start": "2026-11-14T17:00:00+08:00",
-      "end": "2026-11-14T22:00:00+08:00",
+      "start": "2026-11-15T17:00:00+08:00",
+      "end": "2026-11-15T23:00:00+08:00",
       "location": {
-        "en": "Silvermine Bay Beach, Mui Wo",
-        "es": "Playa Silvermine Bay, Mui Wo",
+        "en": "Silvermine Beach, Mui Wo",
+        "es": "Playa Silvermine, Mui Wo",
         "zh": "梅窩銀礦灣沙灘"
       },
       "published": true,
       "unlisted": false,
       "heroEffect": "fireworks",
-      "poster": null
+      "poster": "/images/events/tiki-sessions-2026-11-15-hero.jpg"
     },
     {
       "slug": "tarde-citas-2026-11-22",

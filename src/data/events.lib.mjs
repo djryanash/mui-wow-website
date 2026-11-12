@@ -93,6 +93,10 @@ export const eventSchema = z
     slug: datedSlug,
     published: z.boolean().default(true),
     unlisted: z.boolean().default(false),
+    // Slug-change escape hatch (spec §4): BOTH fields required to rename a
+    // published event; renames emit redirects from the discarded slugs.
+    redirectFrom: z.array(z.string()).default([]),
+    allowSlugChange: z.boolean().default(false),
 
     title: languageObject,
     subtitle: languageObject.optional(),

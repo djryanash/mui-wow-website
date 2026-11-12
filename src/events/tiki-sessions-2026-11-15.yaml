@@ -1,0 +1,86 @@
+# ── Tiki Sessions ────────────────────────────────────────────────
+# From the November flyer (whatsapp-image): Sunday November 15,
+# 5pm–11pm, Silvermine Beach. DJs: Ryan Ash + Kenji (Japan).
+# Renamed from tiki-beach-party-2026-11-14 (date + programme moved);
+# the old URL redirects (spec §4 discipline).
+
+slug: 'tiki-sessions-2026-11-15'
+published: true
+unlisted: false
+redirectFrom: ['tiki-beach-party-2026-11-14']
+allowSlugChange: true
+
+title:
+  en: 'Tiki Sessions'
+  es: 'Tiki Sessions'
+  zh: '夏威夷沙灘 Tiki Sessions'
+subtitle:
+  en: 'Sunset · house music · island vibes, on the sand'
+  es: 'Atardecer · house · ambiente isleño, sobre la arena'
+  zh: '日落 · House 音樂 · 島嶼氣息，盡在沙灘'
+
+start: '2026-11-15T17:00:00+08:00'
+end: '2026-11-15T23:00:00+08:00'
+
+location:
+  en: 'Silvermine Beach, Mui Wo'
+  es: 'Playa Silvermine, Mui Wo'
+  zh: '梅窩銀礦灣沙灘'
+
+details:
+  en: >-
+    Free entry, register in advance and enjoy two drinks. Sunset and
+    house music by Ryan Ash and Kenji (Japan), VIP sofa seating for
+    rent, and the tiki dress code if you feel like it. Come for the
+    sunset, stay for the island vibes.
+  es: >-
+    Entrada gratis, reserva con antelación y disfruta de dos bebidas.
+    Atardecer y house de la mano de Ryan Ash y Kenji (Japón), sofá VIP
+    en alquiler y el dress code tiki si te apetece.
+  zh: >-
+    免費入場，提前登記仲送兩杯飲品。Ryan Ash 同 Kenji（日本）為你帶來
+    日落 House 音樂，VIP 沙發卡座租賃，仲有 Tiki 主題打扮等你變裝。
+
+highlights:
+  - en: 'Free entry — two drinks on registration'
+    es: 'Entrada gratis — dos bebidas al registrarte'
+    zh: '免費入場 — 登記即享兩杯飲品'
+  - en: 'Dress up with the tiki theme!'
+    es: '¡Vístete con el theme tiki!'
+    zh: '一齊著 Tiki 主題打扮！'
+
+schedule:
+  - time: '17:00'
+    label:
+      en: 'Doors — sunset and house music'
+      es: 'Apertura — atardecer y house'
+      zh: '開場 — 日落與 House 音樂'
+  - time: '23:00'
+    label:
+      en: 'Last call on the sand'
+      es: 'Cierre en la arena'
+      zh: '沙灘散場時間'
+
+registrationItems:
+  - name:
+      en: 'Free entry registration (2 drinks included)'
+      es: 'Registro de entrada gratuita (2 bebidas incluidas)'
+      zh: '免費入場登記（包兩杯飲品）'
+    note:
+      en: 'Register in advance to get your two drinks.'
+      es: 'Regístrate con antelación para tus dos bebidas.'
+      zh: '提前登記，到場自取兩杯飲品。'
+
+rentalItems:
+  - name:
+      en: 'VIP sofa seating'
+      es: 'Sofá VIP'
+      zh: 'VIP 沙發卡座'
+    note:
+      en: 'Sofa seating on the beach, available for rent.'
+      es: 'Sofás disponibles para alquilar en la playa.'
+      zh: '沙灘 VIP 沙發卡座，可供租用。'
+
+heroEffect: 'fireworks'
+poster: '/images/events/tiki-sessions-2026-11-15-hero.jpg'
+heroImage: '/images/events/tiki-sessions-2026-11-15-hero.jpg'

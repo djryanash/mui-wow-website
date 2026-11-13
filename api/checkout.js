@@ -112,11 +112,11 @@ export default async function handler(req, res) {
       }
       const kvBase = process.env.KV_REST_API_URL;
       const kvToken = process.env.KV_REST_API_TOKEN;
-      const res = await fetch(`${kvBase}/set/${encodeURIComponent(`booking:${ref}`)}/${encodeURIComponent(JSON.stringify({ ref, email: '', state: 'reserved', amount: 0, sessionId: null, items: booked, orders: [], createdAt: new Date().toISOString(), type: 'ticket' }))}`, {
+      const kvRes = await fetch(`${kvBase}/set/${encodeURIComponent(`booking:${ref}`)}/${encodeURIComponent(JSON.stringify({ ref, email: '', state: 'reserved', amount: 0, sessionId: null, items: booked, orders: [], createdAt: new Date().toISOString(), type: 'ticket' }))}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${kvToken}` },
       });
-      if (!res.ok) return res.status(502).json({ error: 'ticket booking failed (store)' });
+      if (!kvRes.ok) return res.status(502).json({ error: 'ticket booking failed (store)' });
       return res.status(200).json({ url: `${origin}/shop-thanks?ref=${ref}`, ref, direct: true });
     }
     const successUrl = parentRef

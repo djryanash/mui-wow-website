@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T02:43:11.225Z",
+  "generatedAt": "2026-11-13T02:50:45.188Z",
   "products": [
     {
       "slug": "support-0",
@@ -282,7 +282,7 @@
       ]
     },
     {
-      "slug": "absolut-vodka-miniature",
+      "slug": "absolut-vodka-soda-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -303,11 +303,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/absolut-vodka-miniature/cover.jpeg"
+        "/images/products/absolut-vodka-soda-combo/cover.jpg"
       ]
     },
     {
-      "slug": "bacardi-white-rum-miniature",
+      "slug": "bacardi-coke-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -328,11 +328,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/bacardi-white-rum-miniature/cover.jpeg"
+        "/images/products/bacardi-coke-combo/cover.jpg"
       ]
     },
     {
-      "slug": "ballantines-scotch-whisky-miniature",
+      "slug": "ballantines-scotch-whisky-ginger-ale-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -353,11 +353,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/ballantines-scotch-whisky-miniature/cover.jpeg"
+        "/images/products/ballantines-scotch-whisky-ginger-ale-combo/cover.jpg"
       ]
     },
     {
-      "slug": "bombay-sapphire-miniature",
+      "slug": "bombay-sapphire-tonic-water-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -378,11 +378,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/bombay-sapphire-miniature/cover.jpeg"
+        "/images/products/bombay-sapphire-tonic-water-combo/cover.jpg"
       ]
     },
     {
-      "slug": "cointreau-miniature",
+      "slug": "cointreau-tonic-water-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -403,11 +403,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/cointreau-miniature/cover.jpeg"
+        "/images/products/cointreau-tonic-water-combo/cover.jpg"
       ]
     },
     {
-      "slug": "jack-daniels-miniature",
+      "slug": "jack-daniels-coke-combo",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -428,11 +428,11 @@
         "stock": 10
       },
       "images": [
-        "/images/products/jack-daniels-miniature/cover.jpeg"
+        "/images/products/jack-daniels-coke-combo/cover.jpg"
       ]
     },
     {
-      "slug": "chura-shikwasa-seasalt-can",
+      "slug": "chura-shikwasa-seasalt-6-pack",
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
@@ -453,7 +453,7 @@
         "stock": 10
       },
       "images": [
-        "/images/products/chura-shikwasa-seasalt-can/cover.jpeg"
+        "/images/products/chura-shikwasa-seasalt-6-pack/cover.jpg"
       ]
     },
     {

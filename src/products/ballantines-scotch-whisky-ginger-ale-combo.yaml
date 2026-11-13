@@ -1,4 +1,4 @@
-slug: 'ballantines-scotch-whisky-miniature'
+slug: 'ballantines-scotch-whisky-ginger-ale-combo'
 published: true
 kind: 'consumable'
 isAddon: true
@@ -9,9 +9,9 @@ displayPrice:
   amount: 8000
   currency: 'HKD'
   formatted: 'HK$80'
-stripePriceId: 'price_1Ub8pLCzy81v9aNt9jb8JVez' # test
+stripePriceId: 'price_1UbAZFCzy81v9aNtOC4J43VF' # test
 inventory:
   perEvent: true
   stock: 10
 images:
-  - '/images/products/ballantines-scotch-whisky-miniature/cover.jpeg'
+  - '/images/products/ballantines-scotch-whisky-ginger-ale-combo/cover.jpg'

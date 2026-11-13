@@ -1,4 +1,4 @@
-slug: 'jack-daniels-miniature'
+slug: 'jack-daniels-coke-combo'
 published: true
 kind: 'consumable'
 isAddon: true
@@ -9,9 +9,9 @@ displayPrice:
   amount: 8000
   currency: 'HKD'
   formatted: 'HK$80'
-stripePriceId: 'price_1Ub8pMCzy81v9aNtuKcVsqB6' # test
+stripePriceId: 'price_1UbAZHCzy81v9aNtuYJTS9cq' # test
 inventory:
   perEvent: true
   stock: 10
 images:
-  - '/images/products/jack-daniels-miniature/cover.jpeg'
+  - '/images/products/jack-daniels-coke-combo/cover.jpg'

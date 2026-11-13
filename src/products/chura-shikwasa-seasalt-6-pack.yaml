@@ -1,4 +1,4 @@
-slug: 'chura-shikwasa-seasalt-can'
+slug: 'chura-shikwasa-seasalt-6-pack'
 published: true
 kind: 'consumable'
 isAddon: true
@@ -9,9 +9,9 @@ displayPrice:
   amount: 9000
   currency: 'HKD'
   formatted: 'HK$90'
-stripePriceId: 'price_1Ub8pJCzy81v9aNtvVJ5PScS' # test
+stripePriceId: 'price_1UbAZDCzy81v9aNtkYvfkhoa' # test
 inventory:
   perEvent: true
   stock: 10
 images:
-  - '/images/products/chura-shikwasa-seasalt-can/cover.jpeg'
+  - '/images/products/chura-shikwasa-seasalt-6-pack/cover.jpg'

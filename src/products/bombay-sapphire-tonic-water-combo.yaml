@@ -1,4 +1,4 @@
-slug: 'bombay-sapphire-miniature'
+slug: 'bombay-sapphire-tonic-water-combo'
 published: true
 kind: 'consumable'
 isAddon: true
@@ -9,9 +9,9 @@ displayPrice:
   amount: 8000
   currency: 'HKD'
   formatted: 'HK$80'
-stripePriceId: 'price_1Ub8pRCzy81v9aNtI4vSEiTB' # test
+stripePriceId: 'price_1UbAZMCzy81v9aNth9nk2wPj' # test
 inventory:
   perEvent: true
   stock: 10
 images:
-  - '/images/products/bombay-sapphire-miniature/cover.jpeg'
+  - '/images/products/bombay-sapphire-tonic-water-combo/cover.jpg'

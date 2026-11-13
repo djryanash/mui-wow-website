@@ -1,17 +1,17 @@
-slug: 'cointreau-miniature'
+slug: 'bacardi-coke-combo'
 published: true
 kind: 'consumable'
 isAddon: true
 orderable: true
-name: { en: 'Cointreau Miniature (50ml)' }
+name: { en: 'Bacardi White Rum Miniature (50ml)' }
 subtitle: { en: 'incl. Soft Drink, Glass + Ice' }
 displayPrice:
   amount: 8000
   currency: 'HKD'
   formatted: 'HK$80'
-stripePriceId: 'price_1Ub8pTCzy81v9aNtE4U42YVo' # test
+stripePriceId: 'price_1UbAZICzy81v9aNtBtQRFsqw' # test
 inventory:
   perEvent: true
   stock: 10
 images:
-  - '/images/products/cointreau-miniature/cover.jpeg'
+  - '/images/products/bacardi-coke-combo/cover.jpg'

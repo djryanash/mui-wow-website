@@ -25,14 +25,7 @@ const title = L(chrome.donationsTitle);
             <span class="donation-amount">{p.displayPrice.formatted}</span>
           </button>
         ))}
-      </div>
-
-      <p class="funnel-next" style="display:flex; gap:14px; flex-wrap:wrap; margin-top:34px">
-        <button class="btn btn-teal btn-arrow" data-add-donation>{L({ en: "Next: open your cart with this donation", es: "Next: abre tu carrito con esta donación", zh: "下一步：連同捐贈打開購物車" })} <span class="arrow" aria-hidden="true">→</span></button>
-        <button class="btn btn-ghost" data-skip-donation>{L({ en: "Don't donate", es: 'Sin donación', zh: '唔捐款，跳過' })}</button>
-      </p>
-      <p id="donate-note" class="cart-note" style="color:var(--gold-bright)">{L({ en: "Pick an amount above, or continue without one — your call.", es: "Elige un importe arriba, o continúa sin él — tú decides.", zh: "上方揀一個金額，或者唔捐直接繼續 — 由你話事。" })}</p>
-
+      </
       <!-- The cart drawer (shared with the shop pages) lives here for this page -->
       <aside class="cart-drawer" id="cart-drawer" aria-label={L(chrome.cart)}
         data-total={L(chrome.total)}
@@ -61,9 +54,9 @@ const title = L(chrome.donationsTitle);
 <script>
   (function () {
     const KEY = 'muiwow-cart';
+    const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
     const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) ?? {}; } catch { return {}; } };
     const write = (c) => { localStorage.setItem(KEY, JSON.stringify(c)); render(); };
-    const DONATION_SLUGS = new Set('""" + JSON.stringify(tiers.map((p) => p.slug)) + """'.split(','));
 
     const drawer = document.getElementById('cart-drawer');
     drawer.querySelector('.cart-checkout').textContent = drawer.dataset.checkoutLabel ?? 'Checkout';
@@ -72,13 +65,13 @@ const title = L(chrome.donationsTitle);
       const cart = read();
       const items = drawer.querySelector('.cart-items');
       items.textContent = '';
-      const slugs = Object.keys(cart);
-      drawer.querySelector('.cart-empty').hidden = slugs.length > 0;
+      const keys = Object.keys(cart);
+      drawer.querySelector('.cart-empty').hidden = keys.length > 0;
       document.querySelector('[data-cart-open]').hidden = false;
       const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
       drawer.querySelector('[data-cart-badge]').textContent = count || '';
       let total = 0;
-      for (const slug of slugs) {
+      for (const slug of keys) {
         total += cart[slug].cents * cart[slug].qty;
         const row = document.createElement('div');
         row.className = 'cart-row';
@@ -90,60 +83,45 @@ const title = L(chrome.donationsTitle);
         row.appendChild(btn);
         items.appendChild(row);
       }
-      drawer.querySelector('[data-cart-total]').textContent = slugs.length ? 'HK$' + (total / 100).toLocaleString('en-HK') : '—';
-      // selection state on the tier cards
-      const selected = slugs.find((s) => DONATION_SLUGS.has(s));
+      drawer.querySelector('[data-cart-total]').textContent = keys.length ? 'HK$' + (total / 100).toLocaleString('en-HK') : '—';
+      const selected = keys.find((s) => DONATION_SLUGS.includes(s) && s !== 'support-0');
       document.querySelectorAll('[data-select-tier]').forEach((card) => {
         card.setAttribute('aria-checked', card.dataset.selectTier === selected ? 'true' : 'false');
         card.classList.toggle('selected', card.dataset.selectTier === selected);
       });
     }
 
-    function clearDonations() {
-      const c = read();
-      for (const s of Object.keys(c)) if (DONATION_SLUGS.has(s)) delete c[s];
-      write(c);
-    }
-
-    function openCartWithDonation(slug) {
-      const card = document.querySelector(`[data-select-tier="${slug}"]`);
-      clearDonations();
-      const c = read();
-      c[slug] = { name: card.dataset.name, price: card.dataset.price, cents: Number(card.dataset.cents), qty: 1 };
-      write(c);
-      drawer.classList.add('open');
-      drawer.querySelector('.cart-items').scrollIntoView({ block: 'nearest' });
-    }
-
     document.addEventListener('click', (e) => {
       const tier = e.target.closest?.('[data-select-tier]');
       if (tier) {
-        const already = read()[tier.dataset.selectTier]?.qty === 1;
-        if (already) { clearDonations(); render(); return; } // second tap = unselect
-        openCartWithDonation(tier.dataset.selectTier);
+        // HK$0: the explicit opt-out — nothing is added, the cart just opens.
+        if (tier.dataset.selectTier === 'support-0') {
+          const c = read();
+          for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s) && s !== 'support-0') delete c[s];
+          write(c);
+          drawer.classList.add('open');
+          return;
+        }
+        // a real tier: replace any previous donation, write it, open the cart
+        const c = read();
+        for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s) && s !== tier.dataset.selectTier) delete c[s];
+        c[tier.dataset.selectTier] = { name: tier.dataset.name, price: tier.dataset.price, cents: Number(tier.dataset.cents), qty: 1 };
+        write(c);
+        drawer.classList.add('open');
         return;
       }
-      const add = e.target.closest?.('[data-add-donation]');
-      if (add) {
-        const selected = Object.keys(read()).find((s) => DONATION_SLUGS.has(s));
-        if (selected) openCartWithDonation(selected);
-        else drawer.classList.add('open'); // nothing selected: open the cart anyway
-        return;
-      }
-      const skip = e.target.closest?.('[data-skip-donation]');
-      if (skip) { clearDonations(); drawer.classList.add('open'); return; }
       if (e.target.closest?.('[data-cart-open]')) { drawer.classList.add('open'); render(); return; }
       if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
       const go = e.target.closest?.('[data-cart-checkout]');
       if (go) {
         const cart = read();
-        const slugs = Object.keys(cart);
-        if (!slugs.length) return;
+        const keys = Object.keys(cart);
+        if (!keys.length) return;
         go.disabled = true;
         fetch('/api/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: slugs.map((s) => ({ slug: s, qty: cart[s].qty })) }),
+          body: JSON.stringify({ items: keys.map((s) => ({ slug: s, qty: cart[s].qty })) }),
         })
           .then((r) => r.json())
           .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'no url'); })

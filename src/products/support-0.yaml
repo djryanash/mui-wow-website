@@ -1,0 +1,22 @@
+# ── Donation tier: zero — an explicit opt-out ────────────────────
+slug: 'support-0'
+published: true
+kind: 'donation'
+orderable: false
+
+name:
+  en: 'Support Mui WoW'
+  es: 'Apoya Mui WoW'
+  zh: '支持 Mui WoW'
+subtitle:
+  en: 'No donation this time.'
+  es: 'Sin donación esta vez.'
+  zh: '今次唔捐款。'
+
+displayPrice:
+  amount: 0
+  currency: 'HKD'
+  formatted: 'HK$0'
+
+inventory:
+  perEvent: false

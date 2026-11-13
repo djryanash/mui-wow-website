@@ -1,337 +1,25 @@
 {
-  "generatedAt": "2026-11-13T01:34:03.782Z",
+  "generatedAt": "2026-11-13T01:44:00.966Z",
   "products": [
     {
-      "slug": "absolut-vodka-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Absolut Vodka Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/absolut-vodka-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "bacardi-white-rum-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Bacardi White Rum Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/bacardi-white-rum-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "ballantines-scotch-whisky-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Ballantine's Finest Scotch Whisky Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/ballantines-scotch-whisky-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "beach-chair",
-      "kind": "consumable",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Beach Chair"
-      },
-      "subtitle": null,
-      "displayPrice": {
-        "amount": 10000,
-        "currency": "HKD",
-        "formatted": "HK$100"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/beach-chair/cover.jpg"
-      ]
-    },
-    {
-      "slug": "bombay-sapphire-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Bombay Sapphire Gin Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/bombay-sapphire-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "chura-shikwasa-seasalt-can",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Chura Citrus Cooler (6% alc.)"
-      },
-      "subtitle": {
-        "en": "incl. Bucket + Ice"
-      },
-      "displayPrice": {
-        "amount": 9000,
-        "currency": "HKD",
-        "formatted": "HK$90"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/chura-shikwasa-seasalt-can/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "cointreau-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Cointreau Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/cointreau-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "jack-daniels-miniature",
-      "kind": "consumable",
-      "isAddon": true,
-      "orderable": true,
-      "name": {
-        "en": "Jack Daniels Miniature (50ml)"
-      },
-      "subtitle": {
-        "en": "incl. Soft Drink, Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 8000,
-        "currency": "HKD",
-        "formatted": "HK$80"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/jack-daniels-miniature/cover.jpeg"
-      ]
-    },
-    {
-      "slug": "beach-mat-checkered",
-      "kind": "consumable",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Picnic Mat"
-      },
-      "subtitle": null,
-      "displayPrice": {
-        "amount": 5000,
-        "currency": "HKD",
-        "formatted": "HK$50"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/beach-mat-checkered/cover.jpg"
-      ]
-    },
-    {
-      "slug": "beach-tent",
-      "kind": "consumable",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Picnic Tent"
-      },
-      "subtitle": null,
-      "displayPrice": {
-        "amount": 30000,
-        "currency": "HKD",
-        "formatted": "HK$300"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/beach-tent/cover.jpg"
-      ]
-    },
-    {
-      "slug": "sunset-picnic-hamper",
-      "kind": "rental",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Sunset Picnic Hamper",
-        "es": "Cesta de Picnic al Atardecer",
-        "zh": "黃昏野餐藍"
-      },
-      "subtitle": {
-        "en": "Everything for two at the sands: blanket, lanterns, cups and more.",
-        "es": "Todo para dos en la arena: manta, farolillos, vasos y más.",
-        "zh": "兩人沙灘所需：毛氈、燈籠、杯具等一應俱全。"
-      },
-      "displayPrice": {
-        "amount": 1000,
-        "currency": "HKD",
-        "formatted": "HK$10 [test]"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/sunset-picnic-hamper/picnic-hamper-card-face.jpeg"
-      ]
-    },
-    {
-      "slug": "support-100",
+      "slug": "support-0",
       "kind": "donation",
       "isAddon": false,
-      "orderable": true,
+      "orderable": false,
       "name": {
         "en": "Support Mui WoW",
         "es": "Apoya Mui WoW",
         "zh": "支持 Mui WoW"
       },
       "subtitle": {
-        "en": "HK$100 toward the community events on the beach.",
-        "es": "HK$100 para los eventos comunitarios en la playa.",
-        "zh": "捐出HK$100支持梅窩沙灘社區活動。"
+        "en": "No donation this time.",
+        "es": "Sin donación esta vez.",
+        "zh": "今次唔捐款。"
       },
       "displayPrice": {
-        "amount": 10000,
+        "amount": 0,
         "currency": "HKD",
-        "formatted": "HK$100"
-      },
-      "inventory": {
-        "perEvent": false
-      },
-      "images": []
-    },
-    {
-      "slug": "support-20",
-      "kind": "donation",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Support Mui WoW",
-        "es": "Apoya Mui WoW",
-        "zh": "支持 Mui WoW"
-      },
-      "subtitle": {
-        "en": "HK$20 toward the community events on the beach.",
-        "es": "HK$20 para los eventos comunitarios en la playa.",
-        "zh": "捐出HK$20支持梅窩沙灘社區活動。"
-      },
-      "displayPrice": {
-        "amount": 2000,
-        "currency": "HKD",
-        "formatted": "HK$20"
-      },
-      "inventory": {
-        "perEvent": false
-      },
-      "images": []
-    },
-    {
-      "slug": "support-200",
-      "kind": "donation",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Support Mui WoW",
-        "es": "Apoya Mui WoW",
-        "zh": "支持 Mui WoW"
-      },
-      "subtitle": {
-        "en": "HK$200 toward the community events on the beach.",
-        "es": "HK$200 para los eventos comunitarios en la playa.",
-        "zh": "捐出HK$200支持梅窩沙灘社區活動。"
-      },
-      "displayPrice": {
-        "amount": 20000,
-        "currency": "HKD",
-        "formatted": "HK$200"
+        "formatted": "HK$0"
       },
       "inventory": {
         "perEvent": false
@@ -364,6 +52,106 @@
       "images": []
     },
     {
+      "slug": "sunset-picnic-hamper",
+      "kind": "rental",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Sunset Picnic Hamper",
+        "es": "Cesta de Picnic al Atardecer",
+        "zh": "黃昏野餐藍"
+      },
+      "subtitle": {
+        "en": "Everything for two at the sands: blanket, lanterns, cups and more.",
+        "es": "Todo para dos en la arena: manta, farolillos, vasos y más.",
+        "zh": "兩人沙灘所需：毛氈、燈籠、杯具等一應俱全。"
+      },
+      "displayPrice": {
+        "amount": 1000,
+        "currency": "HKD",
+        "formatted": "HK$10 [test]"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/sunset-picnic-hamper/picnic-hamper-card-face.jpeg"
+      ]
+    },
+    {
+      "slug": "support-10",
+      "kind": "donation",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Support Mui WoW",
+        "es": "Apoya Mui WoW",
+        "zh": "支持 Mui WoW"
+      },
+      "subtitle": {
+        "en": "HK$10 toward the community events on the beach.",
+        "es": "HK$10 para los eventos comunitarios en la playa.",
+        "zh": "捐出HK$10支持梅窩沙灘社區活動。"
+      },
+      "displayPrice": {
+        "amount": 1000,
+        "currency": "HKD",
+        "formatted": "HK$10"
+      },
+      "inventory": {
+        "perEvent": false
+      },
+      "images": []
+    },
+    {
+      "slug": "support-20",
+      "kind": "donation",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Support Mui WoW",
+        "es": "Apoya Mui WoW",
+        "zh": "支持 Mui WoW"
+      },
+      "subtitle": {
+        "en": "HK$20 toward the community events on the beach.",
+        "es": "HK$20 para los eventos comunitarios en la playa.",
+        "zh": "捐出HK$20支持梅窩沙灘社區活動。"
+      },
+      "displayPrice": {
+        "amount": 2000,
+        "currency": "HKD",
+        "formatted": "HK$20"
+      },
+      "inventory": {
+        "perEvent": false
+      },
+      "images": []
+    },
+    {
+      "slug": "beach-mat-checkered",
+      "kind": "consumable",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Picnic Mat"
+      },
+      "subtitle": null,
+      "displayPrice": {
+        "amount": 5000,
+        "currency": "HKD",
+        "formatted": "HK$50"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/beach-mat-checkered/cover.jpg"
+      ]
+    },
+    {
       "slug": "support-50",
       "kind": "donation",
       "isAddon": false,
@@ -387,55 +175,6 @@
         "perEvent": false
       },
       "images": []
-    },
-    {
-      "slug": "support-500",
-      "kind": "donation",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "Support Mui WoW",
-        "es": "Apoya Mui WoW",
-        "zh": "支持 Mui WoW"
-      },
-      "subtitle": {
-        "en": "HK$500 toward the community events on the beach.",
-        "es": "HK$500 para los eventos comunitarios en la playa.",
-        "zh": "捐出HK$500支持梅窩沙灘社區活動。"
-      },
-      "displayPrice": {
-        "amount": 50000,
-        "currency": "HKD",
-        "formatted": "HK$500"
-      },
-      "inventory": {
-        "perEvent": false
-      },
-      "images": []
-    },
-    {
-      "slug": "beach-vip-sofa",
-      "kind": "consumable",
-      "isAddon": false,
-      "orderable": true,
-      "name": {
-        "en": "VIP Sofa"
-      },
-      "subtitle": {
-        "en": "Space for 2 people (and maybe some kids on laps)"
-      },
-      "displayPrice": {
-        "amount": 30000,
-        "currency": "HKD",
-        "formatted": "HK$300"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/beach-vip-sofa/cover.jpg"
-      ]
     },
     {
       "slug": "wine-black-elephant-red-blend",
@@ -532,6 +271,317 @@
       "images": [
         "/images/products/wine-vinette-sweet-sparkle/cover.jpeg"
       ]
+    },
+    {
+      "slug": "absolut-vodka-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Absolut Vodka Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/absolut-vodka-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "bacardi-white-rum-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Bacardi White Rum Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/bacardi-white-rum-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "ballantines-scotch-whisky-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Ballantine's Finest Scotch Whisky Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/ballantines-scotch-whisky-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "bombay-sapphire-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Bombay Sapphire Gin Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/bombay-sapphire-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "cointreau-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Cointreau Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/cointreau-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "jack-daniels-miniature",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Jack Daniels Miniature (50ml)"
+      },
+      "subtitle": {
+        "en": "incl. Soft Drink, Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 8000,
+        "currency": "HKD",
+        "formatted": "HK$80"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/jack-daniels-miniature/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "chura-shikwasa-seasalt-can",
+      "kind": "consumable",
+      "isAddon": true,
+      "orderable": true,
+      "name": {
+        "en": "Chura Citrus Cooler (6% alc.)"
+      },
+      "subtitle": {
+        "en": "incl. Bucket + Ice"
+      },
+      "displayPrice": {
+        "amount": 9000,
+        "currency": "HKD",
+        "formatted": "HK$90"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/chura-shikwasa-seasalt-can/cover.jpeg"
+      ]
+    },
+    {
+      "slug": "beach-chair",
+      "kind": "consumable",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Beach Chair"
+      },
+      "subtitle": null,
+      "displayPrice": {
+        "amount": 10000,
+        "currency": "HKD",
+        "formatted": "HK$100"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/beach-chair/cover.jpg"
+      ]
+    },
+    {
+      "slug": "support-100",
+      "kind": "donation",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Support Mui WoW",
+        "es": "Apoya Mui WoW",
+        "zh": "支持 Mui WoW"
+      },
+      "subtitle": {
+        "en": "HK$100 toward the community events on the beach.",
+        "es": "HK$100 para los eventos comunitarios en la playa.",
+        "zh": "捐出HK$100支持梅窩沙灘社區活動。"
+      },
+      "displayPrice": {
+        "amount": 10000,
+        "currency": "HKD",
+        "formatted": "HK$100"
+      },
+      "inventory": {
+        "perEvent": false
+      },
+      "images": []
+    },
+    {
+      "slug": "support-200",
+      "kind": "donation",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Support Mui WoW",
+        "es": "Apoya Mui WoW",
+        "zh": "支持 Mui WoW"
+      },
+      "subtitle": {
+        "en": "HK$200 toward the community events on the beach.",
+        "es": "HK$200 para los eventos comunitarios en la playa.",
+        "zh": "捐出HK$200支持梅窩沙灘社區活動。"
+      },
+      "displayPrice": {
+        "amount": 20000,
+        "currency": "HKD",
+        "formatted": "HK$200"
+      },
+      "inventory": {
+        "perEvent": false
+      },
+      "images": []
+    },
+    {
+      "slug": "beach-tent",
+      "kind": "consumable",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Picnic Tent"
+      },
+      "subtitle": null,
+      "displayPrice": {
+        "amount": 30000,
+        "currency": "HKD",
+        "formatted": "HK$300"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/beach-tent/cover.jpg"
+      ]
+    },
+    {
+      "slug": "beach-vip-sofa",
+      "kind": "consumable",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "VIP Sofa"
+      },
+      "subtitle": {
+        "en": "Space for 2 people (and maybe some kids on laps)"
+      },
+      "displayPrice": {
+        "amount": 30000,
+        "currency": "HKD",
+        "formatted": "HK$300"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/beach-vip-sofa/cover.jpg"
+      ]
+    },
+    {
+      "slug": "support-500",
+      "kind": "donation",
+      "isAddon": false,
+      "orderable": true,
+      "name": {
+        "en": "Support Mui WoW",
+        "es": "Apoya Mui WoW",
+        "zh": "支持 Mui WoW"
+      },
+      "subtitle": {
+        "en": "HK$500 toward the community events on the beach.",
+        "es": "HK$500 para los eventos comunitarios en la playa.",
+        "zh": "捐出HK$500支持梅窩沙灘社區活動。"
+      },
+      "displayPrice": {
+        "amount": 50000,
+        "currency": "HKD",
+        "formatted": "HK$500"
+      },
+      "inventory": {
+        "perEvent": false
+      },
+      "images": []
     }
   ]
 }

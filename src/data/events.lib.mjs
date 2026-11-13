@@ -214,7 +214,8 @@ export const productSchema = z
     // amount in the smallest currency unit (HKD cents); cross-checked live.
     displayPrice: z
       .object({
-        amount: z.number().int().positive(),
+        // amount 0 is legal: donation tiers include an explicit HK$0 opt-out
+        amount: z.number().int().min(0),
         currency: z.string().toUpperCase().length(3),
         formatted: z.string().min(1),
       })

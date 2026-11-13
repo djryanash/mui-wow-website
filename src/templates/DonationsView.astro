@@ -89,7 +89,7 @@ const title = L(chrome.donationsTitle);
       drawer.querySelector('.cart-empty').hidden = keys.length > 0;
       document.querySelector('[data-cart-open]').hidden = false;
       const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-      drawer.querySelector('[data-cart-badge]').textContent = count || '';
+      document.querySelector('[data-cart-badge]').textContent = count || '';
       let total = 0;
       for (const slug of keys) {
         total += cart[slug].cents * cart[slug].qty;

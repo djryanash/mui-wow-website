@@ -22,7 +22,7 @@ const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddo
         <p style="max-width:56ch">{T(chrome.comingSoonBody)}</p>
       ) : (
         <>
-          <p class="cart-note">{T({ en: 'Payment runs on Stripe. Pickup at the beach.', es: 'Pago con Stripe. Recogida en la playa.', zh: 'Stripe 付款，沙灘自取。' })}</p>
+          <p class="cart-note">{T({ en: 'Pick up everything at the beach on the day.', es: 'Recógelo todo en la playa el día del evento.', zh: '活動當日喺沙灘自取。' })}</p>
           <div class="cards">
             {products.map((p) => <ProductCard product={p} locale={locale} />)}
           </div>

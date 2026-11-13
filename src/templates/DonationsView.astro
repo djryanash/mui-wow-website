@@ -14,12 +14,15 @@ const title = T(chrome.donationsTitle);
     <p class="kicker">Mui WoW</p>
     <h1>{title}</h1>
     <p class="cart-note">{T(chrome.donationsHint)}</p>
-    <div class="donation-row">
-      {tiers.map((p) => (
-        <button class="btn btn-gold btn-donation" data-support-tier={p.slug} data-price={p.displayPrice.formatted}>
-          {p.displayPrice.formatted}
-        </button>
-      ))}
-    </div>
+          <div class="donation-row">
+        {tiers.map((p) => (
+          <div class="donation-card">
+            <span class="donation-amount">{p.displayPrice.formatted}</span>
+            <button class="btn btn-gold" data-support-tier={p.slug} data-price={p.displayPrice.formatted}>
+              {T({ en: 'Support', es: 'Apoyar', zh: '支持' })}<span class="arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        ))}
+      </div>
   </div>
 </section>

@@ -17,7 +17,7 @@ displayPrice:
   amount: 20000
   currency: 'HKD'
   formatted: 'HK$200'
-stripePriceId: 'price_1Ub8ptELihTI1DD4mkdEc5rz' # sandbox (test) — live prices when selling starts
+stripePriceId: 'price_1Ub8ptELihTI1DD4mkdEc5rz' # sandbox (test) — live prices created separately
 
 inventory:
   perEvent: false

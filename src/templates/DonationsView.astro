@@ -1,7 +1,7 @@
 ---
 // Donations: /donations — support the beach events (fixed tiers).
-// Selection model: pick one tier (or "don't donate"), the cart is written
-// on selection, and the funnel click-through opens the editable cart.
+// Selection model: pick one tier (or the HK$0 opt-out); the cart is written
+// on selection and the drawer opens over the page. One donation max.
 import Layout from '../components/Layout.astro';
 import { loadProducts } from '../data/load.mjs';
 import { chrome } from '../data/chrome.mjs';
@@ -25,47 +25,41 @@ const title = L(chrome.donationsTitle);
             <span class="donation-amount">{p.displayPrice.formatted}</span>
           </button>
         ))}
-      </
-      <!-- The cart drawer (shared with the shop pages) lives here for this page -->
-      <aside class="cart-drawer" id="cart-drawer" aria-label={L(chrome.cart)}
-        data-total={L(chrome.total)}
-        data-checkout-label={L(chrome.checkout)}
-        data-cart-empty={L(chrome.cartEmpty)}
-        data-remove-label={L(chrome.remove)}
-        data-checkout-pending={L(chrome.checkoutPending)}>
-        <div class="cart-head">
-          <strong>{L(chrome.cart)}</strong>
-          <button class="cart-close" aria-label="Close">×</button>
-        </div>
-        <div class="cart-items"></div>
-        <p class="cart-empty">{L(chrome.cartEmpty)}</p>
-        <div class="cart-total">
-          <span>{L(chrome.total)}</span>
-          <strong data-cart-total>—</strong>
-        </div>
-        <button class="btn btn-gold cart-checkout" data-cart-checkout>{L(chrome.checkout)}</button>
-        <p class="cart-note-after" data-checkout-note hidden></p>
-      </aside>
-      <button class="cart-fab" aria-label={L(chrome.cart)} data-cart-open hidden>🧺 <span data-cart-badge></span></button>
+      </div>
     </div>
   </section>
+
+  <aside class="cart-drawer" id="cart-drawer" aria-label={L(chrome.cart)}
+    data-total={L(chrome.total)}
+    data-checkout-label={L(chrome.checkout)}
+    data-cart-empty={L(chrome.cartEmpty)}
+    data-remove-label={L(chrome.remove)}
+    data-checkout-pending={L(chrome.checkoutPending)}>
+    <div class="cart-head">
+      <strong>{L(chrome.cart)}</strong>
+      <button class="cart-close" aria-label="Close">×</button>
+    </div>
+    <div class="cart-items"></div>
+    <p class="cart-empty">{L(chrome.cartEmpty)}</p>
+    <div class="cart-total">
+      <span>{L(chrome.total)}</span>
+      <strong data-cart-total>—</strong>
+    </div>
+    <button class="btn btn-gold cart-checkout" data-cart-checkout>{L(chrome.checkout)}</button>
+    <p class="cart-note-after" data-checkout-note hidden></p>
+  </aside>
+  <button class="cart-fab" aria-label={L(chrome.cart)} data-cart-open hidden>🧺 <span data-cart-badge></span></button>
 </Layout>
 
-
 <script>
-  window.__cartReady = () => { document.title = 'CART-READY · ' + document.title.replace(/^(CART-READY|ERR[^·]*)\u00b7 /, ''); };
-  window.onerror = (msg, srcFile, line) => { document.title = 'ERR: ' + String(msg) + ' @' + line; };
-  try {
-    (function () {
-    const KEY = 'muiwow-cart';
-    const memStore = {};
+  (function () {
     const store = (() => {
+      const memStore = {};
       try {
         localStorage.setItem('__muiwow_test__', '1');
         localStorage.removeItem('__muiwow_test__');
-        return localStorage; // normal browsers
+        return localStorage;
       } catch {
-        // private mode / storage blocked: keep the cart in memory for this page
         return {
           getItem: (k) => (k in memStore ? memStore[k] : null),
           setItem: (k, v) => { memStore[k] = String(v); },
@@ -73,12 +67,14 @@ const title = L(chrome.donationsTitle);
         };
       }
     })();
-
-    const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
+    const KEY = 'muiwow-cart';
     const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
     const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
+    const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
 
     const drawer = document.getElementById('cart-drawer');
+    const badge = document.querySelector('[data-cart-badge]');
+    const fab = document.querySelector('[data-cart-open]');
     drawer.querySelector('.cart-checkout').textContent = drawer.dataset.checkoutLabel ?? 'Checkout';
 
     function render() {
@@ -87,9 +83,9 @@ const title = L(chrome.donationsTitle);
       items.textContent = '';
       const keys = Object.keys(cart);
       drawer.querySelector('.cart-empty').hidden = keys.length > 0;
-      document.querySelector('[data-cart-open]').hidden = false;
+      fab.hidden = false;
       const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-      document.querySelector('[data-cart-badge]').textContent = count || '';
+      badge.textContent = count || '';
       let total = 0;
       for (const slug of keys) {
         total += cart[slug].cents * cart[slug].qty;
@@ -114,10 +110,10 @@ const title = L(chrome.donationsTitle);
     document.addEventListener('click', (e) => {
       const tier = e.target.closest?.('[data-select-tier]');
       if (tier) {
-        // HK$0: the explicit opt-out — nothing is added, the cart just opens.
+        // HK$0 is the explicit opt-out: nothing is added, the cart just opens.
         if (tier.dataset.selectTier === 'support-0') {
           const c = read();
-          for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s) && s !== 'support-0') delete c[s];
+          for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s)) delete c[s];
           write(c);
           drawer.classList.add('open');
           return;
@@ -156,9 +152,4 @@ const title = L(chrome.donationsTitle);
 
     render();
   })();
-
-    document.title = 'CART-READY · ' + (document.title.split('·').slice(1).join('·').trim() || 'Support Mui WoW');
-  } catch (err) {
-    document.title = 'SYNC-ERR: ' + (err?.message ?? String(err));
-  }
 </script>

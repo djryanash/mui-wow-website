@@ -45,6 +45,7 @@ const copy = {
     send.addEventListener('click', async () => {
       const email = document.getElementById('capture-email').value.trim();
       send.disabled = true;
+      send.textContent = (lang === 'es' ? 'Enviando…' : lang === 'zh-hk' ? '發送中…' : 'Sending…');
       note.hidden = true;
       try {
         const d = await fetch('/api/booking-confirm', {
@@ -56,6 +57,7 @@ const copy = {
         location.href = '/shop-thanks?ref=' + encodeURIComponent(d.ref) + '&lang=' + lang;
       } catch (err) {
         send.disabled = false;
+        send.textContent = L({ en: 'Confirm my free ticket', es: 'Confirmar mi entrada', zh: '確認免費門票' });
         note.hidden = false;
         note.textContent = err.message === 'bad email'
           ? (lang === 'es' ? 'Ese correo no parece válido.' : lang === 'zh-hk' ? '呢個電郵好似唔正確。' : 'That email address does not look right.')

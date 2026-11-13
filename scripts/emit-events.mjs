@@ -23,6 +23,7 @@ const products = loadProducts().map((p) => ({
   slug: p.slug,
   kind: p.kind,
   isAddon: p.isAddon,
+  isTicket: p.isTicket,
   orderable: p.orderable || !!p.stripePriceId,
   name: p.name,
   subtitle: p.subtitle ?? null,

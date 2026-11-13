@@ -92,5 +92,15 @@ heroCta:
     es: 'Voy'
     zh: '我去'
   href: '/rentals'
+heroTicket:
+  slug: 'tiki-free-entry'
+  name:
+    en: 'Tiki Sessions — Free Entry'
+    es: 'Tiki Sessions — Entrada gratuita'
+    zh: 'Tiki Sessions — 免費入場'
+  priceLabel:
+    en: 'Free'
+    es: 'Gratis'
+    zh: '免費'
 poster: '/images/events/tiki-sessions-2026-11-15-hero.jpg'
 heroImage: '/images/events/tiki-sessions-2026-11-15-hero.jpg'

@@ -1,0 +1,24 @@
+# ── Free event ticket (added by the I'M GOING button, never sold in the grid) ──
+slug: 'tiki-free-entry'
+published: true
+kind: 'ticket'
+isTicket: true
+orderable: true
+
+name:
+  en: 'Tiki Sessions — Free Entry'
+  es: 'Tiki Sessions — Entrada gratuita'
+  zh: 'Tiki Sessions — 免費入場'
+subtitle:
+  en: 'Free entry to the beach event, two drinks on arrival.'
+  es: 'Entrada gratuita, dos bebidas al llegar.'
+  zh: '免費入場，到場兩杯飲品。'
+
+displayPrice:
+  amount: 0
+  currency: 'HKD'
+  formatted: 'Free'
+
+inventory:
+  perEvent: true
+  stock: 200

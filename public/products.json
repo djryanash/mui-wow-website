@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-11-13T02:27:44.556Z",
+  "generatedAt": "2026-11-13T02:39:20.814Z",
   "products": [
     {
       "slug": "support-0",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": false,
       "name": {
         "en": "Support Mui WoW",
@@ -27,9 +28,37 @@
       "images": []
     },
     {
+      "slug": "tiki-free-entry",
+      "kind": "ticket",
+      "isAddon": false,
+      "isTicket": true,
+      "orderable": true,
+      "name": {
+        "en": "Tiki Sessions — Free Entry",
+        "es": "Tiki Sessions — Entrada gratuita",
+        "zh": "Tiki Sessions — 免費入場"
+      },
+      "subtitle": {
+        "en": "Free entry to the beach event, two drinks on arrival.",
+        "es": "Entrada gratuita, dos bebidas al llegar.",
+        "zh": "免費入場，到場兩杯飲品。"
+      },
+      "displayPrice": {
+        "amount": 0,
+        "currency": "HKD",
+        "formatted": "Free"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 200
+      },
+      "images": []
+    },
+    {
       "slug": "support-5",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -55,6 +84,7 @@
       "slug": "support-10",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -80,6 +110,7 @@
       "slug": "support-20",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -105,6 +136,7 @@
       "slug": "beach-mat-checkered",
       "kind": "consumable",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Picnic Mat"
@@ -127,6 +159,7 @@
       "slug": "support-50",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -152,6 +185,7 @@
       "slug": "wine-black-elephant-red-blend",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Wine, Black Elephant, Red Blend (250ml can, 13% alc.)"
@@ -176,6 +210,7 @@
       "slug": "wine-black-elephant-sauv-blanc",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Wine, Black Elephant, Sauvignon Blanc (250ml can, 13% alc.)"
@@ -200,6 +235,7 @@
       "slug": "wine-vinette-rose",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Wine, Vinette, Rose (250ml can, 13% alc.)"
@@ -224,6 +260,7 @@
       "slug": "wine-vinette-sweet-sparkle",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Wine, Vinette, Sweet Sparkle (250ml can, 13% alc.)"
@@ -248,6 +285,7 @@
       "slug": "absolut-vodka-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Absolut Vodka Miniature (50ml)"
@@ -272,6 +310,7 @@
       "slug": "bacardi-white-rum-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Bacardi White Rum Miniature (50ml)"
@@ -296,6 +335,7 @@
       "slug": "ballantines-scotch-whisky-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Ballantine's Finest Scotch Whisky Miniature (50ml)"
@@ -320,6 +360,7 @@
       "slug": "bombay-sapphire-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Bombay Sapphire Gin Miniature (50ml)"
@@ -344,6 +385,7 @@
       "slug": "cointreau-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Cointreau Miniature (50ml)"
@@ -368,6 +410,7 @@
       "slug": "jack-daniels-miniature",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Jack Daniels Miniature (50ml)"
@@ -392,6 +435,7 @@
       "slug": "chura-shikwasa-seasalt-can",
       "kind": "consumable",
       "isAddon": true,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Chura Citrus Cooler (6% alc.)"
@@ -416,6 +460,7 @@
       "slug": "beach-chair",
       "kind": "consumable",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Beach Chair"
@@ -438,6 +483,7 @@
       "slug": "support-100",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -463,6 +509,7 @@
       "slug": "support-200",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -488,6 +535,7 @@
       "slug": "beach-tent",
       "kind": "consumable",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Picnic Tent"
@@ -510,6 +558,7 @@
       "slug": "beach-vip-sofa",
       "kind": "consumable",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "VIP Sofa"
@@ -534,6 +583,7 @@
       "slug": "support-500",
       "kind": "donation",
       "isAddon": false,
+      "isTicket": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",

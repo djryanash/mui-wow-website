@@ -86,6 +86,7 @@ export default async function handler(req, res) {
 
   try {
     const line_items = [];
+    let total = 0;
     for (const { slug, qty } of items) {
       if (!/^[a-z0-9-]{1,64}$/.test(String(slug)) || !Number.isInteger(qty) || qty < 1 || qty > 20) {
         return res.status(400).json({ error: 'bad item' });
@@ -93,9 +94,31 @@ export default async function handler(req, res) {
       const price = await activeHkdPrice(String(slug));
       if (!price) return res.status(404).json({ error: `unknown or unpriced product: ${slug}` });
       line_items.push({ price: price.id, quantity: qty });
+      total += price.unit_amount * qty;
     }
 
     const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
+    // Zero-total lane: a cart of only free tickets books DIRECTLY into the
+    // store (Stripe Checkout cannot take HK$0 in payment mode). Same booking
+    // shape, same QR flow, no email (no address is collected in this lane).
+    if (total === 0) {
+      const crypto = await import('node:crypto');
+      const ref = ('T' + crypto.randomBytes(5).toString('hex')).toUpperCase().slice(0, 11);
+      const catalog = await (await fetch(origin + '/products.json', { cache: 'no-cache' })).json();
+      const booked = [];
+      for (const { slug, qty } of items) {
+        const p = (catalog.products ?? []).find((c) => c.slug === slug);
+        booked.push({ slug, kind: p?.kind ?? 'ticket', name: p?.name?.en ?? slug, qty, subtotal: 0, priceId: p?.stripePriceId ?? null });
+      }
+      const kvBase = process.env.KV_REST_API_URL;
+      const kvToken = process.env.KV_REST_API_TOKEN;
+      const res = await fetch(`${kvBase}/set/${encodeURIComponent(`booking:${ref}`)}/${encodeURIComponent(JSON.stringify({ ref, email: '', state: 'reserved', amount: 0, sessionId: null, items: booked, orders: [], createdAt: new Date().toISOString(), type: 'ticket' }))}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${kvToken}` },
+      });
+      if (!res.ok) return res.status(502).json({ error: 'ticket booking failed (store)' });
+      return res.status(200).json({ url: `${origin}/shop-thanks?ref=${ref}`, ref, direct: true });
+    }
     const successUrl = parentRef
       ? `${origin}/addons/${encodeURIComponent(parentRef)}?paid=1`
       : `${origin}/shop-thanks?session_id={CHECKOUT_SESSION_ID}`;

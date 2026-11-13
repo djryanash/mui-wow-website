@@ -166,6 +166,15 @@ export const eventSchema = z
       })
       .strict()
       .optional(),
+    // The free ticket the hero button adds to the cart (zero-total lane).
+    heroTicket: z
+      .object({
+        slug,
+        name: languageObject,
+        priceLabel: languageObject.optional(),
+      })
+      .strict()
+      .optional(),
 
     // Page assets (not emitted to events.json):
     poster: z.string().min(1).optional(), // path under /images/events/
@@ -199,11 +208,13 @@ export const productSchema = z
   .object({
     slug,
     published: z.boolean().default(true),
-    kind: z.enum(['rental', 'consumable', 'donation']).default('rental'),
+    kind: z.enum(['rental', 'consumable', 'donation', 'ticket']).default('rental'),
     // Add-on: snack/drink bought on the beach (via the add-on menu), not a
     // standalone catalog hero. Orderable: has a real bookable price.
     isAddon: z.boolean().default(false),
     orderable: z.boolean().default(false),
+    // Tickets ride the I'M GOING button, never the shop grid or add-on menu.
+    isTicket: z.boolean().default(false),
 
     name: languageObject,
     subtitle: languageObject.optional(),

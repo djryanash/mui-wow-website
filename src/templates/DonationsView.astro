@@ -51,8 +51,12 @@ const title = L(chrome.donationsTitle);
   </section>
 </Layout>
 
+
 <script>
-  (function () {
+  window.__cartReady = () => { document.title = 'CART-READY · ' + document.title.replace(/^(CART-READY|ERR[^·]*)\u00b7 /, ''); };
+  window.onerror = (msg, srcFile, line) => { document.title = 'ERR: ' + String(msg) + ' @' + line; };
+  try {
+    (function () {
     const KEY = 'muiwow-cart';
     const memStore = {};
     const store = (() => {
@@ -152,4 +156,9 @@ const title = L(chrome.donationsTitle);
 
     render();
   })();
+
+    document.title = 'CART-READY · ' + (document.title.split('·').slice(1).join('·').trim() || 'Support Mui WoW');
+  } catch (err) {
+    document.title = 'SYNC-ERR: ' + (err?.message ?? String(err));
+  }
 </script>

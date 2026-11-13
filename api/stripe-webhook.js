@@ -19,11 +19,6 @@ export const config = { api: { bodyParser: false } };
 import QRCode from 'qrcode';
 import crypto from 'node:crypto';
 
-const json = (code, obj) => ({
-  statusCode: code,
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(obj),
-});
 
 // ── Upstash REST (Vercel-integrated names) ──────────────────────
 

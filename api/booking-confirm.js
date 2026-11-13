@@ -9,11 +9,6 @@
 import { kvGet, kvSet, sendBookingEmail } from './stripe-webhook.js';
 import crypto from 'node:crypto';
 
-const json = (code, obj) => ({
-  statusCode: code,
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(obj),
-});
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
@@ -61,5 +56,5 @@ export default async function handler(req, res) {
     .catch((e) => `failed: ${e.message}`);
 
   console.log(`zero-lane booking ${ref} confirmed for ${email}; email: ${emailResult}`);
-  return json(200, { ok: true, ref });
+  return res.status(200).json({ ok: true, ref });
 }

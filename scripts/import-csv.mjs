@@ -16,7 +16,9 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { parse } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
-const file = args.find((a) => !a.startsWith('--'));
+const file = args.find((a) => !a.startsWith('--') && !a.startsWith('--images'));
+const imagesDirArg = args.find((a) => a.startsWith('--images'));
+const IMAGES_DIR = imagesDirArg ? imagesDirArg.split('=')[1] ?? args[args.indexOf(imagesDirArg) + 1] : null;
 const live = args.includes('--live');
 if (!file || !existsSync(file)) {
   console.error('usage: node scripts/import-csv.mjs <file.csv> [--live|--test]');
@@ -90,7 +92,19 @@ for (const row of rows) {
     return `{${[en && ` en: ${en}`, es && ` es: ${es}`, zh && ` zh: ${zh}`].filter(Boolean).join(',')}\n  }`;
   };
   const q = (s) => (s != null ? `'${String(s).replace(/'/g, "''")}'` : undefined);
-  const image = (row.image ?? '').trim();
+  // image: explicit column wins; else a file in IMAGES_DIR starting with the slug
+  let image = (row.image ?? '').trim();
+  if (!image && IMAGES_DIR) {
+    const { readdirSync, copyFileSync, mkdirSync } = await import('node:fs');
+    const candidates = readdirSync(IMAGES_DIR).filter((f) => f.toLowerCase().startsWith(slug) && /\.(jpe?g|png|webp|avif)$/i.test(f));
+    if (candidates.length) {
+      const f = candidates[0];
+      const dir = `public/images/products/${slug}`;
+      mkdirSync(dir, { recursive: true });
+      copyFileSync(`${IMAGES_DIR}/${f}`, `${dir}/cover${f.slice(f.lastIndexOf('.')).toLowerCase()}`);
+      image = `/images/products/${slug}/cover${f.slice(f.lastIndexOf('.')).toLowerCase()}`;
+    }
+  }
 
   const body = [
     `slug: ${q(slug)}`,

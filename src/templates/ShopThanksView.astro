@@ -24,6 +24,9 @@ const copy = {
       <img src="/images/brand/mui-wow-logo.png" alt="Mui WoW" style="height:100px; margin:0 auto 18px;" />
       <h1>{T(copy.title)}</h1>
       <p style="max-width:52ch; margin:14px auto">{T(copy.body)}</p>
+      <div id="thanks-qr" class="qr-frame" style="margin:6px auto 0; width:240px; background:#fff; border-radius:12px; padding:12px; box-shadow:var(--shadow); display:none"></div>
+      <p id="thanks-ref" style="font-weight:900; color:var(--gold-bright); margin-top:10px"></p>
+      <p id="thanks-qr-hint" style="max-width:52ch; margin:0 auto; color:var(--turquoise)"></p>
       <div class="info-block" style="margin-top:34px; text-align:left">
         <h2>{T(chrome.addonsTitle)}</h2>
         <p class="cart-note">{T(chrome.addonsHint)}</p>
@@ -46,6 +49,7 @@ const copy = {
     </div>
   </section>
 </Layout>
+<script src="/js/qrcode.min.js" is:inline></script>
 <script>
   (function () {
     const lang = document.documentElement.getAttribute('lang');
@@ -67,5 +71,20 @@ const copy = {
           note.textContent = (lang === 'es' ? 'Todavía no: ' : lang === 'zh-hk' ? '暫時未能：' : 'Not ready yet: ') + (err.message ?? '');
         });
     });
+  // QR on the thank-you page: the booking comes back by session id.
+  const sid = new URLSearchParams(location.search).get('session_id');
+  if (sid) {
+    fetch(`/api/booking?session_id=${encodeURIComponent(sid)}`)
+      .then((r) => r.json())
+      .then((b) => {
+        if (b.error) return;
+        const el = document.getElementById('thanks-qr');
+        el.style.display = 'block';
+        if (b.qr && window.QRCode) QRCode.toCanvas(el, b.qr, { width: 216 });
+        document.getElementById('thanks-ref').textContent = b.ref ?? '';
+        const hint = document.getElementById('thanks-qr-hint');
+        hint.textContent = (lang === 'es' ? 'Muéstrale este código a nuestro equipo en la playa — lo escanean y se confirma la entrega.' : lang === 'zh-hk' ? '喺沙灘俾員工掃描呢個碼確認交收。' : 'Show this code to our team at the beach — they scan it and the hand-over is confirmed.');
+      });
+  }
   })();
 </script>

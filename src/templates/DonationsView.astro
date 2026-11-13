@@ -1,0 +1,25 @@
+---
+import Layout from '../components/Layout.astro';
+import { t as _t, loadProducts } from '../data/load.mjs';
+import { chrome } from '../data/chrome.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const tiers = loadProducts().filter((p) => p.kind === 'donation' && p.orderable);
+const title = T(chrome.donationsTitle);
+---
+
+<section class="section">
+  <div class="container" style="max-width:760px">
+    <p class="kicker">Mui WoW</p>
+    <h1>{title}</h1>
+    <p class="cart-note">{T(chrome.donationsHint)}</p>
+    <div class="donation-row">
+      {tiers.map((p) => (
+        <button class="btn btn-gold btn-donation" data-support-tier={p.slug} data-price={p.displayPrice.formatted}>
+          {p.displayPrice.formatted}
+        </button>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+slug: 'beach-mat-checkered'
+published: true
+kind: 'consumable'
+orderable: true
+name: { en: 'Picnic Mat' }
+displayPrice:
+  amount: 5000
+  currency: 'HKD'
+  formatted: 'HK$50'
+stripePriceId: 'price_1Ub8pUCzy81v9aNth70JPbxf' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/beach-mat-checkered/cover.jpg'

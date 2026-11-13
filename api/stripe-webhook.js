@@ -256,6 +256,24 @@ export default async function handler(req, res) {
     const ref = session.id.replace(/^cs_(test|live)_/, '').slice(0, 12).toUpperCase();
     const items = await sessionItems(session.id);
 
+    const allDonation = items.length > 0 && items.every((i) => i.kind === 'donation');
+
+    if (allDonation) {
+      // Support tier: a thank-you record only; no pickup, no QR, no staff flow.
+      await kvSet(`booking:${ref}`, {
+        ref,
+        type: 'donation',
+        email: session.customer_details?.email ?? '',
+        state: 'reserved',
+        amount: session.amount_total,
+        sessionId: session.id,
+        items,
+        createdAt: new Date().toISOString(),
+      });
+      console.log(`donation-only session ${ref} recorded (no QR flow)`);
+      return res.status(200).json({ received: true, ref, donation: true });
+    }
+
     if (parentRef && parentRef !== ref) {
       // Add-on re-order: attach to the parent booking's chain.
       const raw = await kvGet(`booking:${parentRef}`);
@@ -266,6 +284,7 @@ export default async function handler(req, res) {
       };
       booking.orders = [...(booking.orders ?? []), order];
       await kvSet(`booking:${parentRef}`, booking);
+      await kvSet(`session:${session.id}`, { ref: parentRef });
       const emailResult = await sendAddonsEmail(origin, parentRef, booking.email, items, session.amount_total)
         .then((r) => r)
         .catch((e) => `failed (order still recorded): ${e.message}`);
@@ -285,6 +304,7 @@ export default async function handler(req, res) {
       orders: [],
       createdAt: new Date().toISOString(),
     });
+    await kvSet(`session:${session.id}`, { ref });
 
     const emailResult = await sendBookingEmail(origin, ref, session.customer_details?.email, items, session.amount_total)
       .then((r) => r)

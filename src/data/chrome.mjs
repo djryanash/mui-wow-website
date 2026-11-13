@@ -117,4 +117,15 @@ export const chrome = {
   addonsQrHint: { en: 'Let the customer scan this to open their add-on menu:',
     es: 'Que el cliente escanee esto para su menú de extras:',
     zh: '俾客人掃描以下二維碼開啟加購菜單：' },
+  donationsTitle: { en: 'Support Mui WoW', es: 'Apoya Mui WoW', zh: '支持 Mui WoW' },
+  donationsHint: { en: 'Every contribution keeps the beach events free and running.',
+    es: 'Cada aportación mantiene gratis los eventos de la playa.',
+    zh: '每一份支持，都令沙灘活動得以免費舉辦。' },
+};
+
+// Funnel step links: rentals → addons → donations → cart/checkout.
+export const funnel = {
+  rentalsNext: { en: 'Next: drinks & snacks →', es: 'Next: bebidas y snacks →', zh: '下一步：飲品小食 →' },
+  addonsNext: { en: 'Next: support the events →', es: 'Next: apoya los eventos →', zh: '下一步：支持活動 →' },
+  donationsNext: { en: 'Go to your cart →', es: 'Ir al carrito →', zh: '去購物車 →' },
 };

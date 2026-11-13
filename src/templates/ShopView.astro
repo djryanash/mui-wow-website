@@ -4,12 +4,12 @@
 import Layout from '../components/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { loadProducts, loadSite } from '../data/load.mjs';
-import { chrome } from '../data/chrome.mjs';
+import { chrome, funnel } from '../data/chrome.mjs';
 
 const site = loadSite();
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
-const products = loadProducts().filter((p) => !p.isAddon);
+const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddon);
 ---
 
 <Layout locale={locale} title={T(chrome.shopTitle)} description={T(chrome.shopTitle)}>
@@ -26,6 +26,13 @@ const products = loadProducts().filter((p) => !p.isAddon);
           <div class="cards">
             {products.map((p) => <ProductCard product={p} locale={locale} />)}
           </div>
+          {products.length > 0 && (
+            <p class="funnel-next" style="margin-top:26px">
+              {locale === 'en' ? <a class="btn btn-teal btn-arrow" href="/addons" data-burst>Next: drinks &amp; snacks <span class="arrow" aria-hidden="true">→</span></a> : ''}
+              {locale === 'es' && <a class="btn btn-teal btn-arrow" href="/es/addons" data-burst>Next: bebidas y snacks <span class="arrow" aria-hidden="true">→</span></a>}
+              {locale === 'zh-hk' && <a class="btn btn-teal btn-arrow" href="/zh-hk/addons" data-burst>下一步：飲品小食 <span class="arrow" aria-hidden="true">→</span></a>}
+            </p>
+          )}
         </>
       )}
     </div>

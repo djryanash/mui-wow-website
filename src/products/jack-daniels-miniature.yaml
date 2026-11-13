@@ -1,0 +1,17 @@
+slug: 'jack-daniels-miniature'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Jack Daniels Miniature (50ml)' }
+subtitle: { en: 'incl. Soft Drink, Glass + Ice' }
+displayPrice:
+  amount: 8000
+  currency: 'HKD'
+  formatted: 'HK$80'
+stripePriceId: 'price_1Ub8pMCzy81v9aNtuKcVsqB6' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/jack-daniels-miniature/cover.jpeg'

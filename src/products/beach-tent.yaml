@@ -1,0 +1,15 @@
+slug: 'beach-tent'
+published: true
+kind: 'consumable'
+orderable: true
+name: { en: 'Picnic Tent' }
+displayPrice:
+  amount: 30000
+  currency: 'HKD'
+  formatted: 'HK$300'
+stripePriceId: 'price_1Ub8pXCzy81v9aNty34s8M27' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/beach-tent/cover.jpg'

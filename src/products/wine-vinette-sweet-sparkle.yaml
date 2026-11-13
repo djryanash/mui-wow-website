@@ -1,0 +1,17 @@
+slug: 'wine-vinette-sweet-sparkle'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Wine, Vinette, Sweet Sparkle (250ml can, 13% alc.)' }
+subtitle: { en: 'incl. Glass + Ice' }
+displayPrice:
+  amount: 5000
+  currency: 'HKD'
+  formatted: 'HK$50'
+stripePriceId: 'price_1Ub8pcCzy81v9aNt3HRm2CgF' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/wine-vinette-sweet-sparkle/cover.jpeg'

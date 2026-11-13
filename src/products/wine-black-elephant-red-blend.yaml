@@ -1,0 +1,17 @@
+slug: 'wine-black-elephant-red-blend'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Wine, Black Elephant, Red Blend (250ml can, 13% alc.)' }
+subtitle: { en: 'incl. Glass + Ice' }
+displayPrice:
+  amount: 5000
+  currency: 'HKD'
+  formatted: 'HK$50'
+stripePriceId: 'price_1Ub8peCzy81v9aNtG0lXRfPC' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/wine-black-elephant-red-blend/cover.jpeg'

@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
     const successUrl = parentRef
       ? `${origin}/addons/${encodeURIComponent(parentRef)}?paid=1`
-      : `${origin}/shop-thanks`;
+      : `${origin}/shop-thanks?session_id={CHECKOUT_SESSION_ID}`;
     const session = await stripe('POST', '/checkout/sessions', {
       mode: 'payment',
       success_url: successUrl,

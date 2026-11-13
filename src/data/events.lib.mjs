@@ -199,7 +199,7 @@ export const productSchema = z
   .object({
     slug,
     published: z.boolean().default(true),
-    kind: z.enum(['rental', 'consumable']).default('rental'),
+    kind: z.enum(['rental', 'consumable', 'donation']).default('rental'),
     // Add-on: snack/drink bought on the beach (via the add-on menu), not a
     // standalone catalog hero. Orderable: has a real bookable price.
     isAddon: z.boolean().default(false),

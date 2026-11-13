@@ -1,0 +1,17 @@
+slug: 'bombay-sapphire-miniature'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Bombay Sapphire Gin Miniature (50ml)' }
+subtitle: { en: 'incl. Soft Drink, Glass + Ice' }
+displayPrice:
+  amount: 8000
+  currency: 'HKD'
+  formatted: 'HK$80'
+stripePriceId: 'price_1Ub8pRCzy81v9aNtI4vSEiTB' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/bombay-sapphire-miniature/cover.jpeg'

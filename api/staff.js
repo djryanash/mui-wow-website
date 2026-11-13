@@ -35,6 +35,7 @@ async function activeBookings() {
     const b = await kvGet(k);
     if (b) {
       const rec = typeof b === 'string' ? JSON.parse(b) : b;
+      if (rec.type === 'donation') continue; // support tiers: no pickup flow
       if (rec.state !== 'returned') out.push(rec);
     }
   }

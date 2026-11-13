@@ -1,0 +1,17 @@
+slug: 'chura-shikwasa-seasalt-can'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Chura Citrus Cooler (6% alc.)' }
+subtitle: { en: 'incl. Bucket + Ice' }
+displayPrice:
+  amount: 9000
+  currency: 'HKD'
+  formatted: 'HK$90'
+stripePriceId: 'price_1Ub8pJCzy81v9aNtvVJ5PScS' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/chura-shikwasa-seasalt-can/cover.jpeg'

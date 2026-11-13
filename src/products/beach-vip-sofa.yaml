@@ -1,0 +1,16 @@
+slug: 'beach-vip-sofa'
+published: true
+kind: 'consumable'
+orderable: true
+name: { en: 'VIP Sofa' }
+subtitle: { en: 'Space for 2 people (and maybe some kids on laps)' }
+displayPrice:
+  amount: 30000
+  currency: 'HKD'
+  formatted: 'HK$300'
+stripePriceId: 'price_1Ub8pZCzy81v9aNtKMaPQ15g' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/beach-vip-sofa/cover.jpg'

@@ -1,0 +1,23 @@
+# ── Donation tier ────────────────────────────────────────────────
+slug: 'support-200'
+published: true
+kind: 'donation'
+orderable: true
+
+name:
+  en: 'Support Mui WoW'
+  es: 'Apoya Mui WoW'
+  zh: '支持 Mui WoW'
+subtitle:
+  en: 'HK$200 toward the community events on the beach.'
+  es: 'HK$200 para los eventos comunitarios en la playa.'
+  zh: '捐出HK$200支持梅窩沙灘社區活動。'
+
+displayPrice:
+  amount: 20000
+  currency: 'HKD'
+  formatted: 'HK$200'
+stripePriceId: 'price_1Ub8ptELihTI1DD4mkdEc5rz' # sandbox (test) — live prices when selling starts
+
+inventory:
+  perEvent: false

@@ -1,0 +1,17 @@
+slug: 'wine-black-elephant-sauv-blanc'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Wine, Black Elephant, Sauvignon Blanc (250ml can, 13% alc.)' }
+subtitle: { en: 'incl. Glass + Ice' }
+displayPrice:
+  amount: 5000
+  currency: 'HKD'
+  formatted: 'HK$50'
+stripePriceId: 'price_1Ub8pfCzy81v9aNt35Tgh8Ir' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/wine-black-elephant-sauv-blanc/cover.jpeg'

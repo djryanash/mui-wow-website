@@ -34,8 +34,8 @@ const title = T(chrome.addonsTitle);
               {p.subtitle && <p class="sub">{T(p.subtitle)}</p>}
               <div class="price-row">
                 <span class="price">{p.displayPrice.formatted}</span>
-                <button class="btn btn-gold" data-quick-order={p.slug} data-price={p.displayPrice.formatted}>
-                  {T(chrome.quickOrder)} <span class="arrow" aria-hidden="true">→</span>
+                <button class="btn btn-gold" data-add-to-cart={p.slug} data-name={T(p.name)} data-price={p.displayPrice.formatted} data-cents={p.displayPrice.amount}>
+                  {T(chrome.addToCart)} <span class="arrow" aria-hidden="true">→</span>
                 </button>
               </div>
             </div>
@@ -43,6 +43,11 @@ const title = T(chrome.addonsTitle);
         ))}
       </div>
       <p id="addons-note" class="flash-error" hidden></p>
+      <p class="funnel-next" style="margin-top:30px">
+        {locale === 'en' && <a class="btn btn-teal btn-arrow" href="/donations" data-burst>Next: support the events <span class="arrow" aria-hidden="true">→</span></a>}
+        {locale === 'es' && <a class="btn btn-teal btn-arrow" href="/es/donations" data-burst>Next: apoya los eventos <span class="arrow" aria-hidden="true">→</span></a>}
+        {locale === 'zh-hk' && <a class="btn btn-teal btn-arrow" href="/zh-hk/donations" data-burst>下一步：支持活動 <span class="arrow" aria-hidden="true">→</span></a>}
+      </p>
     </div>
   </section>
 </Layout>

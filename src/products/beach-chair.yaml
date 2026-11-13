@@ -1,0 +1,15 @@
+slug: 'beach-chair'
+published: true
+kind: 'consumable'
+orderable: true
+name: { en: 'Beach Chair' }
+displayPrice:
+  amount: 10000
+  currency: 'HKD'
+  formatted: 'HK$100'
+stripePriceId: 'price_1Ub8pWCzy81v9aNt7OTzZ6Bx' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/beach-chair/cover.jpg'

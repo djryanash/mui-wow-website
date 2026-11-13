@@ -1,0 +1,17 @@
+slug: 'absolut-vodka-miniature'
+published: true
+kind: 'consumable'
+isAddon: true
+orderable: true
+name: { en: 'Absolut Vodka Miniature (50ml)' }
+subtitle: { en: 'incl. Soft Drink, Glass + Ice' }
+displayPrice:
+  amount: 8000
+  currency: 'HKD'
+  formatted: 'HK$80'
+stripePriceId: 'price_1Ub8pPCzy81v9aNtFBHhKJTl' # test
+inventory:
+  perEvent: true
+  stock: 10
+images:
+  - '/images/products/absolut-vodka-miniature/cover.jpeg'

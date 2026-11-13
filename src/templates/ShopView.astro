@@ -11,7 +11,7 @@ import { chrome, funnel } from '../data/chrome.mjs';
 const site = loadSite();
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (typeof v === 'object' && v ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
-const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddon);
+const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddon && !p.isTicket);
 ---
 
 <Layout locale={locale} title={T(chrome.shopTitle)} description={T(chrome.shopTitle)}>

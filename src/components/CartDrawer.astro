@@ -1,0 +1,157 @@
+---
+// The cart drawer + its script: ONE shared component for every funnel step
+// (rentals, add-ons, donations). Add buttons via data-add-to-cart (+data-cents
+// +data-name +data-price) anywhere on the page; the drawer handles edit,
+// checkout, the funnel marker, and — when the URL carries an /addons/:ref
+// booking chain — the quick-order behavior for beach re-orders.
+---
+
+<aside class="cart-drawer" id="cart-drawer" aria-label="Cart"
+  data-total="Total" data-checkout-label="Checkout" data-cart-empty="Your cart is empty."
+  data-remove-label="Remove" data-checkout-pending="Checkout is not live yet.">
+  <div class="cart-head">
+    <strong>Cart</strong>
+    <button class="cart-close" aria-label="Close">×</button>
+  </div>
+  <div class="cart-items"></div>
+  <p class="cart-empty">Your cart is empty.</p>
+  <div class="cart-total">
+    <span>Total</span>
+    <strong data-cart-total>—</strong>
+  </div>
+  <button class="btn btn-gold cart-checkout" data-cart-checkout>Checkout</button>
+  <p class="cart-note-after" data-checkout-note hidden></p>
+</aside>
+<button class="cart-fab" aria-label="Cart" data-cart-open hidden>🧺 <span data-cart-badge></span></button>
+
+<script>
+  (function () {
+    const chainRef = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
+    const isChain = /^\/addons\//i.test(location.pathname) && /^[A-Z0-9]{6,16}$/.test(chainRef);
+
+    const memStore = {};
+    const store = (() => {
+      try {
+        localStorage.setItem('__muiwow_test__', '1');
+        localStorage.removeItem('__muiwow_test__');
+        return localStorage;
+      } catch {
+        return {
+          getItem: (k) => (k in memStore ? memStore[k] : null),
+          setItem: (k, v) => { memStore[k] = String(v); },
+          removeItem: (k) => { delete memStore[k]; },
+        };
+      }
+    })();
+    const KEY = 'muiwow-cart';
+    const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
+    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); document.body.dataset.cartStep = '4'; };
+
+    const drawer = document.getElementById('cart-drawer');
+    const badge = document.querySelector('[data-cart-badge]');
+    const fab = document.querySelector('[data-cart-open]');
+    drawer.querySelector('.cart-checkout').textContent = drawer.dataset.checkoutLabel ?? 'Checkout';
+
+    function render() {
+      const cart = read();
+      const items = drawer.querySelector('.cart-items');
+      items.textContent = '';
+      const keys = Object.keys(cart);
+      drawer.querySelector('.cart-empty').hidden = keys.length > 0;
+      fab.hidden = false;
+      const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
+      badge.textContent = count || '';
+      let total = 0;
+      for (const slug of keys) {
+        total += cart[slug].cents * cart[slug].qty;
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `<div><div class="cart-name">${cart[slug].name}</div><div class="cart-line">${cart[slug].price} × ${cart[slug].qty}</div></div>`;
+        const btn = document.createElement('button');
+        btn.className = 'cart-remove';
+        btn.textContent = drawer.dataset.removeLabel ?? 'Remove';
+        btn.onclick = () => { const c = read(); delete c[slug]; write(c); };
+        row.appendChild(btn);
+        items.appendChild(row);
+      }
+      drawer.querySelector('[data-cart-total]').textContent = keys.length ? 'HK$' + (total / 100).toLocaleString('en-HK') : '—';
+    }
+
+    function openCart() {
+      document.body.dataset.cartStep = '4';
+      drawer.classList.add('open');
+      render();
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest?.('[data-cart-open]')) { openCart(); return; }
+      if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
+      const quick = e.target.closest?.('[data-quick-order]');
+      if (quick) {
+        // Quick-order only exists on a booking chain (the staff-shown menu).
+        if (isChain) {
+          quick.disabled = true;
+          const note = document.getElementById('addons-note');
+          fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: [{ slug: quick.dataset.quickOrder, qty: 1 }], ref: chainRef }),
+          })
+            .then((r) => r.json())
+            .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'failed'); })
+            .catch((err) => {
+              quick.disabled = false;
+              if (note) { note.hidden = false; note.textContent = err.message ?? ''; }
+            });
+          return;
+        }
+        // public page: behave as a cart add
+        const c = read();
+        const slug = quick.dataset.quickOrder;
+        c[slug] = { name: quick.textContent.trim().replace('→', '').trim(), price: quick.dataset.price, cents: Number(quick.dataset.cents), qty: Math.min((c[slug]?.qty ?? 0) + 1, 20) };
+        write(c);
+        return;
+      }
+      const add = e.target.closest?.('[data-add-to-cart]');
+      if (add) {
+        const c = read();
+        const slug = add.dataset.addToCart;
+        c[slug] = {
+          name: add.dataset.name,
+          price: add.dataset.price,
+          cents: Number(add.dataset.cents),
+          qty: Math.min((c[slug]?.qty ?? 0) + 1, 20),
+        };
+        write(c);
+        openCart();
+        return;
+      }
+      const go = e.target.closest?.('[data-cart-checkout]');
+      if (go) {
+        const cart = read();
+        const keys = Object.keys(cart);
+        if (!keys.length) return;
+        go.disabled = true;
+        fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: keys.map((s) => ({ slug: s, qty: cart[s].qty })) }),
+        })
+          .then((r) => r.json())
+          .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'no url'); })
+          .catch(() => {
+            const note = drawer.querySelector('[data-checkout-note]');
+            note.textContent = drawer.dataset.checkoutPending ?? 'Checkout coming soon.';
+            note.hidden = false;
+            go.disabled = false;
+          });
+      }
+    });
+
+    // pages that write the cart directly (donation selection) trigger these
+    document.addEventListener('muiwow-cart-updated', render);
+    document.addEventListener('muiwow-cart-open', openCart);
+
+    render();
+  })();
+</script>

@@ -6,6 +6,7 @@ import Layout from '../components/Layout.astro';
 import { loadProducts } from '../data/load.mjs';
 import { chrome, funnel } from '../data/chrome.mjs';
 import FunnelBar from '../components/FunnelBar.astro';
+import CartDrawer from '../components/CartDrawer.astro';
 
 const locale = Astro.props.locale ?? 'en';
 const L = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
@@ -20,6 +21,7 @@ const title = L(chrome.donationsTitle);
       <p class="kicker">Mui WoW</p>
       <h1>{title}</h1>
       <p class="cart-note">{L(chrome.donationsHint)}</p>
+      <p id="donate-hint" class="cart-note" style="color:var(--gold-bright)"></p>
 
       <div class="donation-row" role="radiogroup" aria-label={title}>
         {tiers.map((p) => (
@@ -31,78 +33,32 @@ const title = L(chrome.donationsTitle);
     </div>
   </section>
 
-  <aside class="cart-drawer" id="cart-drawer" aria-label={L(chrome.cart)}
-    data-total={L(chrome.total)}
-    data-checkout-label={L(chrome.checkout)}
-    data-cart-empty={L(chrome.cartEmpty)}
-    data-remove-label={L(chrome.remove)}
-    data-checkout-pending={L(chrome.checkoutPending)}>
-    <div class="cart-head">
-      <strong>{L(chrome.cart)}</strong>
-      <button class="cart-close" aria-label="Close">×</button>
-    </div>
-    <div class="cart-items"></div>
-    <p class="cart-empty">{L(chrome.cartEmpty)}</p>
-    <div class="cart-total">
-      <span>{L(chrome.total)}</span>
-      <strong data-cart-total>—</strong>
-    </div>
-    <button class="btn btn-gold cart-checkout" data-cart-checkout>{L(chrome.checkout)}</button>
-    <p class="cart-note-after" data-checkout-note hidden></p>
-  </aside>
-  <button class="cart-fab" aria-label={L(chrome.cart)} data-cart-open hidden>🧺 <span data-cart-badge></span></button>
+  <CartDrawer />
 </Layout>
-
 <script>
   (function () {
+    const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
     const store = (() => {
-      const memStore = {};
+      const mem = {};
       try {
         localStorage.setItem('__muiwow_test__', '1');
         localStorage.removeItem('__muiwow_test__');
         return localStorage;
       } catch {
         return {
-          getItem: (k) => (k in memStore ? memStore[k] : null),
-          setItem: (k, v) => { memStore[k] = String(v); },
-          removeItem: (k) => { delete memStore[k]; },
+          getItem: (k) => (k in mem ? mem[k] : null),
+          setItem: (k, v) => { mem[k] = String(v); },
+          removeItem: (k) => { delete mem[k]; },
         };
       }
     })();
     const KEY = 'muiwow-cart';
     const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
-    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
-    const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
+    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); document.dispatchEvent(new CustomEvent('muiwow-cart-updated')); };
 
-    const drawer = document.getElementById('cart-drawer');
-    const badge = document.querySelector('[data-cart-badge]');
-    const fab = document.querySelector('[data-cart-open]');
-    drawer.querySelector('.cart-checkout').textContent = drawer.dataset.checkoutLabel ?? 'Checkout';
-
-    function render() {
+    function paintSelection() {
       const cart = read();
-      const items = drawer.querySelector('.cart-items');
-      items.textContent = '';
-      const keys = Object.keys(cart);
-      drawer.querySelector('.cart-empty').hidden = keys.length > 0;
-      fab.hidden = false;
-      const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-      badge.textContent = count || '';
-      let total = 0;
-      for (const slug of keys) {
-        total += cart[slug].cents * cart[slug].qty;
-        const row = document.createElement('div');
-        row.className = 'cart-row';
-        row.innerHTML = `<div><div class="cart-name">${cart[slug].name}</div><div class="cart-line">${cart[slug].price} × ${cart[slug].qty}</div></div>`;
-        const btn = document.createElement('button');
-        btn.className = 'cart-remove';
-        btn.textContent = drawer.dataset.removeLabel ?? 'Remove';
-        btn.onclick = () => { const c = read(); delete c[slug]; write(c); };
-        row.appendChild(btn);
-        items.appendChild(row);
-      }
-      drawer.querySelector('[data-cart-total]').textContent = keys.length ? 'HK$' + (total / 100).toLocaleString('en-HK') : '—';
-      const selected = keys.find((s) => DONATION_SLUGS.includes(s) && s !== 'support-0');
+      const selected = Object.keys(cart).find((s) => DONATION_SLUGS.includes(s) && s !== 'support-0');
       document.querySelectorAll('[data-select-tier]').forEach((card) => {
         card.setAttribute('aria-checked', card.dataset.selectTier === selected ? 'true' : 'false');
         card.classList.toggle('selected', card.dataset.selectTier === selected);
@@ -112,48 +68,29 @@ const title = L(chrome.donationsTitle);
     document.addEventListener('click', (e) => {
       const tier = e.target.closest?.('[data-select-tier]');
       if (tier) {
-        document.body.dataset.cartStep = '4';
-        // HK$0 is the explicit opt-out: nothing is added, the cart just opens.
+        // HK$0 is the explicit opt-out: clears any donation, nothing added.
         if (tier.dataset.selectTier === 'support-0') {
           const c = read();
           for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s)) delete c[s];
           write(c);
-          drawer.classList.add('open');
+          document.dispatchEvent(new CustomEvent('muiwow-cart-open'));
           return;
         }
-        // a real tier: replace any previous donation, write it, open the cart
         const c = read();
         for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s) && s !== tier.dataset.selectTier) delete c[s];
-        c[tier.dataset.selectTier] = { name: tier.dataset.name, price: tier.dataset.price, cents: Number(tier.dataset.cents), qty: 1 };
+        c[tier.dataset.selectTier] = {
+          name: tier.dataset.name,
+          price: tier.dataset.price,
+          cents: Number(tier.dataset.cents),
+          qty: 1,
+        };
         write(c);
-        drawer.classList.add('open');
-        document.body.dataset.cartStep = '4';
+        document.dispatchEvent(new CustomEvent('muiwow-cart-open'));
         return;
-      }
-      if (e.target.closest?.('[data-cart-open]')) { document.body.dataset.cartStep = '4'; drawer.classList.add('open'); render(); return; }
-      if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
-      const go = e.target.closest?.('[data-cart-checkout]');
-      if (go) {
-        const cart = read();
-        const keys = Object.keys(cart);
-        if (!keys.length) return;
-        go.disabled = true;
-        fetch('/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: keys.map((s) => ({ slug: s, qty: cart[s].qty })) }),
-        })
-          .then((r) => r.json())
-          .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'no url'); })
-          .catch(() => {
-            const note = drawer.querySelector('[data-checkout-note]');
-            note.textContent = drawer.dataset.checkoutPending ?? 'Checkout coming soon.';
-            note.hidden = false;
-            go.disabled = false;
-          });
       }
     });
 
-    render();
+    document.addEventListener('muiwow-cart-updated', paintSelection);
+    paintSelection();
   })();
 </script>

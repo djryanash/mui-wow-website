@@ -7,6 +7,7 @@ import Layout from '../../components/Layout.astro';
 import { t, loadProducts } from '../../data/load.mjs';
 import { chrome, funnel } from '../../data/chrome.mjs';
 import FunnelBar from '../../components/FunnelBar.astro';
+import CartDrawer from '../../components/CartDrawer.astro';
 
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
@@ -52,44 +53,6 @@ const title = T(chrome.addonsTitle);
       </p>
     </div>
   </section>
+<CartDrawer />
 </Layout>
 
-<script>
-  (function () {
-    const lang = document.documentElement.getAttribute('lang');
-    const ref = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
-    if (!/^[A-Z0-9]{6,16}$/.test(ref)) return;
-
-    // came back from payment?
-    if (new URLSearchParams(location.search).get('paid')) {
-      history.replaceState(null, '', '/addons/' + ref);
-      document.getElementById('addons-note').hidden = false;
-      document.getElementById('addons-note').textContent =
-        lang === 'es' ? '¡Pedido recibido! Lo llevamos enseguida.' :
-        lang === 'zh-hk' ? '落單成功！即刻送上。' :
-        'Order received! The team is bringing it over.';
-    }
-
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest?.('[data-quick-order]');
-      if (!btn) return;
-      btn.disabled = true;
-      const note = document.getElementById('addons-note');
-      fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: [{ slug: btn.dataset.quickOrder, qty: 1 }], ref }),
-      })
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.url) location.href = d.url;
-          else throw new Error(d.error ?? 'failed');
-        })
-        .catch((err) => {
-          btn.disabled = false;
-          note.hidden = false;
-          note.textContent = (lang === 'es' ? 'Todavía no se puede pedir: ' : lang === 'zh-hk' ? '暫時未能落單：' : 'Ordering not ready yet: ') + (err.message ?? '');
-        });
-    });
-  })();
-</script>

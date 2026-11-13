@@ -8,7 +8,7 @@ import { chrome } from '../data/chrome.mjs';
 
 const locale = Astro.props.locale ?? 'en';
 const L = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
-const tiers = loadProducts().filter((p) => p.kind === 'donation' && p.orderable);
+const tiers = loadProducts().filter((p) => p.kind === 'donation');
 const title = L(chrome.donationsTitle);
 ---
 

@@ -27,6 +27,14 @@ const copy = {
       <div id="thanks-qr" class="qr-frame" style="margin:6px auto 0; width:240px; background:#fff; border-radius:12px; padding:12px; box-shadow:var(--shadow); display:none"></div>
       <p id="thanks-ref" style="font-weight:900; color:var(--gold-bright); margin-top:10px"></p>
       <p id="thanks-qr-hint" style="max-width:52ch; margin:0 auto; color:var(--turquoise)"></p>
+      <div id="email-capture" hidden style="margin:20px auto 0; display:grid; gap:10px; max-width:420px">
+        <p style="margin:0">{T({ en: 'Want the QR in your inbox too? Let us know where to send it:', es: '¿Quieres también el QR en tu correo? Dinos dónde:', zh: '想埋個 QR 寄到郵箱？話我哋知電郵：' })}</p>
+        <div style="display:flex; gap:10px">
+          <input id="thanks-email" type="email" placeholder="you@..." style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid rgba(56,163,165,.5); background:#1d2d44; color:#f5f2ea" />
+          <button class="btn btn-gold" data-send-qr type="button">{T({ en: 'Send', es: 'Enviar', zh: '發送' })}</button>
+        </div>
+        <p id="email-note" class="flash-error" hidden></p>
+      </div>
       <div class="info-block" style="margin-top:34px; text-align:left">
         <h2>{T(chrome.addonsTitle)}</h2>
         <p class="cart-note">{T(chrome.addonsHint)}</p>
@@ -52,6 +60,7 @@ const copy = {
 <script src="/js/qrcode.min.js" is:inline></script>
 <script>
   (function () {
+    let bookingRef = '';
     const lang = document.documentElement.getAttribute('lang');
     document.addEventListener('click', (e) => {
       const btn = e.target.closest?.('[data-quick-order]');
@@ -71,20 +80,54 @@ const copy = {
           note.textContent = (lang === 'es' ? 'Todavía no: ' : lang === 'zh-hk' ? '暫時未能：' : 'Not ready yet: ') + (err.message ?? '');
         });
     });
-  // QR on the thank-you page: the booking comes back by session id.
+  // The booking comes back by checkout session id (paid) or by ref (free lane).
+  const ref = new URLSearchParams(location.search).get('ref');
   const sid = new URLSearchParams(location.search).get('session_id');
-  if (sid) {
-    fetch(`/api/booking?session_id=${encodeURIComponent(sid)}`)
+  const fetchUrl = ref
+    ? `/api/booking?ref=${encodeURIComponent(ref)}`
+    : sid
+      ? `/api/booking?session_id=${encodeURIComponent(sid)}`
+      : null;
+  if (fetchUrl) {
+    fetch(fetchUrl)
       .then((r) => r.json())
       .then((b) => {
         if (b.error) return;
+        bookingRef = b.ref ?? '';
         const el = document.getElementById('thanks-qr');
         el.style.display = 'block';
-        if (b.qr && window.QRCode) QRCode.toCanvas(el, b.qr, { width: 216 });
-        document.getElementById('thanks-ref').textContent = b.ref ?? '';
+        try {
+          if (window.QRCode) QRCode.toCanvas(el, bookingRef ? location.origin + '/booking/' + bookingRef : el, { width: 216 });
+        } catch {
+          // QR render is decorative; the email carries a baked-in code.
+        }
+        document.getElementById('thanks-ref').textContent = bookingRef;
         const hint = document.getElementById('thanks-qr-hint');
         hint.textContent = (lang === 'es' ? 'Muéstrale este código a nuestro equipo en la playa — lo escanean y se confirma la entrega.' : lang === 'zh-hk' ? '喺沙灘俾員工掃描呢個碼確認交收。' : 'Show this code to our team at the beach — they scan it and the hand-over is confirmed.');
+        // free-lane bookings have no address yet: capture it now
+        const needsEmail = b.email === '' || b.email == null;
+        const wrap = document.getElementById('email-capture');
+        if (needsEmail && !b.error) wrap.hidden = false;
       });
   }
+  document.addEventListener('click', (e) => {
+    const send = e.target.closest?.('[data-send-qr]');
+    if (!send) return;
+    const input = document.getElementById('thanks-email');
+    const email = (input?.value ?? '').trim();
+    const note = document.getElementById('email-note');
+    const res = fetch('/api/booking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: bookingRef, email }),
+    }).then((r) => r.json());
+    res.then((d) => {
+      if (d.error) { note.hidden = false; note.textContent = d.error; return; }
+      wrap.hidden = true;
+      note.hidden = false;
+      note.style.color = 'var(--turquoise)';
+      note.textContent = (lang === 'es' ? '¡Enviado! Revisa tu correo por el código QR.' : lang === 'zh-hk' ? '已發送！QR 二維碼已寄到你的郵箱。' : 'Sent! Check your inbox for the QR code.');
+    });
+  });
   })();
 </script>

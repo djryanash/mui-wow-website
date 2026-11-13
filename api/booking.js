@@ -2,7 +2,7 @@
 // Read-only for everyone; state changes live in staff-only routes.
 // Staff detection: a valid staff cookie upgrades the response (staff: true).
 
-import { kvGet } from './stripe-webhook.js';
+import { kvGet, kvSet, sendBookingEmail } from './stripe-webhook.js';
 import crypto from 'node:crypto';
 import QRCode from 'qrcode';
 
@@ -24,6 +24,32 @@ function hasStaffCookie(req) {
 }
 
 export default async function handler(req, res) {
+  // POST /api/booking { ref, email } — email capture for bookings made
+  // without checkout (free-ticket lane): attaches the address and sends
+  // the same QR email the webhook would have sent at payment.
+  if (req.method === 'POST') {
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const ref = String(body.ref ?? '').toUpperCase();
+    const email = String(body.email ?? '').trim();
+    if (!/^[A-Z0-9]{6,16}$/.test(ref)) return res.status(400).json({ error: 'bad ref' });
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return res.status(400).json({ error: 'bad email' });
+
+    const raw = await kvGet(`booking:${ref}`);
+    if (!raw) return res.status(404).json({ error: 'unknown booking' });
+    const booking = typeof raw === 'string' ? JSON.parse(raw) : raw;
+
+    if (!booking.email) booking.email = email;
+    booking.history = [...(booking.history ?? []), { action: 'email-captured', at: new Date().toISOString() }];
+    await kvSet(`booking:${ref}`, booking);
+
+    const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
+    const emailResult = await sendBookingEmail(origin, booking.ref, email, booking.items ?? [], booking.amount)
+      .then((r) => r)
+      .catch((e) => `failed: ${e.message}`);
+    console.log(`booking ${ref} email captured; send: ${emailResult}`);
+    return res.status(200).json({ ok: true, emailSent: !emailResult.includes('failed') });
+  }
+
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET only' });
 
   let ref;

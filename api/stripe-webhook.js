@@ -163,7 +163,7 @@ async function sessionItems(sessionId) {
 
 // ── Email (Resend; best effort, never blocks the 200) ───────────
 
-async function sendBookingEmail(origin, ref, email, items, amount) {
+export async function sendBookingEmail(origin, ref, email, items, amount) {
   if (!email || !process.env.RESEND_API_KEY) return 'skipped (no email/key)';
   // Test-sandbox rule: Resend's unverified domain can only deliver to the
   // account owner's own address. RESEND_REDIRECT_TO (set while testing)

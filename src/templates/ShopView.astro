@@ -64,8 +64,8 @@ const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddo
 <script>
   // Cart: localStorage, one item per product, quantities, checkout stub.
   const KEY = 'muiwow-cart';
-  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) ?? {}; } catch { return {}; } };
-  const write = (c) => { localStorage.setItem(KEY, JSON.stringify(c)); render(); };
+  const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
+  const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
   const isZh = (l) => l === 'zh-hk';
 
   // Locale + chrome injected at build: checkout strings come from data attrs.

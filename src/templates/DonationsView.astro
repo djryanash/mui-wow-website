@@ -54,9 +54,25 @@ const title = L(chrome.donationsTitle);
 <script>
   (function () {
     const KEY = 'muiwow-cart';
+    const memStore = {};
+    const store = (() => {
+      try {
+        localStorage.setItem('__muiwow_test__', '1');
+        localStorage.removeItem('__muiwow_test__');
+        return localStorage; // normal browsers
+      } catch {
+        // private mode / storage blocked: keep the cart in memory for this page
+        return {
+          getItem: (k) => (k in memStore ? memStore[k] : null),
+          setItem: (k, v) => { memStore[k] = String(v); },
+          removeItem: (k) => { delete memStore[k]; },
+        };
+      }
+    })();
+
     const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
-    const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) ?? {}; } catch { return {}; } };
-    const write = (c) => { localStorage.setItem(KEY, JSON.stringify(c)); render(); };
+    const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
+    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
 
     const drawer = document.getElementById('cart-drawer');
     drawer.querySelector('.cart-checkout').textContent = drawer.dataset.checkoutLabel ?? 'Checkout';

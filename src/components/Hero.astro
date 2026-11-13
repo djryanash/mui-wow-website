@@ -39,12 +39,45 @@ const eventHref = event ? `/event/${event.slug}` : null;
     {event.heroOverlay === 'none' ? (
       <div class="hero-minimal" id="hero-minimal">
         {event.heroCta && (
-          <a class="btn btn-gold btn-arrow" href={event.heroCta.href} target={event.heroCta.href?.startsWith('http') ? '_blank' : undefined} rel="noopener" data-burst>
+          <a class="btn btn-gold btn-arrow" id="hero-cta" href={event.heroCta.href} data-ticket-slug={event.heroTicket?.slug} data-ticket-name={event.heroTicket ? T(event.heroTicket.name) : undefined} data-ticket-price={event.heroTicket ? T(event.heroTicket.priceLabel) : undefined} target={event.heroCta.href?.startsWith('http') ? '_blank' : undefined} rel="noopener" data-burst>
             {T(event.heroCta.label).toUpperCase()}
             <span class="arrow" aria-hidden="true">→</span>
           </a>
         )}
       </div>
+
+      <script>
+        document.addEventListener('click', (e) => {
+          const going = e.target.closest?.('#hero-cta');
+          if (!going || !going.dataset.ticketSlug) return;
+          const store = (() => {
+            try {
+              localStorage.setItem('__muiwow_test__', '1');
+              localStorage.removeItem('__muiwow_test__');
+              return localStorage;
+            } catch {
+              const mem = {};
+              return {
+                getItem: (k) => (k in mem ? mem[k] : null),
+                setItem: (k, v) => { mem[k] = String(v); },
+                removeItem: (k) => { delete mem[k]; },
+              };
+            }
+          })();
+          const cart = JSON.parse(store.getItem('muiwow-cart') ?? '{}');
+          const slug = going.dataset.ticketSlug;
+          if (!cart[slug]) {
+            cart[slug] = {
+              name: going.dataset.ticketName ?? 'Free entry',
+              price: going.dataset.ticketPrice ?? 'Free',
+              cents: 0,
+              qty: 1,
+            };
+            store.setItem('muiwow-cart', JSON.stringify(cart));
+          }
+          // navigation proceeds through the anchor's own href
+        });
+      </script>
     ) : (
     <div class="container hero-content hero-grid">
       <div class="hero-copy">

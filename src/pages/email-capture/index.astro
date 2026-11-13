@@ -1,0 +1,68 @@
+---
+// Email capture for zero-total checkouts: /email-capture?token=<token>
+// The visitor enters an address; confirming creates the booking, emails the
+// QR, and moves on to the thank-you page.
+import Layout from '../../components/Layout.astro';
+import { chrome } from '../data/chrome.mjs';
+
+const locale = Astro.props.locale ?? 'en';
+const L = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const title = L({ en: 'Save your spot: enter your email', es: 'Guarda tu lugar: pon tu correo', zh: '鎖定名額：填寫你的電郵' });
+const copy = {
+  title: { en: 'Save your spot: enter your email', es: 'Guarda tu lugar: pon tu correo', zh: '鎖定名額：填寫你的電郵' },
+  hint: {
+    en: 'Your free ticket needs somewhere to go — we email you the QR code to show at the beach.',
+    es: 'Tu entrada gratuita necesita a dónde ir — te enviamos el QR para la playa.',
+    zh: '你嘅免費門票需要一個電郵 — 我哋會寄 QR 二維碼俾你，到沙灘出示即可。',
+  },
+  send: { en: 'Confirm my free ticket', es: 'Confirmar mi entrada', zh: '確認免費門票' },
+};
+---
+
+<Layout locale={locale} title={title} description={L(copy.hint)}>
+  <section class="section">
+    <div class="container" style="max-width:560px">
+      <p class="kicker">Mui WoW</p>
+      <h1>{L(copy.title)}</h1>
+      <p class="cart-note">{L(copy.hint)}</p>
+      <div style="display:grid; gap:12px">
+        <input id="capture-email" type="email" autocomplete="email" placeholder="you@..."
+          style="padding:12px 16px; border-radius:10px; border:1px solid rgba(56,163,165,.5); background:#1d2d44; color:#f5f2ea" />
+        <button class="btn btn-gold" id="capture-send" type="button">{L(copy.send)} →</button>
+        <p id="capture-note" class="flash-error" hidden></p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  (function () {
+    const lang = document.documentElement.getAttribute('lang');
+    const token = new URLSearchParams(location.search).get('token');
+    const note = document.getElementById('capture-note');
+    const send = document.getElementById('capture-send');
+
+    send.addEventListener('click', async () => {
+      const email = document.getElementById('capture-email').value.trim();
+      send.disabled = true;
+      note.hidden = true;
+      try {
+        const d = await fetch('/api/booking-confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, email }),
+        }).then((x) => x.json());
+        if (d.error) throw new Error(d.error);
+        location.href = '/shop-thanks?ref=' + encodeURIComponent(d.ref) + '&lang=' + lang;
+      } catch (err) {
+        send.disabled = false;
+        note.hidden = false;
+        note.textContent = err.message === 'bad email'
+          ? (lang === 'es' ? 'Ese correo no parece válido.' : lang === 'zh-hk' ? '呢個電郵好似唔正確。' : 'That email address does not look right.')
+          : (err.message === 'capture expired — start again from the cart'
+            ? (lang === 'es' ? 'La sesión caducó — vuelve al carrito y inténtalo de nuevo.' : lang === 'zh-hk' ? '已過時 — 返回購物車再試一次。' : 'This page expired — go back to the cart and try again.')
+            : err.message);
+      }
+    });
+  })();
+</script>

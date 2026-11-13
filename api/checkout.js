@@ -98,26 +98,27 @@ export default async function handler(req, res) {
     }
 
     const origin = (process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '');
-    // Zero-total lane: a cart of only free tickets books DIRECTLY into the
-    // store (Stripe Checkout cannot take HK$0 in payment mode). Same booking
-    // shape, same QR flow, no email (no address is collected in this lane).
+    // Zero-total lane (Stripe Checkout cannot take HK$0 in payment mode):
+    // park the cart behind a short-lived capture token and collect the email
+    // first — /email-capture confirms it, creates the booking, sends the QR,
+    // and sends the visitor to the thank-you page.
     if (total === 0) {
       const crypto = await import('node:crypto');
-      const ref = ('T' + crypto.randomBytes(5).toString('hex')).toUpperCase().slice(0, 11);
+      const kvBase = process.env.KV_REST_API_URL;
+      const kvToken = process.env.KV_REST_API_TOKEN;
+      const token = crypto.randomBytes(10).toString('base64url');
       const catalog = await (await fetch(origin + '/products.json', { cache: 'no-cache' })).json();
       const booked = [];
       for (const { slug, qty } of items) {
         const p = (catalog.products ?? []).find((c) => c.slug === slug);
         booked.push({ slug, kind: p?.kind ?? 'ticket', name: p?.name?.en ?? slug, qty, subtotal: 0, priceId: p?.stripePriceId ?? null });
       }
-      const kvBase = process.env.KV_REST_API_URL;
-      const kvToken = process.env.KV_REST_API_TOKEN;
-      const kvRes = await fetch(`${kvBase}/set/${encodeURIComponent(`booking:${ref}`)}/${encodeURIComponent(JSON.stringify({ ref, email: '', state: 'reserved', amount: 0, sessionId: null, items: booked, orders: [], createdAt: new Date().toISOString(), type: 'ticket' }))}`, {
+      const kvRes = await fetch(`${kvBase}/set/${encodeURIComponent(`capture:${token}`)}/${encodeURIComponent(JSON.stringify({ items: booked, amount: 0, createdAt: new Date().toISOString() }))}/EX/1800`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${kvToken}` },
       });
-      if (!kvRes.ok) return res.status(502).json({ error: 'ticket booking failed (store)' });
-      return res.status(200).json({ url: `${origin}/shop-thanks?ref=${ref}`, ref, direct: true });
+      if (!kvRes.ok) return res.status(502).json({ error: 'ticket lane failed (store)' });
+      return res.status(200).json({ url: `${origin}/email-capture?token=${token}` });
     }
     const successUrl = parentRef
       ? `${origin}/addons/${encodeURIComponent(parentRef)}?paid=1`

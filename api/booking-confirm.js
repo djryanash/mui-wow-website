@@ -32,6 +32,7 @@ export default async function handler(req, res) {
   }
   if (!capture) return res.status(404).json({ error: 'capture expired — start again from the cart' });
   const parked = typeof capture === 'string' ? JSON.parse(capture) : capture;
+  if (parked.used) return res.status(409).json({ error: 'capture already used' });
 
   const ref = ('T' + crypto.randomBytes(5).toString('hex')).toUpperCase().slice(0, 11);
   const booking = {
@@ -48,6 +49,8 @@ export default async function handler(req, res) {
   };
   try {
     await kvSet(`booking:${ref}`, booking);
+    // Burn the token (TTL catches strays): reused tokens are rejected via `used`.
+    await kvSet(`capture:${token}`, { used: true });
   } catch (e) {
     return res.status(502).json({ error: 'booking failed (store)' });
   }
@@ -56,11 +59,6 @@ export default async function handler(req, res) {
   const emailResult = await sendBookingEmail(origin, ref, email, booking.items, 0)
     .then((r) => r)
     .catch((e) => `failed: ${e.message}`);
-
-  await fetch(`${process.env.KV_REST_API_URL}/del/${encodeURIComponent(`capture:${token}`)}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
-  }).catch(() => {});
 
   console.log(`zero-lane booking ${ref} confirmed for ${email}; email: ${emailResult}`);
   return json(200, { ok: true, ref });

@@ -560,7 +560,7 @@ img { max-width: 100%; display: block; }
 
 /* ── Donations: tier cards in site palette, selectable ── */
 
-.donation-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; max-width: 700px; }
+.donation-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; max-width: 860px; }
 .donation-card {
   display: grid;
   place-items: center;
@@ -710,4 +710,44 @@ img { max-width: 100%; display: block; }
   .hero-photo > img.still { animation: none; opacity: 0; }
   .hero-photo > img.light { animation: none; opacity: 0.7; }
   .brand-name { transform: none; }
+}
+/* ── Funnel step bar ── */
+.funnel-bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: rgba(11, 19, 43, 0.86);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 10px 20px;
+  position: sticky;
+  top: 62px;
+  z-index: 40;
+  backdrop-filter: blur(8px);
+}
+.funnel-back { color: var(--turquoise); font-weight: 700; font-size: 0.9rem; }
+.funnel-bar ol { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.funnel-bar li {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: rgba(245, 242, 234, 0.55);
+  border: 1px solid transparent;
+}
+.funnel-bar li a { color: var(--turquoise); }
+.funnel-bar li.active {
+  color: var(--gold-bright);
+  border-color: rgba(240, 165, 0, 0.5);
+  background: rgba(240, 165, 0, 0.12);
+}
+.funnel-bar li.done a { color: rgba(56, 163, 165, 0.75); }
+body[data-cart-step='4'] .funnel-bar li[data-fstep='4'] {
+  color: var(--gold-bright);
+  border-color: rgba(240, 165, 0, 0.5);
+  background: rgba(240, 165, 0, 0.12);
+}
+body[data-cart-step='4'] .funnel-bar li[data-fstep='3'] {
+  color: rgba(245, 242, 234, 0.55);
+  border-color: transparent;
+  background: none;
 }

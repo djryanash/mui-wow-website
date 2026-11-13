@@ -3,6 +3,7 @@
 // Coming-soon state only when the catalogue is empty.
 import Layout from '../components/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
+import FunnelBar from '../components/FunnelBar.astro';
 import { loadProducts, loadSite } from '../data/load.mjs';
 import { chrome, funnel } from '../data/chrome.mjs';
 
@@ -13,6 +14,7 @@ const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddo
 ---
 
 <Layout locale={locale} title={T(chrome.shopTitle)} description={T(chrome.shopTitle)}>
+  <FunnelBar step={1} locale={locale} />
   <section class="section">
     <div class="container">
       <p class="kicker">Mui WoW</p>

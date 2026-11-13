@@ -5,7 +5,8 @@
 // booking ref attached, so the order joins the chain. Payment returns here.
 import Layout from '../../components/Layout.astro';
 import { t, loadProducts } from '../../data/load.mjs';
-import { chrome } from '../../data/chrome.mjs';
+import { chrome, funnel } from '../../data/chrome.mjs';
+import FunnelBar from '../../components/FunnelBar.astro';
 
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
@@ -14,6 +15,7 @@ const title = T(chrome.addonsTitle);
 ---
 
 <Layout locale={locale} title={title} description={T(chrome.addonsHint)}>
+  <FunnelBar step={2} locale={locale} backHref={locale === 'en' ? '/rentals' : `/${locale}/rentals`} backLabel={funnel.rentalsNext} />
   <section class="section">
     <div class="container" style="max-width:760px">
       <p class="kicker">Mui WoW</p>

@@ -1,0 +1,30 @@
+---
+// Funnel step bar: where the visitor is, with a back door to the previous step.
+// Steps: 1 rentals · 2 add-ons · 3 donations · 4 checkout (the cart drawer —
+// the donations page toggles it active when the cart opens).
+const { step = 1, backHref = '', backLabel = '', locale = 'en' } = Astro.props;
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+
+const steps = [
+  { n: 1, label: { en: 'Rentals', es: 'Alquileres', zh: '租賃' }, href: '/rentals' },
+  { n: 2, label: { en: 'Drinks & snacks', es: 'Bebidas y snacks', zh: '飲品小食' }, href: '/addons' },
+  { n: 3, label: { en: 'Support', es: 'Apoyo', zh: '支持' }, href: '/donations' },
+  { n: 4, label: { en: 'Your cart', es: 'Tu carrito', zh: '購物車' }, href: '' },
+];
+const prefix = locale === 'en' ? '' : `/${locale}`;
+---
+
+<div class="funnel-bar">
+  {backHref && <a class="funnel-back" href={backHref}>← {T(backLabel)}</a>}
+  <ol>
+    {steps.map((s) => (
+      <li data-fstep={s.n} class={s.n === step ? 'active' : ''}>
+        {s.n < step ? (
+          <a href={`${prefix}${s.href}`}>{T(s.label)}</a>
+        ) : (
+          <span>{T(s.label)}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</div>

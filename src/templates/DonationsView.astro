@@ -4,7 +4,8 @@
 // on selection and the drawer opens over the page. One donation max.
 import Layout from '../components/Layout.astro';
 import { loadProducts } from '../data/load.mjs';
-import { chrome } from '../data/chrome.mjs';
+import { chrome, funnel } from '../data/chrome.mjs';
+import FunnelBar from '../components/FunnelBar.astro';
 
 const locale = Astro.props.locale ?? 'en';
 const L = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
@@ -13,6 +14,7 @@ const title = L(chrome.donationsTitle);
 ---
 
 <Layout locale={locale} title={title} description={L(chrome.donationsHint)}>
+  <FunnelBar step={3} locale={locale} backHref={locale === 'en' ? '/addons' : `/${locale}/addons`} backLabel={funnel.addonsNext} data-funnel-cart />
   <section class="section">
     <div class="container" style="max-width:760px">
       <p class="kicker">Mui WoW</p>
@@ -110,6 +112,7 @@ const title = L(chrome.donationsTitle);
     document.addEventListener('click', (e) => {
       const tier = e.target.closest?.('[data-select-tier]');
       if (tier) {
+        document.body.dataset.cartStep = '4';
         // HK$0 is the explicit opt-out: nothing is added, the cart just opens.
         if (tier.dataset.selectTier === 'support-0') {
           const c = read();
@@ -124,9 +127,10 @@ const title = L(chrome.donationsTitle);
         c[tier.dataset.selectTier] = { name: tier.dataset.name, price: tier.dataset.price, cents: Number(tier.dataset.cents), qty: 1 };
         write(c);
         drawer.classList.add('open');
+        document.body.dataset.cartStep = '4';
         return;
       }
-      if (e.target.closest?.('[data-cart-open]')) { drawer.classList.add('open'); render(); return; }
+      if (e.target.closest?.('[data-cart-open]')) { document.body.dataset.cartStep = '4'; drawer.classList.add('open'); render(); return; }
       if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
       const go = e.target.closest?.('[data-cart-checkout]');
       if (go) {

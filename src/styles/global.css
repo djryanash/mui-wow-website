@@ -558,25 +558,34 @@ img { max-width: 100%; display: block; }
 
 /* ── Shop / cart ── */
 
-/* ── Donations: tier cards in site palette ── */
+/* ── Donations: tier cards in site palette, selectable ── */
 
 .donation-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; max-width: 700px; }
 .donation-card {
   display: grid;
-  gap: 12px;
-  justify-items: center;
+  place-items: center;
   padding: 22px 16px 20px;
   background: linear-gradient(160deg, var(--navy-800), var(--navy-900));
   border: 1px solid rgba(212, 175, 55, 0.35);
   border-radius: var(--radius);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
+.donation-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+.donation-card.selected {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold), 0 14px 30px rgba(240, 165, 0, 0.18);
+}
+.donation-card[aria-checked='true'] .donation-amount::after { content: ' ✓'; color: var(--gold-bright); }
 .donation-amount {
   font-family: 'Fraunces', serif;
   font-size: 1.6rem;
   font-weight: 800;
   color: var(--gold-bright);
 }
-.donation-card .btn { font-size: 0.95rem; padding: 8px 18px; }
+.flash-error { color: var(--pink); font-size: 0.9rem; }
 
 .cart-note { color: rgba(245, 242, 234, 0.7); margin: -10px 0 20px; }
 .product-card {

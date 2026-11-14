@@ -34,32 +34,3 @@ const title = L(chrome.donationsTitle);
 
   <CartDrawer />
 </Layout>
-<script>
-  (function () {
-    function paintSelection() {
-      document.querySelectorAll('[data-select-tier]').forEach((card) => {
-        const selected = document.querySelector('[aria-current="donation"]')?.dataset.selectTier;
-        card.setAttribute('aria-checked', card.dataset.selectTier === selected ? 'true' : 'false');
-        card.classList.toggle('selected', card.dataset.selectTier === selected);
-      });
-    }
-
-    document.addEventListener('click', (e) => {
-      const tier = e.target.closest?.('[data-select-tier]');
-      if (!tier) return;
-      // announce the selection: the shared cart drawer owns the storage and
-      // performs the write, then opens itself (the single-writer contract).
-      document.dispatchEvent(new CustomEvent('muiwow-donation-select', {
-        detail: {
-          slug: tier.dataset.selectTier,
-          name: tier.dataset.name,
-          price: tier.dataset.price,
-          cents: Number(tier.dataset.cents),
-        },
-      }));
-    });
-
-    document.addEventListener('muiwow-cart-updated', paintSelection);
-    paintSelection();
-  })();
-</script>

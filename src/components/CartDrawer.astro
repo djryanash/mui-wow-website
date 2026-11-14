@@ -158,6 +158,20 @@
             return;
           }
         }
+        const tier = e.target.closest?.('[data-select-tier]');
+        if (tier) {
+          // donation tiers: HK$0 clears any donation; a tier replaces the
+          // previous one (only one donation rides at a time).
+          const slug = tier.dataset.selectTier;
+          const c = read();
+          for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s)) delete c[s];
+          if (slug !== 'support-0') {
+            c[slug] = { name: tier.dataset.name, price: tier.dataset.price, cents: Number(tier.dataset.cents), qty: 1 };
+          }
+          write(c);
+          openCart();
+          return;
+        }
         const add = e.target.closest?.('[data-add-to-cart]');
         if (add) {
           try {

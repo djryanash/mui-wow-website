@@ -57,6 +57,7 @@ h2, h3 { font-family: 'Oswald', 'Nunito Sans', sans-serif; font-weight: 600; let
 
 a { color: var(--neon-pink); text-decoration: none; }
 a:hover { text-decoration: underline; }
+h1, h2, h3 { text-shadow: 0 2px 12px rgba(26, 17, 48, 0.6); }
 
 img { max-width: 100%; display: block; }
 
@@ -114,10 +115,11 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(11, 19, 43, 0.86);
+  background: rgba(26, 17, 48, 0.9);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  border-bottom: 2px solid var(--wood-edge);
 }
+.site-header .logo { filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5)); }
 .site-header .container {
   display: flex;
   align-items: center;
@@ -172,10 +174,10 @@ img { max-width: 100%; display: block; }
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(60% 50% at 50% 62%, rgba(240, 165, 0, 0.30), transparent 70%),
-    radial-gradient(50% 45% at 68% 40%, rgba(0, 168, 150, 0.22), transparent 70%),
-    radial-gradient(45% 40% at 30% 35%, rgba(236, 75, 143, 0.16), transparent 70%),
-    linear-gradient(180deg, #0b132b 0%, #10294a 55%, #06101f 100%);
+    radial-gradient(60% 50% at 50% 62%, rgba(255, 178, 0, 0.35), transparent 70%),
+    radial-gradient(55% 45% at 68% 40%, rgba(255, 94, 54, 0.3), transparent 70%),
+    radial-gradient(45% 40% at 30% 35%, rgba(255, 42, 141, 0.22), transparent 70%),
+    linear-gradient(180deg, #1a1130 0%, #2c1b4d 55%, #7a3305 100%);
   background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
   animation: breathe 9s ease-in-out infinite;
 }
@@ -458,11 +460,11 @@ img { max-width: 100%; display: block; }
   font-size: 2rem;
   padding: 16px 24px;
   border-radius: 12px;
-  background: linear-gradient(120deg, #ff5252, #c62828);
+  background: linear-gradient(120deg, var(--neon-pink), #d81b7a);
   color: #fff;
   text-shadow: none;
   white-space: nowrap;
-  box-shadow: 0 10px 34px rgba(198, 40, 40, 0.45), 0 22px 48px rgba(11, 19, 43, 0.55);
+  box-shadow: 0 10px 34px var(--neon-pink-soft), 0 22px 48px rgba(26, 17, 48, 0.55);
   margin: 0;
 }
 .hero-minimal .btn .arrow { margin-left: 0.5em; }
@@ -489,7 +491,7 @@ img { max-width: 100%; display: block; }
   top: 10px;
   left: -6px;
   z-index: 2;
-  background: linear-gradient(120deg, #ff5252, #c62828);
+  background: linear-gradient(120deg, var(--neon-pink), #d81b7a);
   color: #fff;
   font-size: 0.78rem;
   font-weight: 900;
@@ -497,7 +499,7 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   padding: 4px 14px 4px 12px;
   border-radius: 0 8px 8px 0;
-  box-shadow: 0 6px 16px rgba(198, 40, 40, 0.4);
+  box-shadow: 0 6px 16px var(--neon-pink-soft);
 }
 .product-card { position: relative; }
 .event-card {
@@ -721,9 +723,9 @@ img { max-width: 100%; display: block; }
 /* ── Footer ── */
 
 .site-footer {
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  border-top: 2px solid var(--wood-edge);
   padding: 34px 0 46px;
-  background: #08101f;
+  background: rgba(26, 17, 48, 0.95);
 }
 .site-footer .container { display: grid; gap: 10px; justify-items: start; }
 .site-footer .legal { font-size: 0.8rem; color: rgba(245, 242, 234, 0.55); }
@@ -775,13 +777,31 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   gap: 18px;
-  background: rgba(11, 19, 43, 0.86);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  padding: 10px 20px;
+  background: linear-gradient(to bottom, #5d3a1a, #3e1f0f);
+  border-bottom: 2px solid var(--wood-edge);
+  padding: 26px 20px 10px;
   position: sticky;
   top: 62px;
   z-index: 40;
   backdrop-filter: blur(8px);
+}
+.funnel-bar::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background:
+    radial-gradient(circle 4px at 8% 50%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 20% 30%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 32% 55%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 44% 35%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 56% 50%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 68% 30%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 80% 55%, var(--gold-bright) 60%, transparent 61%),
+    radial-gradient(circle 4px at 92% 40%, var(--gold-bright) 60%, transparent 61%);
+  filter: drop-shadow(0 0 6px rgba(255, 178, 0, 0.8));
 }
 .funnel-back { color: var(--turquoise); font-weight: 700; font-size: 0.9rem; }
 .funnel-bar ol { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }

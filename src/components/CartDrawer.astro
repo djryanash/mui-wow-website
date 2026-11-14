@@ -45,7 +45,7 @@
     })();
     const KEY = 'muiwow-cart';
     const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
-    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); document.body.dataset.cartStep = '4'; };
+    const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
 
     const drawer = document.getElementById('cart-drawer');
     const badge = document.querySelector('[data-cart-badge]');
@@ -84,6 +84,12 @@
     }
 
     document.addEventListener('click', (e) => {
+      // click outside an OPEN drawer dismisses it (buttons that add items
+      // re-render the badge without opening, so they never hit this branch)
+      if (drawer.classList.contains('open') && !e.target.closest?.('#cart-drawer') && !e.target.closest?.('[data-cart-open]')) {
+        drawer.classList.remove('open');
+        return;
+      }
       if (e.target.closest?.('[data-cart-open]')) { openCart(); return; }
       if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
       const quick = e.target.closest?.('[data-quick-order]');

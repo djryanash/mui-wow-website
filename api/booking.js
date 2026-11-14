@@ -55,9 +55,9 @@ export default async function handler(req, res) {
   let ref;
   if (req.query?.session_id) {
     // checkout return flow: resolve the session id → booking ref
-    const pointer = await kvGet(`session:${String(req.query.session_id).replace(/^cs_(test|live)_/, '').slice(0, 20)}`);
-    const sessionIdFull = await kvGet(`session:${String(req.query.session_id)}`);
-    ref = String(pointer?.ref ?? sessionIdFull?.ref ?? '').toUpperCase();
+    // (records come back as JSON strings — parse before reading .ref)
+    const refFrom = (raw) => { try { return (typeof raw === 'string' ? JSON.parse(raw) : raw)?.ref; } catch { return null; } };
+    ref = String(refFrom(await kvGet(`session:${String(req.query.session_id)}`)) ?? '').toUpperCase();
     if (!ref) return res.status(404).json({ error: 'unknown session' });
   } else {
     ref = String(req.query?.ref ?? '').toUpperCase();

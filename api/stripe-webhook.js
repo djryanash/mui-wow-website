@@ -32,7 +32,12 @@ async function kvGet(key) {
   });
   const b = await r.json();
   if (r.status !== 200) throw new Error(`KV get ${key} → ${r.status}: ${b.error ?? ''}`);
-  return b.result ?? null;
+  const raw = b.result ?? null;
+  // values are stored JSON-encoded: parse strings so callers see objects
+  if (typeof raw === 'string' && raw.startsWith('{')) {
+    try { return JSON.parse(raw); } catch { return raw; }
+  }
+  return raw ?? null;
 }
 
 async function kvSet(key, value) {

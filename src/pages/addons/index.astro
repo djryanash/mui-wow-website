@@ -18,12 +18,12 @@ const title = T(chrome.addonsTitle);
 <Layout locale={locale} title={title} description={T(chrome.addonsHint)}>
   <FunnelBar step={2} locale={locale} backHref={locale === 'en' ? '/rentals' : `/${locale}/rentals`} backLabel={funnel.rentalsNext} />
   <section class="section">
-    <div class="container" style="max-width:760px">
+    <div class="container">
       <h1>{title}</h1>
       <p class="cart-note">{T(chrome.addonsHint)}</p>
       <div class="cards addons-grid">
         {addons.sort((a, b) => (b.specialDeal ? 1 : 0) - (a.specialDeal ? 1 : 0) || a.displayPrice.amount - b.displayPrice.amount).map((p) => (
-          <div class="product-card">
+          <div class="product-card" class:list={[p.specialDeal && 'special-card']}>
             {p.specialDeal && <span class="special-ribbon">Special Deal!</span>}
             {p.images?.[0] ? (
               <img class="thumb" src={p.images[0]} alt={T(p.name)} loading="lazy" />

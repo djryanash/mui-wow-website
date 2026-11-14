@@ -2,6 +2,7 @@
 // Staff page: gate form on first visit (cookie set), dashboard afterwards.
 // The dashboard is served by /api/staff with the cookie; this page is the UI.
 import Layout from '../components/Layout.astro';
+import CartDrawer from '../components/CartDrawer.astro';
 import { t } from '../data/load.mjs';
 
 const locale = Astro.props.locale ?? 'en';
@@ -39,7 +40,6 @@ const copy = {
       </div>
     </div>
   </section>
-<CartDrawer />
 <CartDrawer />
 </Layout>
 

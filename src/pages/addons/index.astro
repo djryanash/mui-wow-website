@@ -12,7 +12,7 @@ import CartDrawer from '../../components/CartDrawer.astro';
 const locale = Astro.props.locale ?? 'en';
 const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
 const addons = loadProducts().filter((p) => p.isAddon && p.orderable);
-const title = T(chrome.addonsTitle);
+const title = T({ en: 'Add-ons', es: 'Complementos', zh: '加購' });
 ---
 
 <Layout locale={locale} title={title} description={T(chrome.addonsHint)}>

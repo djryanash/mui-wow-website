@@ -17,7 +17,7 @@ displayPrice:
   amount: 1000
   currency: 'HKD'
   formatted: 'HK$10'
-stripePriceId: 'price_1Ub9U2Czy81v9aNtPE4zgAkV' # sandbox (test)
+stripePriceId: 'price_1UbgALELihTI1DD4lpNPqB6B' # live
 
 inventory:
   perEvent: false

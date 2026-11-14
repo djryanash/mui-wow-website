@@ -7,7 +7,7 @@ displayPrice:
   amount: 10000
   currency: 'HKD'
   formatted: 'HK$100'
-stripePriceId: 'price_1Ub8pWCzy81v9aNt7OTzZ6Bx' # test
+stripePriceId: 'price_1UbgA8ELihTI1DD42HbDCApi' # live
 inventory:
   perEvent: true
   stock: 10

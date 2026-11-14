@@ -59,7 +59,13 @@
       })();
       const KEY = 'muiwow-cart';
       const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
-      const write = (c) => { store.setItem(KEY, JSON.stringify(c)); render(); };
+      const write = (c) => {
+        const json = JSON.stringify(c);
+        store.setItem(KEY, json);
+        const back = store.getItem(KEY);
+        LOG('write', { keys: Object.keys(c), written: json, readBack: back, persistedOK: back === json });
+        render();
+      };
 
       const drawer = document.getElementById('cart-drawer');
       const badge = document.querySelector('[data-cart-badge]');

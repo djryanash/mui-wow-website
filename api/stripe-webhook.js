@@ -254,7 +254,17 @@ export default async function handler(req, res) {
     const origin = ORIGIN();
     const parentRef = String(session.metadata?.parentRef ?? '').toUpperCase();
     const ref = session.id.replace(/^cs_(test|live)_/, '').slice(0, 12).toUpperCase();
-    const items = await sessionItems(session.id);
+    let items = await sessionItems(session.id);
+    // Free products ride the session as metadata (no Stripe line item):
+    // reattach them so the booking record and QR carry the free entry too.
+    try {
+      const free = JSON.parse(session.metadata?.freeItems ?? '[]');
+      if (Array.isArray(free)) {
+        for (const f of free) {
+          if (f?.slug) items.push({ slug: f.slug, kind: f.kind ?? 'ticket', name: f.name ?? f.slug, qty: Number(f.qty) || 1, subtotal: 0 });
+        }
+      }
+    } catch { /* malformed metadata: skip the free reattach */ }
 
     const allDonation = items.length > 0 && items.every((i) => i.kind === 'donation');
 

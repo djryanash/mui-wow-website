@@ -85,14 +85,26 @@ export default async function handler(req, res) {
   }
 
   try {
+    const catalog = await (await fetch((process.env.SITE_URL ?? 'https://mui-wow-website.vercel.app').replace(/\/$/, '') + '/products.json', { cache: 'no-cache' })).json();
     const line_items = [];
+    const freeItems = [];
     let total = 0;
     for (const { slug, qty } of items) {
       if (!/^[a-z0-9-]{1,64}$/.test(String(slug)) || !Number.isInteger(qty) || qty < 1 || qty > 20) {
         return res.status(400).json({ error: 'bad item' });
       }
       const price = await activeHkdPrice(String(slug));
-      if (!price) return res.status(404).json({ error: `unknown or unpriced product: ${slug}` });
+      if (!price) {
+        // Free products (free entry, HK$0 support) carry no Stripe price.
+        // They ride the booking through session metadata instead of a line
+        // item, so a mixed cart with a paid item keeps working.
+        const p = (catalog.products ?? []).find((c) => c.slug === slug);
+        if (!p || p.displayPrice?.amount !== 0) {
+          return res.status(404).json({ error: `unknown or unpriced product: ${slug}` });
+        }
+        freeItems.push({ slug, kind: p.kind ?? 'ticket', name: (p.name?.en ?? slug).replace(/\s*—\s*Mui WoW\s*$/, ''), qty });
+        continue;
+      }
       line_items.push({ price: price.id, quantity: qty });
       total += price.unit_amount * qty;
     }
@@ -107,7 +119,6 @@ export default async function handler(req, res) {
       const kvBase = process.env.KV_REST_API_URL;
       const kvToken = process.env.KV_REST_API_TOKEN;
       const token = crypto.randomBytes(10).toString('base64url');
-      const catalog = await (await fetch(origin + '/products.json', { cache: 'no-cache' })).json();
       const booked = [];
       for (const { slug, qty } of items) {
         const p = (catalog.products ?? []).find((c) => c.slug === slug);
@@ -128,7 +139,7 @@ export default async function handler(req, res) {
       success_url: successUrl,
       cancel_url: parentRef ? `${origin}/addons/${encodeURIComponent(parentRef)}` : `${origin}/rentals`,
       line_items,
-      metadata: { site: 'mui-wow', ...(parentRef ? { parentRef } : {}) },
+      metadata: { site: 'mui-wow', ...(parentRef ? { parentRef } : {}), ...(freeItems.length ? { freeItems: JSON.stringify(freeItems) } : {}) },
     });
     return res.status(200).json({ url: session.url, id: session.id });
   } catch (e) {

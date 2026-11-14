@@ -55,7 +55,7 @@ async function stripe(method, path, params) {
   const existing = await stripe('GET', '/products?limit=50');
   const dup = existing.data.find((p) => p.metadata?.slug === slug && p.metadata?.site === 'mui-wow');
   const product = dup ?? (await stripe('POST', '/products', {
-    name: `${name} — Mui WoW`,
+    name,
     ...(description ? { description } : {}),
     metadata: { slug, site: 'mui-wow' },
   }));

@@ -62,7 +62,7 @@ for (const file of files) {
   if (!product) {
     if (dry) { results.push([slug, 'WOULD create product + price']); continue; }
     product = await stripe('POST', '/products', {
-      name: `${doc.name?.en ?? slug} — Mui WoW`,
+      name: doc.name?.en ?? slug,
       description: doc.subtitle?.en ?? undefined,
       metadata: { site: 'mui-wow', slug, kind: doc.kind ?? 'consumable' },
     });

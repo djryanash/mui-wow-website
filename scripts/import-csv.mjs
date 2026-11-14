@@ -71,7 +71,7 @@ for (const row of rows) {
     let product = list.data.find((p) => p.metadata?.site === 'mui-wow' && p.metadata?.slug === slug);
     if (!product) {
       product = await stripe('POST', '/products', {
-        name: `${nameEn} — Mui WoW`,
+        name: nameEn,
         ...(row.details_en ? { description: row.details_en } : {}),
         metadata: { slug, site: 'mui-wow' },
       });

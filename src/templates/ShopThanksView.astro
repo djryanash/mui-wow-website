@@ -24,22 +24,14 @@ const copy = {
       <img src="/images/brand/mui-wow-logo.png" alt="Mui WoW" style="height:100px; margin:0 auto 18px;" />
       <h1>{T(copy.title)}</h1>
       <p style="max-width:52ch; margin:14px auto">{T(copy.body)}</p>
-      <div id="thanks-qr" class="qr-frame" style="margin:6px auto 0; width:240px; background:#fff; border-radius:12px; padding:12px; box-shadow:var(--shadow); display:none"></div>
+      <img id="thanks-qr" alt="Booking QR code" style="margin:6px auto 0; width:220px; background:#fff; border-radius:12px; padding:12px; box-shadow:var(--shadow); display:none" />
       <p id="thanks-ref" style="font-weight:900; color:var(--gold-bright); margin-top:10px"></p>
       <p id="thanks-qr-hint" style="max-width:52ch; margin:0 auto; color:var(--turquoise)"></p>
-      <div id="email-capture" hidden style="margin:20px auto 0; display:grid; gap:10px; max-width:420px">
-        <p style="margin:0">{T({ en: 'Want the QR in your inbox too? Let us know where to send it:', es: '¿Quieres también el QR en tu correo? Dinos dónde:', zh: '想埋個 QR 寄到郵箱？話我哋知電郵：' })}</p>
-        <div style="display:flex; gap:10px">
-          <input id="thanks-email" type="email" placeholder="you@..." style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid rgba(56,163,165,.5); background:#1d2d44; color:#f5f2ea" />
-          <button class="btn btn-gold" data-send-qr type="button">{T({ en: 'Send', es: 'Enviar', zh: '發送' })}</button>
-        </div>
-        <p id="email-note" class="flash-error" hidden></p>
-      </div>
       <p style="margin-top:26px"><a href="/rentals">{T(copy.back)}</a></p>
     </div>
   </section>
 </Layout>
-<script src="/js/qrcode.min.js" is:inline></script>
+
 <script>
   (function () {
     let bookingRef = '';
@@ -63,46 +55,16 @@ const copy = {
         if (b.error) return;
         bookingRef = b.ref ?? '';
         const el = document.getElementById('thanks-qr');
-        el.style.display = 'block';
-        try {
-          if (window.QRCode) QRCode.toCanvas(el, location.origin + '/booking/' + bookingRef, { width: 216 });
-        } catch {}
+        if (b.qr) { el.src = b.qr; el.style.display = 'block'; }
         document.getElementById('thanks-ref').textContent = bookingRef;
         const hint = document.getElementById('thanks-qr-hint');
         hint.textContent = (lang === 'es' ? 'Muéstrale este código a nuestro equipo en la playa — lo escanean y se confirma la entrega.' : lang === 'zh-hk' ? '喺沙灘俾員工掃描呢個碼確認交收。' : 'Show this code to our team at the beach — they scan it and the hand-over is confirmed.');
-        // only free-lane bookings (no email collected) need the capture field
-        if (b.hasEmail === false) {
-          const wrap = document.getElementById('email-capture');
-          if (wrap) wrap.hidden = false;
-        }
         // purchase done: the cart empties
         try { localStorage.removeItem('muiwow-cart'); } catch {}
         document.dispatchEvent(new CustomEvent('muiwow-cart-updated'));
         return;
       }
     }
-    // email capture (free lane only — the field appears when there's no address)
-    document.addEventListener('click', (e) => {
-      const send = e.target.closest?.('[data-send-qr]');
-      if (!send) return;
-      const input = document.getElementById('thanks-email');
-      const email = (input?.value ?? '').trim();
-      const note = document.getElementById('email-note');
-      fetch('/api/booking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ref: bookingRef, email }),
-      })
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.error) { note.hidden = false; note.style.color = 'var(--pink)'; note.textContent = d.error; return; }
-          const wrap = document.getElementById('email-capture');
-          if (wrap) wrap.hidden = true;
-          note.hidden = false;
-          note.style.color = 'var(--turquoise)';
-          note.textContent = (lang === 'es' ? '¡Enviado! Revisa tu correo por el código QR.' : lang === 'zh-hk' ? '已發送！QR 二維碼已寄到你的郵箱。' : 'Sent! Check your inbox for the QR code.');
-        });
-    });
     loadBooking();
   })();
 </script>

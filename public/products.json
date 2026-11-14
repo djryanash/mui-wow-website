@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T01:29:15.513Z",
+  "generatedAt": "2026-11-14T01:31:37.143Z",
   "products": [
     {
       "slug": "support-0",
@@ -138,6 +138,58 @@
       "images": []
     },
     {
+      "slug": "wine-black-elephant-red-blend",
+      "kind": "consumable",
+      "isAddon": true,
+      "isTicket": false,
+      "specialDeal": false,
+      "orderable": true,
+      "name": {
+        "en": "Black Elephant Red Blend Wine (250ml can, 13% alc.)"
+      },
+      "subtitle": {
+        "en": "incl. Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 5000,
+        "currency": "HKD",
+        "formatted": "HK$50"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/wine-black-elephant-red-blend/cover.jpg"
+      ]
+    },
+    {
+      "slug": "wine-black-elephant-sauv-blanc",
+      "kind": "consumable",
+      "isAddon": true,
+      "isTicket": false,
+      "specialDeal": false,
+      "orderable": true,
+      "name": {
+        "en": "Black Elephant Sauvignon Blanc Wine (250ml can, 13% alc.)"
+      },
+      "subtitle": {
+        "en": "incl. Glass + Ice"
+      },
+      "displayPrice": {
+        "amount": 5000,
+        "currency": "HKD",
+        "formatted": "HK$50"
+      },
+      "inventory": {
+        "perEvent": true,
+        "stock": 10
+      },
+      "images": [
+        "/images/products/wine-black-elephant-sauv-blanc/cover.jpg"
+      ]
+    },
+    {
       "slug": "beach-mat-checkered",
       "kind": "consumable",
       "isAddon": false,
@@ -189,58 +241,6 @@
       "images": []
     },
     {
-      "slug": "wine-black-elephant-red-blend",
-      "kind": "consumable",
-      "isAddon": true,
-      "isTicket": false,
-      "specialDeal": false,
-      "orderable": true,
-      "name": {
-        "en": "Wine, Black Elephant, Red Blend (250ml can, 13% alc.)"
-      },
-      "subtitle": {
-        "en": "incl. Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 5000,
-        "currency": "HKD",
-        "formatted": "HK$50"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/wine-black-elephant-red-blend/cover.jpg"
-      ]
-    },
-    {
-      "slug": "wine-black-elephant-sauv-blanc",
-      "kind": "consumable",
-      "isAddon": true,
-      "isTicket": false,
-      "specialDeal": false,
-      "orderable": true,
-      "name": {
-        "en": "Wine, Black Elephant, Sauvignon Blanc (250ml can, 13% alc.)"
-      },
-      "subtitle": {
-        "en": "incl. Glass + Ice"
-      },
-      "displayPrice": {
-        "amount": 5000,
-        "currency": "HKD",
-        "formatted": "HK$50"
-      },
-      "inventory": {
-        "perEvent": true,
-        "stock": 10
-      },
-      "images": [
-        "/images/products/wine-black-elephant-sauv-blanc/cover.jpg"
-      ]
-    },
-    {
       "slug": "wine-vinette-rose",
       "kind": "consumable",
       "isAddon": true,
@@ -248,7 +248,7 @@
       "specialDeal": false,
       "orderable": true,
       "name": {
-        "en": "Wine, Vinette, Rose (250ml can, 13% alc.)"
+        "en": "Vinette Rose Wine (250ml can, 13% alc.)"
       },
       "subtitle": {
         "en": "incl. Glass + Ice"
@@ -274,7 +274,7 @@
       "specialDeal": false,
       "orderable": true,
       "name": {
-        "en": "Wine, Vinette, Sweet Sparkle (250ml can, 13% alc.)"
+        "en": "Vinette Sweet Sparkle Wine (250ml can, 13% alc.)"
       },
       "subtitle": {
         "en": "incl. Glass + Ice"

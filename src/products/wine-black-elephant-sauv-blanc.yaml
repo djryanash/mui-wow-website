@@ -3,7 +3,7 @@ published: true
 kind: 'consumable'
 isAddon: true
 orderable: true
-name: { en: 'Wine, Black Elephant, Sauvignon Blanc (250ml can, 13% alc.)' }
+name: { en: 'Black Elephant Sauvignon Blanc Wine (250ml can, 13% alc.)' }
 subtitle: { en: 'incl. Glass + Ice' }
 displayPrice:
   amount: 5000

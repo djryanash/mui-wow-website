@@ -87,6 +87,7 @@
       }
 
       document.addEventListener('click', (e) => {
+        document.title = 'CLICK ' + (e.target.tagName || 'x') + ' @' + (e.target.className || '?');
         // click outside an OPEN drawer dismisses it
         if (drawer.classList.contains('open') && !e.target.closest?.('#cart-drawer') && !e.target.closest?.('[data-cart-open]')) {
           drawer.classList.remove('open');
@@ -116,7 +117,9 @@
         }
         const add = e.target.closest?.('[data-add-to-cart]');
         if (add) {
-          const c = read();
+          try {
+            document.title = 'ADD-HIT ' + add.dataset.addToCart;
+            const c = read();
           const slug = add.dataset.addToCart;
           c[slug] = {
             name: add.dataset.name,
@@ -125,6 +128,9 @@
             qty: Math.min((c[slug]?.qty ?? 0) + 1, 20),
           };
           render(); // badge updates; the drawer stays closed for item adds
+          } catch (err) {
+            document.title = 'ADD-ERR: ' + (err?.message ?? String(err));
+          }
           return;
         }
         const go = e.target.closest?.('[data-cart-checkout]');

@@ -847,3 +847,22 @@ body[data-cart-step='4'] .funnel-bar li[data-fstep='3'] {
   border-radius: 999px;
   display: inline-block;
 }
+
+.funnel-cart-btn {
+  font-family: inherit;
+  font-weight: 800;
+  color: var(--sand);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 0;
+}
+.funnel-cart-btn:hover { color: var(--neon-pink); }
+body[data-cart-step='4'] .funnel-cart-btn {
+  color: var(--gold-bright);
+  background: rgba(240, 165, 0, 0.12);
+  border: 1px solid rgba(240, 165, 0, 0.5);
+  border-radius: 999px;
+  padding: 5px 14px;
+}

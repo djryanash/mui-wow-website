@@ -19,7 +19,11 @@ const prefix = locale === 'en' ? '' : `/${locale}`;
   <ol>
     {steps.map((s) => (
       <li data-fstep={s.n} class={s.n === step ? 'active' : ''}>
-        <a href={`${prefix}${s.href}`} class:list={[s.n === step && 'current']}>{T(s.label)}</a>
+        {s.n === 4 ? (
+          <button class="funnel-cart-btn" data-cart-open type="button">{T(s.label)}</button>
+        ) : (
+          <a href={`${prefix}${s.href}`}>{T(s.label)}</a>
+        )}
       </li>
     ))}
   </ol>

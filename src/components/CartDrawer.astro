@@ -215,6 +215,12 @@
           c[slug] = { name: e.detail.name, price: e.detail.price, cents: Number(e.detail.cents), qty: 1 };
         }
         openCart();
+        document.querySelectorAll('[data-select-tier]').forEach((card) => {
+          const isSel = card.dataset.selectTier === slug;
+          card.setAttribute('aria-checked', isSel ? 'true' : 'false');
+          card.classList.toggle('selected', isSel);
+          card.setAttribute('aria-current', isSel ? 'donation' : 'false');
+        });
       });
       // other pages that re-render the cart (they read, this writes):
       document.addEventListener('muiwow-cart-updated', render);

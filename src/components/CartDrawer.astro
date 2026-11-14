@@ -26,9 +26,18 @@
 
 <script>
   (function () {
-    window.onerror = (msg, src, line) => { document.title = 'ERR: ' + String(msg) + ' @' + line; };
-    document.title = 'CART-LOADED';
+    const LOG = (...a) => { try { console.log('%c[Mui WoW cart]', 'color:#f0a500;font-weight:900', ...a); } catch {} };
+    window.addEventListener('error', (e) => LOG('WINDOW ERROR', e.message, '@' + e.lineno, e.filename ?? ''));
+    window.addEventListener('unhandledrejection', (e) => LOG('UNHANDLED REJECTION', String(e.reason)));
+    window.onerror = (msg, src, line) => { document.title = 'ERR: ' + String(msg) + ' @' + line; LOG('WINDOW onerror', msg, '#' + line); };
     try {
+      LOG('script start', { ref: location.pathname, userAgent: navigator.userAgent.slice(0, 70), storageTest: 'loading…' });
+    } catch (err) {
+      console.error('[Mui WoW cart] early error', err);
+    }
+    // body of the module continues below with detailed logs
+    try {
+      void 0;
       const chainRef = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
       const isChain = /^\/addons\//i.test(location.pathname) && /^[A-Z0-9]{6,16}$/.test(chainRef);
 
@@ -37,8 +46,10 @@
         try {
           localStorage.setItem('__muiwow_test__', '1');
           localStorage.removeItem('__muiwow_test__');
+          console.log('[Mui WoW cart] storage: localStorage OK');
           return localStorage;
-        } catch {
+        } catch (e) {
+          console.warn('[Mui WoW cart] storage: localStorage BLOCKED (' + e.message + ') — using in-memory fallback (cart is lost on reload)');
           return {
             getItem: (k) => (k in memStore ? memStore[k] : null),
             setItem: (k, v) => { memStore[k] = String(v); },
@@ -87,7 +98,7 @@
       }
 
       document.addEventListener('click', (e) => {
-        document.title = 'CLICK ' + (e.target.tagName || 'x') + ' @' + (e.target.className || '?');
+        LOG('click', { tag: e.target.tagName, cls: String(e.target.className ?? '').slice(0, 50) });
         // click outside an OPEN drawer dismisses it
         if (drawer.classList.contains('open') && !e.target.closest?.('#cart-drawer') && !e.target.closest?.('[data-cart-open]')) {
           drawer.classList.remove('open');
@@ -118,7 +129,7 @@
         const add = e.target.closest?.('[data-add-to-cart]');
         if (add) {
           try {
-            document.title = 'ADD-HIT ' + add.dataset.addToCart;
+            LOG('ADD to cart', { slug: add.dataset.addToCart, name: add.dataset.name, cents: add.dataset.cents, btnData: JSON.stringify(add.dataset) });
             const c = read();
           const slug = add.dataset.addToCart;
           c[slug] = {
@@ -127,8 +138,11 @@
             cents: Number(add.dataset.cents),
             qty: Math.min((c[slug]?.qty ?? 0) + 1, 20),
           };
-          render(); // badge updates; the drawer stays closed for item adds
+          LOG('cart after add', read());
+          render();
+          LOG('render done; drawer stays closed for item adds');
           } catch (err) {
+            LOG('ADD-ERR', err?.message ?? String(err), err?.stack?.split('\n')[1] ?? '');
             document.title = 'ADD-ERR: ' + (err?.message ?? String(err));
           }
           return;

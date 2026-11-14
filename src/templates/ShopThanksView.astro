@@ -1,5 +1,6 @@
 ---
 import Layout from '../components/Layout.astro';
+import CartDrawer from '../components/CartDrawer.astro';
 import { loadProducts } from '../data/load.mjs';
 import { chrome } from '../data/chrome.mjs';
 import { t } from '../data/load.mjs';
@@ -30,6 +31,7 @@ const copy = {
       <p style="margin-top:26px"><a href="/rentals">{T(copy.back)}</a></p>
     </div>
   </section>
+<CartDrawer />
 </Layout>
 
 <script>

@@ -165,7 +165,8 @@
             cents: Number(add.dataset.cents),
             qty: Math.min((c[slug]?.qty ?? 0) + 1, 20),
           };
-          LOG('cart after add', read());
+          write(c);
+          LOG('cart after add', read()); // store now contains the item
           render();
           LOG('render done; drawer stays closed for item adds');
           } catch (err) {

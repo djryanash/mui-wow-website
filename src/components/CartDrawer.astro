@@ -180,6 +180,18 @@
       document.addEventListener('muiwow-cart-open', openCart);
 
       render();
+
+      // storage watcher: logs every external mutation of the cart key
+      let lastSeen = JSON.stringify(read());
+      setInterval(() => {
+        let now;
+        try { now = store.getItem(KEY); } catch (e) { now = 'STORE ERROR: ' + e.message; }
+        if (now !== lastSeen) {
+          LOG('STORAGE CHANGED by someone else', { before: lastSeen.slice(0, 120), after: String(now).slice(0, 120) });
+          lastSeen = now;
+        }
+      }, 800);
+      LOG('storage watcher on');
       document.title = 'CART-READY';
     } catch (err) {
       document.title = 'INIT-ERR: ' + (err?.message ?? String(err));

@@ -1,6 +1,8 @@
 ---
 // Staff page: gate form on first visit (cookie set), dashboard afterwards.
 // The dashboard is served by /api/staff with the cookie; this page is the UI.
+// Three filters (out / returned / all); clicking a booking expands the full
+// customer detail; "mark all as returned" closes the day on the out list.
 import Layout from '../components/Layout.astro';
 import CartDrawer from '../components/CartDrawer.astro';
 import { t } from '../data/load.mjs';
@@ -13,10 +15,26 @@ const copy = {
   enter: { en: 'Enter', es: 'Entrar', zh: '進入' },
   wrong: { en: 'That word is wrong.', es: 'Esa palabra no es correcta.', zh: '密語唔正確。' },
   out: { en: 'Items out', es: 'Artículos fuera', zh: '未歸還物品' },
+  tabReturned: { en: 'Items returned', es: 'Devueltos', zh: '已歸還物品' },
+  tabAll: { en: 'All', es: 'Todos', zh: '全部' },
   collected: { en: 'Collected, not returned', es: 'Recogidos, no devueltos', zh: '已提未還' },
   reserved: { en: 'Awaiting pickup', es: 'Pendiente de recogida', zh: '待提取' },
+  returnedState: { en: 'Returned', es: 'Devuelto', zh: '已歸還' },
   collect: { en: 'Mark collected', es: 'Marcar recogido', zh: '標記已提取' },
   doReturn: { en: 'Mark returned', es: 'Marcar devuelto', zh: '標記已歸還' },
+  delivered: { en: 'Delivered', es: 'Entregado', zh: '已送達' },
+  awaitingDelivery: { en: 'Awaiting delivery', es: 'Pendiente de entrega', zh: '待送' },
+  markAll: { en: 'Mark all as returned', es: 'Marcar todo como devuelto', zh: '全部標記為已歸還' },
+  confirmAll: { en: 'Mark every item out as returned?', es: '¿Marcar todo como devuelto?', zh: '全部標記為已歸還？' },
+  details: { en: 'Details', es: 'Detalles', zh: '詳情' },
+  name: { en: 'Name', es: 'Nombre', zh: '姓名' },
+  email: { en: 'Email', es: 'Correo', zh: '電郵' },
+  phone: { en: 'Phone', es: 'Teléfono', zh: '電話' },
+  placed: { en: 'Placed', es: 'Realizado', zh: '下單時間' },
+  itemsLabel: { en: 'Items', es: 'Artículos', zh: '物品' },
+  addOns: { en: 'Add-on orders', es: 'Pedidos extra', zh: '加購訂單' },
+  historyLabel: { en: 'History', es: 'Historial', zh: '紀錄' },
+  empty: { en: 'Nothing here.', es: 'Nada por aquí.', zh: '無項目。' },
 };
 ---
 
@@ -35,8 +53,9 @@ const copy = {
       </div>
 
       <div id="staff-view" hidden>
-        <h2>{T(copy.out)}</h2>
+        <div id="staff-tabs" class="staff-tabs" role="tablist"></div>
         <div id="bookings"></div>
+        <button id="return-all" class="btn btn-gold" hidden style="width:100%; margin-top:14px">{T(copy.markAll)}</button>
       </div>
     </div>
   </section>
@@ -49,9 +68,38 @@ const copy = {
   const gateView = document.getElementById('staff-gate');
   const dash = document.getElementById('staff-view');
   const bookEl = document.getElementById('bookings');
+  const tabsEl = document.getElementById('staff-tabs');
+  const returnAllBtn = document.getElementById('return-all');
 
   const L = (o) => (o && typeof o === 'object' ? o[locale === 'zh-hk' ? 'zh' : locale] ?? o.en : o);
-  const stateLabel = (s) => (s === 'collected' ? L(copy.collected) : s === 'reserved' ? L(copy.reserved) : s);
+  const stateLabel = (s) =>
+    s === 'collected' ? L(copy.collected) : s === 'reserved' ? L(copy.reserved) : s === 'returned' ? L(copy.returnedState) : s;
+
+  const FILTERS = [
+    { key: 'out', label: () => L(copy.out), test: (b) => b.state !== 'returned' },
+    { key: 'returned', label: () => L(copy.tabReturned), test: (b) => b.state === 'returned' },
+    { key: 'all', label: () => L(copy.tabAll), test: () => true },
+  ];
+  let filter = 'out';
+  let data = [];
+  let expanded = null;
+
+  const fmt = (iso) => (iso ? new Date(iso).toLocaleString(locale === 'zh-hk' ? 'zh-HK' : locale === 'es' ? 'es' : 'en-GB') : '—');
+
+  function detailHtml(b) {
+    const orders = (b.orders ?? [])
+      .map((o) => `<div class="cart-line">· ${(o.items ?? []).map((i) => esc(i.name) + ' × ' + i.qty).join(', ') || '—'} · HK$${((o.amount ?? 0) / 100).toLocaleString('en-HK')} · ${o.state === 'delivered' ? esc(L(copy.delivered)) : esc(L(copy.awaitingDelivery))}</div>`)
+      .join('');
+    return `<div class="cart-row staff-detail">
+      ${b.name ? `<div class="cart-line"><strong>${esc(L(copy.name))}:</strong> ${esc(b.name)}</div>` : ''}
+      <div class="cart-line"><strong>${esc(L(copy.email))}:</strong> ${esc(b.email || '—')}</div>
+      ${b.phone ? `<div class="cart-line"><strong>${esc(L(copy.phone))}:</strong> ${esc(b.phone)}</div>` : ''}
+      <div class="cart-line"><strong>${esc(L(copy.placed))}:</strong> ${esc(fmt(b.createdAt))}</div>
+      <div class="cart-line"><strong>${esc(L(copy.itemsLabel))}:</strong> ${(b.items ?? []).map((i) => esc(i.name) + ' × ' + i.qty).join(', ') || '—'}</div>
+      ${orders ? `<div class="cart-line"><strong>${esc(L(copy.addOns))}:</strong></div>${orders}` : ''}
+      <div class="cart-line"><strong>${esc(L(copy.historyLabel))}:</strong> ${(b.history ?? []).map((h) => esc(h.action) + ' · ' + esc(fmt(h.at))).join(', ') || '—'}</div>
+    </div>`;
+  }
 
   function row(b) {
     const items = (b.items ?? []).map((i) => `${esc(i.name)} × ${i.qty}`).join(', ');
@@ -60,15 +108,26 @@ const copy = {
       : b.state === 'collected'
         ? `<button class="btn btn-gold" data-ref="${esc(b.ref)}" data-action="return">${esc(L(copy.doReturn))}</button>`
         : '';
-    const orders = (b.orders ?? []).map((o) => `
-      <div class="cart-row" style="background:rgba(29,45,68,0.35)">
-        <div><div class="cart-line">${(o.items ?? []).map((i) => esc(i.name) + ' × ' + i.qty).join(', ') || '—'} · HK$${((o.amount ?? 0) / 100).toLocaleString('en-HK')} · ${o.state === 'delivered' ? (copy.delivered[locale === 'zh-hk' ? 'zh' : locale] ?? copy.delivered.en) : (locale === 'es' ? 'Pendiente' : locale === 'zh-hk' ? '待送' : 'Awaiting delivery')}</div></div>
-        ${o.state === 'reserved' ? `<button class="btn btn-gold" data-chain="${esc(b.ref)}" data-order="${esc(o.id)}" data-action="deliver">✓</button>` : ''}
-      </div>`).join('');
-    return `<div class="cart-row" style="margin-bottom:10px">
-      <div><div class="cart-name"><a href="/booking/${esc(b.ref)}">${esc(b.ref)}</a></div>
+    return `<div class="cart-row staff-row" style="margin-bottom:10px" data-row-ref="${esc(b.ref)}">
+      <div style="cursor:pointer"><div class="cart-name"><a href="/booking/${esc(b.ref)}">${esc(b.ref)}</a></div>
       <div class="cart-line">${items || '—'} · HK$${((b.amount ?? 0) / 100).toLocaleString('en-HK')} · ${esc(stateLabel(b.state))}</div></div>
-      <div class="booking-actions">${acts}</div>${orders}</div>`;
+      <div class="booking-actions">${acts}</div></div>
+    ${expanded === b.ref ? detailHtml(b) : ''}`;
+  }
+
+  function draw() {
+    const f = FILTERS.find((x) => x.key === filter);
+    const list = data.filter(f.test);
+    bookEl.innerHTML = list.map(row).join('') || `<p>${esc(L(copy.empty))}</p>`;
+    const collectable = data.filter((b) => b.state === 'collected').length;
+    returnAllBtn.hidden = !(filter === 'out' && collectable > 0);
+    returnAllBtn.textContent = `${L(copy.markAll)} (${collectable})`;
+  }
+
+  function drawTabs() {
+    tabsEl.innerHTML = FILTERS.map((f) =>
+      `<button role="tab" class="staff-tab${f.key === filter ? ' active' : ''}" data-filter="${f.key}">${esc(f.label())}</button>`
+    ).join('');
   }
 
   async function load() {
@@ -76,7 +135,9 @@ const copy = {
     if (r.error) { dash.hidden = true; gateView.hidden = false; return; }
     gateView.hidden = true;
     dash.hidden = false;
-    bookEl.innerHTML = r.bookings.map(row).join('') || `<p>${esc(L(copy.out))}</p>`;
+    data = r.bookings ?? [];
+    drawTabs();
+    draw();
   }
 
   gateForm.addEventListener('submit', async (e) => {
@@ -92,6 +153,13 @@ const copy = {
   });
 
   bookEl.addEventListener('click', async (e) => {
+    const toggle = e.target.closest?.('[data-row-ref]');
+    if (toggle && !e.target.closest?.('button')) {
+      const ref = toggle.dataset.rowRef;
+      expanded = expanded === ref ? null : ref;
+      draw();
+      return;
+    }
     const d = e.target.closest?.('[data-action="deliver"]');
     if (d) {
       d.disabled = true;
@@ -113,6 +181,29 @@ const copy = {
       body: JSON.stringify({ ref: btn.dataset.ref, action: btn.dataset.action }),
     }).then((x) => x.json());
     if (r.error) { btn.disabled = false; btn.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`); return; }
+    load();
+  });
+
+  tabsEl.addEventListener('click', (e) => {
+    const tab = e.target.closest?.('[data-filter]');
+    if (!tab) return;
+    filter = tab.dataset.filter;
+    expanded = null;
+    drawTabs();
+    draw();
+  });
+
+  returnAllBtn.addEventListener('click', async () => {
+    const n = data.filter((b) => b.state === 'collected').length;
+    if (!window.confirm(`${L(copy.confirmAll)} (${n})`)) return;
+    returnAllBtn.disabled = true;
+    const r = await fetch('/api/staff', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'return-all' }),
+    }).then((x) => x.json());
+    returnAllBtn.disabled = false;
+    if (r.error) { returnAllBtn.insertAdjacentHTML('afterend', `<p class="flash-error">${esc(r.error)}</p>`); return; }
     load();
   });
 

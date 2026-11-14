@@ -297,6 +297,8 @@ export default async function handler(req, res) {
     await kvSet(`booking:${ref}`, {
       ref,
       email: session.customer_details?.email ?? '',
+      name: session.customer_details?.name ?? null,
+      phone: session.customer_details?.phone ?? null,
       state: 'reserved',
       amount: session.amount_total,
       sessionId: session.id,

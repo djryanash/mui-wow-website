@@ -8,7 +8,7 @@
 
 <aside class="cart-drawer" id="cart-drawer" aria-label="Cart"
   data-total="Total" data-checkout-label="Checkout" data-cart-empty="Your cart is empty."
-  data-remove-label="Remove" data-checkout-pending="Checkout is not live yet.">
+  data-checkout-pending="Checkout is not live yet.">
   <div class="cart-head">
     <strong>Cart</strong>
     <button class="cart-close" aria-label="Close">×</button>
@@ -106,17 +106,36 @@
           const row = document.createElement('div');
           row.className = 'cart-row';
           row.innerHTML = `<div><div class="cart-name">${cart[slug].name}</div><div class="cart-line">${cart[slug].price} × ${cart[slug].qty}</div></div>`;
-          const btn = document.createElement('button');
-          btn.className = 'cart-remove';
-          btn.textContent = drawer.dataset.removeLabel ?? 'Remove';
-          btn.onclick = (ev) => {
-            ev.stopPropagation(); // removal never dismisses the open drawer
+          // − / + stepper: at zero the item leaves the cart
+          const step = document.createElement('div');
+          step.className = 'cart-stepper';
+          const qty = document.createElement('span');
+          qty.className = 'qty-num';
+          qty.textContent = cart[slug].qty;
+          const dec = document.createElement('button');
+          dec.className = 'qty-btn';
+          dec.type = 'button';
+          dec.textContent = '−';
+          dec.setAttribute('aria-label', `Remove one ${cart[slug].name}`);
+          dec.onclick = (ev) => {
+            ev.stopPropagation(); // stepper taps never dismiss the open drawer
             const c = read();
-            delete c[slug];
+            if (--c[slug].qty <= 0) delete c[slug];
             write(c);
-            drawer.classList.add('open');
           };
-          row.appendChild(btn);
+          const inc = document.createElement('button');
+          inc.className = 'qty-btn';
+          inc.type = 'button';
+          inc.textContent = '+';
+          inc.setAttribute('aria-label', `Add one more ${cart[slug].name}`);
+          inc.onclick = (ev) => {
+            ev.stopPropagation();
+            const c = read();
+            if (c[slug].qty < 20) c[slug].qty++;
+            write(c);
+          };
+          step.append(dec, qty, inc);
+          row.appendChild(step);
           items.appendChild(row);
         }
         drawer.querySelector('[data-cart-total]').textContent = keys.length ? 'HK$' + (total / 100).toLocaleString('en-HK') : '—';

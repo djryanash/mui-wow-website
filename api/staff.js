@@ -36,7 +36,7 @@ async function activeBookings() {
     if (b) {
       const rec = typeof b === 'string' ? JSON.parse(b) : b;
       if (rec.type === 'donation') continue; // support tiers: no pickup flow
-      if (rec.state !== 'returned') out.push(rec);
+      out.push(rec); // returned bookings ride along so the UI can list them
     }
   }
   return out.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -68,8 +68,27 @@ export default async function handler(req, res) {
       if (!(gate && body.gate === gate)) return res.status(401).json({ error: 'staff gate required' });
     }
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const ref = String(body.ref ?? '').toUpperCase();
     const action = body.action;
+    const now = new Date().toISOString();
+
+    if (action === 'return-all') {
+      // One tap closes the day: every collected booking goes to returned.
+      const keys = await kvKeys('booking:*');
+      let updated = 0;
+      for (const k of keys) {
+        const raw = await kvGet(k);
+        if (!raw) continue;
+        const b = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        if (b.type === 'donation' || b.state !== 'collected') continue;
+        b.state = 'returned';
+        b.history = [...(b.history ?? []), { action: 'return', at: now, note: 'return-all' }];
+        await kvSet(k, b);
+        updated++;
+      }
+      return res.status(200).json({ updated });
+    }
+
+    const ref = String(body.ref ?? '').toUpperCase();
     if (!/^[A-Z0-9]{6,16}$/.test(ref) || !['collect', 'return', 'unreserve'].includes(action)) {
       return res.status(400).json({ error: 'bad action or ref' });
     }
@@ -78,7 +97,6 @@ export default async function handler(req, res) {
     if (!raw) return res.status(404).json({ error: 'unknown booking' });
     const booking = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
-    const now = new Date().toISOString();
     const allowed = {
       collect: ['reserved', 'returned'],
       return: ['collected'],
@@ -112,6 +130,8 @@ async function dashboard() {
       state: b.state,
       createdAt: b.createdAt,
       email: b.email,
+      name: b.name ?? null,
+      phone: b.phone ?? null,
       items: b.items ?? [],
       orders: b.orders ?? [],
       history: b.history ?? [],

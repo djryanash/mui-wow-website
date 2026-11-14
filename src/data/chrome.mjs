@@ -17,15 +17,10 @@ export const chrome = {
     es: 'Ver todos los eventos',
     zh: '睇晒所有活動',
   },
-  registerCta: {
-    en: 'Register on Eventbrite',
-    es: 'Regístrate en Eventbrite',
-    zh: 'Eventbrite 登記',
-  },
-  linkSoon: {
-    en: 'Registration link coming soon — check Instagram',
-    es: 'El enlace de inscripción llega pronto — mira Instagram',
-    zh: '登記連結即將公開 — 睇 Instagram',
+  registerHereCta: {
+    en: 'Register here',
+    es: 'Regístrate aquí',
+    zh: '喺度登記',
   },
   reserveCta: {
     en: 'Reserve — ask Gaston',

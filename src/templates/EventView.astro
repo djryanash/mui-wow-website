@@ -77,9 +77,9 @@ const banner = event.heroImage ?? null;
                   <span class="grow">{T(r.name)}</span>
                   {r.status && <span class="chip status-chip">{T(r.status)}</span>}
                   {r.registrationUrl ? (
-                    <a class="btn btn-teal" href={r.registrationUrl} target="_blank" rel="noopener" data-burst>{T(chrome.registerCta)}</a>
+                    <a class="btn btn-teal" href={locale === 'en' ? '/rentals' : `/${locale}/rentals`} data-burst>{T(chrome.registerHereCta)}</a>
                   ) : (
-                    <a class="chip" href={site.instagram} target="_blank" rel="noopener">{T(chrome.linkSoon)}</a>
+                    <a class="btn btn-teal" href={locale === 'en' ? '/rentals' : `/${locale}/rentals`} data-burst>{T(chrome.registerHereCta)}</a>
                   )}
                 </li>
               ))}
@@ -88,27 +88,7 @@ const banner = event.heroImage ?? null;
         )}
         {event.registrationItems.length === 0 && event.registrationUrl && (
           <div class="info-block">
-            <a class="btn btn-teal" href={event.registrationUrl} target="_blank" rel="noopener" data-burst>{T(chrome.registerCta)}</a>
-          </div>
-        )}
-
-        {event.rentalItems.length > 0 && (
-          <div class="info-block">
-            <h2>{T(chrome.rentalsTitle)}</h2>
-            <ul class="item-list">
-              {event.rentalItems.map((r) => (
-                <li>
-                  <span class="grow">{T(r.name)}</span>
-                  {r.price && <span>{T(r.price)}</span>}
-                  {r.note && <span class="note" style="width:100%">{T(r.note)}</span>}
-                  {r.bookingUrl ? (
-                    <a class="btn btn-gold" href={r.bookingUrl} target="_blank" rel="noopener" data-burst>{T(chrome.reserveCta)}</a>
-                  ) : (
-                    <a class="btn btn-ghost" href={`tel:${site.contact.phone.replace(/\s/g, '')}`}>{T(chrome.reserveCta)}</a>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <a class="btn btn-teal" href={locale === 'en' ? '/rentals' : `/${locale}/rentals`} data-burst>{T(chrome.registerHereCta)}</a>
           </div>
         )}
 

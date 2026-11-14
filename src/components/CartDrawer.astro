@@ -229,9 +229,14 @@
           })
             .then((r) => r.json())
             .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'no url'); })
-            .catch(() => {
+            .catch((e) => {
+              // name the real reason: stale cart items come back as
+              // "unknown or unpriced product: <slug>" from the server
               const note = drawer.querySelector('[data-checkout-note]');
-              note.textContent = drawer.dataset.checkoutPending ?? 'Checkout coming soon.';
+              const real = e?.message ?? '';
+              note.textContent = real && real !== 'no url'
+                ? real
+                : (drawer.dataset.checkoutPending ?? 'Checkout coming soon.');
               note.hidden = false;
               go.disabled = false;
             });

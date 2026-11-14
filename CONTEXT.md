@@ -73,6 +73,15 @@ Day of the Dead event). Content chooses the effect, so a new event can
 surprise visitors without code changes. Honors visitors' reduced-motion
 preference, falling back to a static glow.
 
+### Tiki Design System
+
+The site-wide visual identity: a twilight-to-sunset palette (deep violet
+into fiery orange), neon-pink and tiki-gold accents, wooden-signage cards,
+Shrikhand display type with Oswald details and Montserrat body text, and
+Pacifico script accents. Guided by tmp/tiki-design-guide.md (aspirational
+reference); the canonical tokens live in the site stylesheet. Honors
+reduced-motion preferences and keeps system CJK fonts for Chinese text.
+
 ### Mui WoW
 
 The public-facing brand name of the organisation behind the Events

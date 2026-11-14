@@ -22,7 +22,7 @@
   <button class="btn btn-gold cart-checkout" data-cart-checkout>Checkout</button>
   <p class="cart-note-after" data-checkout-note hidden></p>
 </aside>
-<button class="cart-fab" aria-label="Cart" data-cart-open>🧺 <span data-cart-badge></span></button>
+🧺 <span data-cart-badge></span></button>
 
 <script>
   (function () {
@@ -99,7 +99,6 @@
         items.textContent = '';
         const keys = Object.keys(cart);
         drawer.querySelector('.cart-empty').hidden = keys.length > 0;
-        fab.hidden = false;
         const count = Object.values(cart).reduce((a, b) => a + b.qty, 0);
         badge.textContent = count || '';
         let total = 0;

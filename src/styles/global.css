@@ -136,6 +136,7 @@ img { max-width: 100%; display: block; }
   display: inline-block;
   transform: perspective(180px) rotate(-10deg) rotateY(-10deg);
 }
+.site-header .row-2,
 .site-header nav {
   margin-left: auto;
   display: flex;
@@ -865,4 +866,31 @@ body[data-cart-step='4'] .funnel-cart-btn {
   border: 1px solid rgba(240, 165, 0, 0.5);
   border-radius: 999px;
   padding: 5px 14px;
+}
+
+/* Header cart button, right of the language select */
+.header-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: rgba(26, 17, 48, 0.7);
+  color: var(--sand);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+.header-cart:hover { border-color: var(--gold); }
+.header-cart-badge {
+  font-weight: 900;
+  color: var(--gold-bright);
+  font-size: 0.9rem;
+}
+.header-cart-badge:empty { display: none; }
+.header-cart-badge:not(:empty) {
+  background: var(--gold);
+  color: var(--wood-dark);
+  border-radius: 999px;
+  padding: 1px 7px;
 }

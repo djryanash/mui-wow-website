@@ -41,22 +41,43 @@
       const chainRef = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() ?? '').toUpperCase();
       const isChain = /^\/addons\//i.test(location.pathname) && /^[A-Z0-9]{6,16}$/.test(chainRef);
 
+      LOG('storage probe…');
       const memStore = {};
-      const store = (() => {
-        try {
-          localStorage.setItem('__muiwow_test__', '1');
-          localStorage.removeItem('__muiwow_test__');
-          console.log('[Mui WoW cart] storage: localStorage OK');
-          return localStorage;
-        } catch (e) {
-          console.warn('[Mui WoW cart] storage: localStorage BLOCKED (' + e.message + ') — using in-memory fallback (cart is lost on reload)');
-          return {
-            getItem: (k) => (k in memStore ? memStore[k] : null),
-            setItem: (k, v) => { memStore[k] = String(v); },
-            removeItem: (k) => { delete memStore[k]; },
-          };
-        }
-      })();
+      const memLayer = {
+        getItem: (k) => (k in memStore ? memStore[k] : null),
+        setItem: (k, v) => { memStore[k] = String(v); },
+        removeItem: (k) => { delete memStore[k]; },
+      };
+      const layer = (name, test) => { try { return test(); } catch (e) { LOG('store layer rejected:', name, e.message); return null; } };
+
+      // localStorage: WRITTEN VALUES MUST ACTUALLY PERSIST (Safari silently
+      // discards writes when cookies/site-data are blocked)
+      const lsLayer = layer('localStorage', () => {
+        localStorage.setItem('__muiwow_t', 'persist-check');
+        const persisted = localStorage.getItem('__muiwow_t') === 'persist-check';
+        localStorage.removeItem('__muiwow_t');
+        if (!persisted) throw new Error('writes are silently discarded');
+        return localStorage;
+      });
+
+      // cookie layer for browsers that block localStorage but allow cookies
+      const cookieLayer = layer('cookie', () => {
+        document.cookie = '__muiwow_t=persist-check; path=/; SameSite=Lax';
+        const persisted = document.cookie.indexOf('__muiwow_t=persist-check') !== -1;
+        document.cookie = '__muiwow_t=; path=/; max-age=0; SameSite=Lax';
+        if (!persisted) throw new Error('cookie writes are discarded');
+        return {
+          getItem: (k) => { const m = document.cookie.match(new RegExp('(?:^|; )' + k + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : null; },
+          setItem: (k, v) => { document.cookie = k + '=' + encodeURIComponent(String(v)) + '; path=/; max-age=1209600; SameSite=Lax'; },
+          removeItem: (k) => { document.cookie = k + '=; path=/; max-age=0; SameSite=Lax'; },
+        };
+      });
+
+      let store; let storeName;
+      if (lsLayer) { store = lsLayer; storeName = 'localStorage'; }
+      else if (cookieLayer) { store = cookieLayer; storeName = 'cookie (localStorage blocked by your browser)'; }
+      else { store = memLayer; storeName = 'memory (all storage blocked — the cart is lost on page navigation)'; }
+      LOG('storage layer:', storeName);
       const KEY = 'muiwow-cart';
       const read = () => { try { return JSON.parse(store.getItem(KEY)) ?? {}; } catch { return {}; } };
       const write = (c) => {

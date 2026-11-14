@@ -3,6 +3,7 @@
 // The visitor enters an address; confirming creates the booking, emails the
 // QR, and moves on to the thank-you page.
 import Layout from '../../components/Layout.astro';
+import CartDrawer from '../../components/CartDrawer.astro';
 import { chrome } from '../data/chrome.mjs';
 
 const locale = Astro.props.locale ?? 'en';
@@ -32,6 +33,7 @@ const copy = {
       </div>
     </div>
   </section>
+<CartDrawer />
 </Layout>
 
 <script>

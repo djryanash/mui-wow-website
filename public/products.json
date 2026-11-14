@@ -1,11 +1,12 @@
 {
-  "generatedAt": "2026-11-13T06:35:30.575Z",
+  "generatedAt": "2026-11-14T01:14:30.335Z",
   "products": [
     {
       "slug": "support-0",
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": false,
       "name": {
         "en": "Support Mui WoW",
@@ -32,6 +33,7 @@
       "kind": "ticket",
       "isAddon": false,
       "isTicket": true,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Tiki Sessions — Free Entry",
@@ -59,6 +61,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -85,6 +88,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -111,6 +115,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -137,6 +142,7 @@
       "kind": "consumable",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Picnic Mat"
@@ -160,6 +166,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -186,6 +193,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Wine, Black Elephant, Red Blend (250ml can, 13% alc.)"
@@ -203,7 +211,7 @@
         "stock": 10
       },
       "images": [
-        "/images/products/wine-black-elephant-red-blend/cover.jpeg"
+        "/images/products/wine-black-elephant-red-blend/cover.jpg"
       ]
     },
     {
@@ -211,6 +219,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Wine, Black Elephant, Sauvignon Blanc (250ml can, 13% alc.)"
@@ -228,7 +237,7 @@
         "stock": 10
       },
       "images": [
-        "/images/products/wine-black-elephant-sauv-blanc/cover.jpeg"
+        "/images/products/wine-black-elephant-sauv-blanc/cover.jpg"
       ]
     },
     {
@@ -236,6 +245,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Wine, Vinette, Rose (250ml can, 13% alc.)"
@@ -253,7 +263,7 @@
         "stock": 10
       },
       "images": [
-        "/images/products/wine-vinette-rose/cover.jpeg"
+        "/images/products/wine-vinette-rose/cover.jpg"
       ]
     },
     {
@@ -261,6 +271,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Wine, Vinette, Sweet Sparkle (250ml can, 13% alc.)"
@@ -278,7 +289,7 @@
         "stock": 10
       },
       "images": [
-        "/images/products/wine-vinette-sweet-sparkle/cover.jpeg"
+        "/images/products/wine-vinette-sweet-sparkle/cover.jpg"
       ]
     },
     {
@@ -286,6 +297,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Absolut Vodka Miniature (50ml)"
@@ -311,6 +323,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Bacardi White Rum Miniature (50ml)"
@@ -336,6 +349,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Ballantine's Finest Scotch Whisky Miniature (50ml)"
@@ -361,6 +375,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Bombay Sapphire Gin Miniature (50ml)"
@@ -386,6 +401,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Cointreau Miniature (50ml)"
@@ -411,6 +427,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Jack Daniels Miniature (50ml)"
@@ -436,6 +453,7 @@
       "kind": "consumable",
       "isAddon": true,
       "isTicket": false,
+      "specialDeal": true,
       "orderable": true,
       "name": {
         "en": "Chura Citrus Cooler (6% alc.)"
@@ -461,6 +479,7 @@
       "kind": "consumable",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Beach Chair"
@@ -484,6 +503,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -510,6 +530,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",
@@ -536,6 +557,7 @@
       "kind": "consumable",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Picnic Tent"
@@ -559,6 +581,7 @@
       "kind": "consumable",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "VIP Sofa"
@@ -584,6 +607,7 @@
       "kind": "donation",
       "isAddon": false,
       "isTicket": false,
+      "specialDeal": false,
       "orderable": true,
       "name": {
         "en": "Support Mui WoW",

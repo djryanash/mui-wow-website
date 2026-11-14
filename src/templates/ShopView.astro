@@ -18,7 +18,6 @@ const products = loadProducts().filter((p) => p.kind !== 'donation' && !p.isAddo
   <FunnelBar step={1} locale={locale} />
   <section class="section">
     <div class="container">
-      <p class="kicker">Mui WoW</p>
       <h1>{T(chrome.shopTitle)}</h1>
 
       {products.length === 0 ? (

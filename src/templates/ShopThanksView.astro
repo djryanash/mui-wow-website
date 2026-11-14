@@ -35,24 +35,6 @@ const copy = {
         </div>
         <p id="email-note" class="flash-error" hidden></p>
       </div>
-      <div class="info-block" style="margin-top:34px; text-align:left">
-        <h2>{T(chrome.addonsTitle)}</h2>
-        <p class="cart-note">{T(chrome.addonsHint)}</p>
-        <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
-          {loadProducts().filter((p) => p.isAddon && p.orderable).map((p) => (
-            <div class="product-card">
-              <div class="body">
-                <h3>{T(p.name)}</h3>
-                <div class="price-row">
-                  <span class="price">{p.displayPrice.formatted}</span>
-                  <button class="btn btn-gold" data-quick-order={p.slug} data-price={p.displayPrice.formatted}>{T(chrome.quickOrder)} <span class="arrow" aria-hidden="true">→</span></button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <p id="thanks-note" class="flash-error" hidden></p>
       <p style="margin-top:26px"><a href="/rentals">{T(copy.back)}</a></p>
     </div>
   </section>
@@ -62,72 +44,65 @@ const copy = {
   (function () {
     let bookingRef = '';
     const lang = document.documentElement.getAttribute('lang');
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest?.('[data-quick-order]');
-      if (!btn) return;
-      btn.disabled = true;
-      const note = document.getElementById('thanks-note');
-      fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: [{ slug: btn.dataset.quickOrder, qty: 1 }] }),
-      })
-        .then((r) => r.json())
-        .then((d) => { if (d.url) location.href = d.url; else throw new Error(d.error ?? 'failed'); })
-        .catch((err) => {
-          btn.disabled = false;
-          note.hidden = false;
-          note.textContent = (lang === 'es' ? 'Todavía no: ' : lang === 'zh-hk' ? '暫時未能：' : 'Not ready yet: ') + (err.message ?? '');
-        });
-    });
-  // The booking comes back by checkout session id (paid) or by ref (free lane).
-  const ref = new URLSearchParams(location.search).get('ref');
-  const sid = new URLSearchParams(location.search).get('session_id');
-  const fetchUrl = ref
-    ? `/api/booking?ref=${encodeURIComponent(ref)}`
-    : sid
-      ? `/api/booking?session_id=${encodeURIComponent(sid)}`
-      : null;
-  if (fetchUrl) {
-    fetch(fetchUrl)
-      .then((r) => r.json())
-      .then((b) => {
+    const ref = new URLSearchParams(location.search).get('ref');
+    const sid = new URLSearchParams(location.search).get('session_id');
+    const fetchUrl = ref
+      ? '/api/booking?ref=' + encodeURIComponent(ref)
+      : sid
+        ? '/api/booking?session_id=' + encodeURIComponent(sid)
+        : null;
+    // Stripe's webhook lands a second or two after the redirect: retry.
+    async function loadBooking() {
+      if (!fetchUrl) return;
+      for (let i = 0; i < 8; i++) {
+        const b = await fetch(fetchUrl).then((r) => r.json());
+        if (b.error === 'unknown session' || b.error === 'unknown booking') {
+          await new Promise((res) => setTimeout(res, 2500));
+          continue;
+        }
         if (b.error) return;
         bookingRef = b.ref ?? '';
         const el = document.getElementById('thanks-qr');
         el.style.display = 'block';
         try {
-          if (window.QRCode) QRCode.toCanvas(el, bookingRef ? location.origin + '/booking/' + bookingRef : el, { width: 216 });
-        } catch {
-          // QR render is decorative; the email carries a baked-in code.
-        }
+          if (window.QRCode) QRCode.toCanvas(el, location.origin + '/booking/' + bookingRef, { width: 216 });
+        } catch {}
         document.getElementById('thanks-ref').textContent = bookingRef;
         const hint = document.getElementById('thanks-qr-hint');
         hint.textContent = (lang === 'es' ? 'Muéstrale este código a nuestro equipo en la playa — lo escanean y se confirma la entrega.' : lang === 'zh-hk' ? '喺沙灘俾員工掃描呢個碼確認交收。' : 'Show this code to our team at the beach — they scan it and the hand-over is confirmed.');
-        // free-lane bookings have no address yet: capture it now
-        const needsEmail = b.email === '' || b.email == null;
-        const wrap = document.getElementById('email-capture');
-        if (needsEmail && !b.error) wrap.hidden = false;
-      });
-  }
-  document.addEventListener('click', (e) => {
-    const send = e.target.closest?.('[data-send-qr]');
-    if (!send) return;
-    const input = document.getElementById('thanks-email');
-    const email = (input?.value ?? '').trim();
-    const note = document.getElementById('email-note');
-    const res = fetch('/api/booking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref: bookingRef, email }),
-    }).then((r) => r.json());
-    res.then((d) => {
-      if (d.error) { note.hidden = false; note.textContent = d.error; return; }
-      wrap.hidden = true;
-      note.hidden = false;
-      note.style.color = 'var(--turquoise)';
-      note.textContent = (lang === 'es' ? '¡Enviado! Revisa tu correo por el código QR.' : lang === 'zh-hk' ? '已發送！QR 二維碼已寄到你的郵箱。' : 'Sent! Check your inbox for the QR code.');
+        // only free-lane bookings (no email collected) need the capture field
+        if (b.hasEmail === false) {
+          const wrap = document.getElementById('email-capture');
+          if (wrap) wrap.hidden = false;
+        }
+        // purchase done: the cart empties
+        try { localStorage.removeItem('muiwow-cart'); } catch {}
+        document.dispatchEvent(new CustomEvent('muiwow-cart-updated'));
+        return;
+      }
+    }
+    // email capture (free lane only — the field appears when there's no address)
+    document.addEventListener('click', (e) => {
+      const send = e.target.closest?.('[data-send-qr]');
+      if (!send) return;
+      const input = document.getElementById('thanks-email');
+      const email = (input?.value ?? '').trim();
+      const note = document.getElementById('email-note');
+      fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: bookingRef, email }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.error) { note.hidden = false; note.style.color = 'var(--pink)'; note.textContent = d.error; return; }
+          const wrap = document.getElementById('email-capture');
+          if (wrap) wrap.hidden = true;
+          note.hidden = false;
+          note.style.color = 'var(--turquoise)';
+          note.textContent = (lang === 'es' ? '¡Enviado! Revisa tu correo por el código QR.' : lang === 'zh-hk' ? '已發送！QR 二維碼已寄到你的郵箱。' : 'Sent! Check your inbox for the QR code.');
+        });
     });
-  });
+    loadBooking();
   })();
 </script>

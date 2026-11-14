@@ -215,6 +215,8 @@ export const productSchema = z
     orderable: z.boolean().default(false),
     // Tickets ride the I'M GOING button, never the shop grid or add-on menu.
     isTicket: z.boolean().default(false),
+    // Special Deal: pinned to the top of the add-on menu with a ribbon.
+    specialDeal: z.boolean().default(false),
 
     name: languageObject,
     subtitle: languageObject.optional(),

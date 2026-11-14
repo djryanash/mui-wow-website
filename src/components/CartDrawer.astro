@@ -122,8 +122,7 @@
           cents: Number(add.dataset.cents),
           qty: Math.min((c[slug]?.qty ?? 0) + 1, 20),
         };
-        write(c);
-        openCart();
+        render(); // badge updates; the drawer stays closed for item adds
         return;
       }
       const go = e.target.closest?.('[data-cart-checkout]');

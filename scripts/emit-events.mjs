@@ -24,6 +24,7 @@ const products = loadProducts().map((p) => ({
   kind: p.kind,
   isAddon: p.isAddon,
   isTicket: p.isTicket,
+  specialDeal: p.specialDeal,
   orderable: p.orderable || !!p.stripePriceId,
   name: p.name,
   subtitle: p.subtitle ?? null,

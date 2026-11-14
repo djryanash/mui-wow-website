@@ -19,10 +19,10 @@ const pathFor = (l) => (l === 'en' ? raw : `/${l}${raw}`);
 
 <header class="site-header">
   <div class="container">
-    <a href={locale === 'en' ? '/' : `/${locale}/`} aria-label={site.name}>
+    <a class="brand-link" href={locale === 'en' ? '/' : `/${locale}/`} aria-label={site.name}>
       <img class="logo" src="/images/brand/mui-wow-logo.png" alt={site.name} />
+      <span class="brand-name">{site.name}</span>
     </a>
-    <span class="brand-name">{site.name}</span>
     <nav>
       {site.nav.map((item) => (
         <a href={item.href}>{t(item.label, locale)}</a>

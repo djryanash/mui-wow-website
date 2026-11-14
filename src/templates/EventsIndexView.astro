@@ -16,7 +16,6 @@ const past = events.filter((e) => e.published && !e.unlisted && isPast(e));
 <Layout locale={locale} title={T(chrome.eventsPageTitle)} description={T(chrome.eventsPageTitle)}>
   <section class="section">
     <div class="container">
-      <p class="kicker">Mui WoW</p>
       <h1>{T(chrome.eventsPageTitle)}</h1>
       {upcoming.length > 0 && (
         <div class="cards" style="margin-top:26px">

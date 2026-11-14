@@ -93,5 +93,6 @@ export default async function handler(req, res) {
     createdAt: booking.createdAt,
     qr: qrDataUrl,
     staff: hasStaffCookie(req), // customers get read-only facts, staff get actions
+    hasEmail: !!booking.email, // drives the email-capture field on free lane only
   });
 }

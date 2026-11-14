@@ -25,7 +25,7 @@ const copy = {
       <h1>{L(copy.title)}</h1>
       <p class="cart-note">{L(copy.hint)}</p>
       <div style="display:grid; gap:12px">
-        <input id="capture-email" type="email" autocomplete="email" placeholder="you@..."
+        <input id="capture-email" type="email" autocomplete="email" placeholder="your-name@example.com"
           style="padding:12px 16px; border-radius:10px; border:1px solid rgba(56,163,165,.5); background:#1d2d44; color:#f5f2ea" />
         <button class="btn btn-gold" id="capture-send" type="button">{L(copy.send)} →</button>
         <p id="capture-note" class="flash-error" hidden></p>
@@ -43,6 +43,11 @@ const copy = {
 
     send.addEventListener('click', async () => {
       const email = document.getElementById('capture-email').value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) {
+        note.hidden = false;
+        note.textContent = (lang === 'es' ? 'Ese correo no parece válido.' : lang === 'zh-hk' ? '呢個電郵好似唔正確。' : 'That email address does not look right — please check it.');
+        return;
+      }
       send.disabled = true;
       send.textContent = (lang === 'es' ? 'Enviando…' : lang === 'zh-hk' ? '發送中…' : 'Sending…');
       note.hidden = true;

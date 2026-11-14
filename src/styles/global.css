@@ -303,9 +303,9 @@ img { max-width: 100%; display: block; }
    vector lights/screen contents; plain jpgs keep the css background. */
 .hero-photo > img.photo {
   position: absolute;
-  left: 50%;
+  left: 0;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   min-width: 100%;
   min-height: 100%;
   width: auto;
@@ -328,7 +328,7 @@ img { max-width: 100%; display: block; }
   inset: 0;
   z-index: -2;
   background-size: cover;
-  background-position: center;
+  background-position: left center;
 }
 .hero-scrim {
   position: absolute;
@@ -838,3 +838,12 @@ body[data-cart-step='4'] .funnel-bar li[data-fstep='3'] {
 .product-card.special-card { grid-column: span 2; }
 .product-card.special-card .thumb { aspect-ratio: 8 / 3; }
 .donation-row { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); max-width: 1080px; }
+
+.funnel-bar li a.current, .funnel-bar li a[aria-current='true'] {
+  color: var(--gold-bright);
+  border-color: rgba(240, 165, 0, 0.5);
+  background: rgba(240, 165, 0, 0.12);
+  padding: 5px 14px;
+  border-radius: 999px;
+  display: inline-block;
+}

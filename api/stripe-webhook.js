@@ -152,7 +152,7 @@ async function sessionItems(sessionId) {
     byPriceId[li.price.id] = {
       slug,
       kind: p?.kind ?? 'consumable',
-      name: li.description ?? li.price.nickname ?? 'item',
+      name: (li.description ?? li.price.nickname ?? 'item').replace(/\s*—\s*Mui WoW\s*$/, ''),
       qty: li.quantity,
       subtotal: li.amount_total,
       priceId: li.price.id,

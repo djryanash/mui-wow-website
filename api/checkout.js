@@ -111,7 +111,7 @@ export default async function handler(req, res) {
       const booked = [];
       for (const { slug, qty } of items) {
         const p = (catalog.products ?? []).find((c) => c.slug === slug);
-        booked.push({ slug, kind: p?.kind ?? 'ticket', name: p?.name?.en ?? slug, qty, subtotal: 0, priceId: p?.stripePriceId ?? null });
+        booked.push({ slug, kind: p?.kind ?? 'ticket', name: (p?.name?.en ?? slug).replace(/\s*—\s*Mui WoW\s*$/, ''), qty, subtotal: 0, priceId: p?.stripePriceId ?? null });
       }
       const kvRes = await fetch(`${kvBase}/set/${encodeURIComponent(`capture:${token}`)}/${encodeURIComponent(JSON.stringify({ items: booked, amount: 0, createdAt: new Date().toISOString() }))}/EX/1800`, {
         method: 'POST',

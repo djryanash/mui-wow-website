@@ -111,7 +111,13 @@
           const btn = document.createElement('button');
           btn.className = 'cart-remove';
           btn.textContent = drawer.dataset.removeLabel ?? 'Remove';
-          btn.onclick = () => { const c = read(); delete c[slug]; write(c); };
+          btn.onclick = (ev) => {
+            ev.stopPropagation(); // removal never dismisses the open drawer
+            const c = read();
+            delete c[slug];
+            write(c);
+            drawer.classList.add('open');
+          };
           row.appendChild(btn);
           items.appendChild(row);
         }

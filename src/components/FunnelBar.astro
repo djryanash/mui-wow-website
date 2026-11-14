@@ -8,7 +8,7 @@ const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : loc
 const steps = [
   { n: 1, label: { en: 'Rentals', es: 'Alquileres', zh: '租賃' }, href: '/rentals' },
   { n: 2, label: { en: 'Drinks & snacks', es: 'Bebidas y snacks', zh: '飲品小食' }, href: '/addons' },
-  { n: 3, label: { en: 'Support', es: 'Apoyo', zh: '支持' }, href: '/donations' },
+  { n: 3, label: { en: 'Donation', es: 'Donación', zh: '捐贈' }, href: '/donations' },
   { n: 4, label: { en: 'Your cart', es: 'Tu carrito', zh: '購物車' }, href: '' },
 ];
 const prefix = locale === 'en' ? '' : `/${locale}`;
@@ -19,11 +19,7 @@ const prefix = locale === 'en' ? '' : `/${locale}`;
   <ol>
     {steps.map((s) => (
       <li data-fstep={s.n} class={s.n === step ? 'active' : ''}>
-        {s.n < step ? (
-          <a href={`${prefix}${s.href}`}>{T(s.label)}</a>
-        ) : (
-          <span>{T(s.label)}</span>
-        )}
+        <a href={`${prefix}${s.href}`} class:list={[s.n === step && 'current']}>{T(s.label)}</a>
       </li>
     ))}
   </ol>

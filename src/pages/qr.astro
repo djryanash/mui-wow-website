@@ -1,0 +1,34 @@
+---
+// /qr: a big, printable QR that points scanners at the website root.
+// Pure client render (the same qrcode.min.js the booking page uses), so
+// the route is static and works offline once loaded.
+import Layout from '../components/Layout.astro';
+
+const locale = Astro.props.locale ?? 'en';
+const T = (v) => (v && typeof v === 'object' ? v[locale === 'zh-hk' ? 'zh' : locale] ?? v.en : v);
+const copy = {
+  title: { en: 'Scan me — Mui WoW', es: 'Escanea — Mui WoW', zh: '掃我 — Mui WoW' },
+  hint: { en: 'Point your camera here to visit muiwow.com', es: 'Apunta la cámara para visitar muiwow.com', zh: '用手機鏡頭嚟到 muiwow.com' },
+};
+---
+
+<script src="/js/qrcode.min.js" is:inline></script>
+<Layout locale={locale} title={T(copy.title)} description={T(copy.hint)}>
+  <section class="section qr-page">
+    <div class="container" style="max-width:520px; text-align:center">
+      <img class="logo" src="/images/brand/mui-wow-logo.png" alt="Mui WoW" style="height:72px; margin:0 auto 18px" />
+      <canvas id="site-qr" class="qr-frame" width="380" height="380" style="background:#fff; border-radius:16px"></canvas>
+      <p style="margin-top:18px; font-weight:800; color:var(--gold-bright); font-size:1.2rem">www.muiwow.com</p>
+      <p class="cart-line">{T(copy.hint)}</p>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  window.addEventListener('load', () => {
+    const el = document.getElementById('site-qr');
+    if (el && window.QRCode) {
+      window.QRCode.toCanvas(el, 'https://www.muiwow.com', { width: 380, margin: 2, color: { dark: '#0b132b', light: '#ffffff' } });
+    }
+  });
+</script>

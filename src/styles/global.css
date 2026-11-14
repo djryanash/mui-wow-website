@@ -773,6 +773,9 @@ img { max-width: 100%; display: block; }
 .qty-num { min-width: 20px; text-align: center; font-weight: 900; color: var(--sand); }
 body { overflow-x: clip; min-width: 320px; }
 
+/* QR display (booking page and /qr) */
+.qr-frame { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
+
 /* Staff dashboard: filter tabs, expandable detail panel */
 .staff-tabs { display: flex; gap: 8px; margin: 0 0 18px; flex-wrap: wrap; }
 .staff-tab {

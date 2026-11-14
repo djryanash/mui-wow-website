@@ -233,12 +233,12 @@ img { max-width: 100%; display: block; }
 }
 .lang-select option { color: var(--navy-900); background: #fff; }
 
-/* Header hamburger: hidden on desktop; carries the nav below 480px while
+/* Header hamburger: hidden on desktop; carries the nav below 620px while
    the cart button always stays in the bar itself. */
 .header-burger {
   display: none;
 }
-@media (max-width: 480px) {
+@media (max-width: 620px) {
   .header-burger {
     display: inline-flex;
     align-items: center;

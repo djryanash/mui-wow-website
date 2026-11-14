@@ -2,19 +2,34 @@
    Dark tropical: deep navy grounds, gold/teal/pink accents. */
 
 :root {
-  --navy-900: #0b132b;
-  --navy-800: #1d2d44;
-  --gold: #d4af37;
-  --gold-bright: #f0a500;
-  --teal: #00a896;
-  --teal-deep: #028090;
-  --turquoise: #38a3a5;
-  --pink: #ec4b8f;
+  /* Tiki design guide (site-wide identity): twilight → sunset, wood, neon */
+  --violet-deep: #1a1130;
+  --sunset-violet: #2c1b4d;
+  --sunset-orange: #ff5e36;
+  --bg-gradient: linear-gradient(160deg, #1a1130 0%, #2c1b4d 52%, #ff5e36 135%);
+  --neon-pink: #ff2a8d;
+  --neon-pink-soft: rgba(255, 42, 141, 0.45);
+  --gold: #ffb300;
+  --gold-bright: #ffc233;
+  --wood-dark: #3e1f0f;
+  --wood-mid: #5d3a1a;
+  --wood-light: #8b5a2b;
+  --wood-edge: #2b1706;
+  --hibiscus: #ff3366;
+  --tropical-green: #2e5a36;
   --sand: #f5e9d7;
-  --ink: #f5f2ea;
-
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(11, 19, 43, 0.45);
+  --ink: #fffaf0;
+  /* legacy token names re-pointed so every existing rule re-skins at once */
+  --navy-900: #1a1130;
+  --navy-800: #3e2412;
+  --gold: #ffb300;
+  --gold-bright: #ffc233;
+  --teal: #ffb300;
+  --teal-deep: #d98e00;
+  --turquoise: #ffc233;
+  --pink: #ff2a8d;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(26, 17, 48, 0.55);
 }
 
 * { box-sizing: border-box; }
@@ -24,21 +39,23 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--navy-900);
-  color: var(--ink);
-  font-family: 'Nunito Sans', 'Helvetica Neue', Arial, 'PingFang HK', 'Microsoft JhengHei', sans-serif;
+  background: var(--bg-gradient) fixed;
+  color: var(--sand);
+  font-family: 'Montserrat', 'Helvetica Neue', Arial, 'PingFang HK', 'Microsoft JhengHei', sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3 {
-  font-family: 'Fraunces', Georgia, 'Songti HK', serif;
+  font-family: 'Shrikhand', 'Oswald', Georgia, 'Songti HK', serif;
   line-height: 1.15;
   margin: 0 0 0.5em;
   color: var(--sand);
 }
+h1 { font-family: 'Shrikhand', Georgia, serif; letter-spacing: 0.01em; }
+h2, h3 { font-family: 'Oswald', 'Nunito Sans', sans-serif; font-weight: 600; letter-spacing: 0.02em; }
 
-a { color: var(--gold-bright); text-decoration: none; }
+a { color: var(--neon-pink); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 img { max-width: 100%; display: block; }
@@ -50,12 +67,30 @@ img { max-width: 100%; display: block; }
 .btn {
   display: inline-block;
   padding: 0.7em 1.6em;
-  border-radius: 999px;
-  font-weight: 800;
-  letter-spacing: 0.015em;
+  border-radius: 12px;
+  font-family: 'Oswald', 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
   border: 2px solid transparent;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-2px) scale(1.01); text-decoration: none; }
+.btn-gold {
+  background: linear-gradient(120deg, var(--gold-bright), var(--gold));
+  color: var(--wood-dark);
+  box-shadow: 0 6px 20px rgba(255, 178, 0, 0.35);
+}
+.btn-teal {
+  background: linear-gradient(120deg, var(--neon-pink), #d81b7a);
+  color: #fff;
+  box-shadow: 0 6px 20px var(--neon-pink-soft);
+}
+.btn-ghost {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
 }
 .btn:hover { transform: translateY(-2px); text-decoration: none; }
 .btn-gold {

@@ -203,8 +203,21 @@
       });
 
       // pages that write the cart directly (donation selection) trigger these
+      // donation selection: the donations page announces the chosen tier,
+      // and THIS script (the single owner of the store) performs the write.
+      const DONATION_SLUGS = ["support-0", "support-5", "support-10", "support-20", "support-50", "support-100", "support-200", "support-500"];
+      document.addEventListener('muiwow-donation-select', (e) => {
+        const slug = e.detail?.slug;
+        if (!slug || !DONATION_SLUGS.includes(slug)) return;
+        const c = read();
+        for (const s of Object.keys(c)) if (DONATION_SLUGS.includes(s) && s !== slug) delete c[s];
+        if (slug !== 'support-0') {
+          c[slug] = { name: e.detail.name, price: e.detail.price, cents: Number(e.detail.cents), qty: 1 };
+        }
+        openCart();
+      });
+      // other pages that re-render the cart (they read, this writes):
       document.addEventListener('muiwow-cart-updated', render);
-      document.addEventListener('muiwow-cart-open', openCart);
 
       render();
 

@@ -50,20 +50,30 @@ const eventHref = event ? `/event/${event.slug}` : null;
         document.addEventListener('click', (e) => {
           const going = e.target.closest?.('#hero-cta');
           if (!going || !going.dataset.ticketSlug) return;
-          const store = (() => {
+          const layer = (name, test) => { try { return test(); } catch (e) { return null; } };
+          let store;
+          try {
+            localStorage.setItem('__muiwow_t', 'p');
+            store = localStorage.getItem('__muiwow_t') === 'p' ? localStorage : null;
+            localStorage.removeItem('__muiwow_t');
+          } catch { store = null; }
+          if (!store) {
             try {
-              localStorage.setItem('__muiwow_test__', '1');
-              localStorage.removeItem('__muiwow_test__');
-              return localStorage;
-            } catch {
-              const mem = {};
-              return {
-                getItem: (k) => (k in mem ? mem[k] : null),
-                setItem: (k, v) => { mem[k] = String(v); },
-                removeItem: (k) => { delete mem[k]; },
-              };
-            }
-          })();
+              document.cookie = '__muiwow_t=p; path=/; SameSite=Lax';
+              if (document.cookie.indexOf('__muiwow_t=p') !== -1) {
+                document.cookie = '__muiwow_t=; path=/; max-age=0; SameSite=Lax';
+                store = {
+                  getItem: (k) => { const m = document.cookie.match(new RegExp('(?:^|; )' + k + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : null; },
+                  setItem: (k, v) => { document.cookie = k + '=' + encodeURIComponent(String(v)) + '; path=/; max-age=1209600; SameSite=Lax'; },
+                  removeItem: (k) => { document.cookie = k + '=; path=/; max-age=0; SameSite=Lax'; },
+                };
+              }
+            } catch { store = null; }
+          }
+          if (!store) {
+            const mem = {};
+            store = { getItem: (k) => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = String(v); }, removeItem: (k) => { delete mem[k]; } };
+          };
           const cart = JSON.parse(store.getItem('muiwow-cart') ?? '{}');
           const slug = going.dataset.ticketSlug;
           if (!cart[slug]) {

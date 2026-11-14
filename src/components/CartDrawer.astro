@@ -22,7 +22,6 @@
   <button class="btn btn-gold cart-checkout" data-cart-checkout>Checkout</button>
   <p class="cart-note-after" data-checkout-note hidden></p>
 </aside>
-🧺 <span data-cart-badge></span></button>
 
 <script>
   (function () {
@@ -131,13 +130,17 @@
 
       document.addEventListener('click', (e) => {
         LOG('click', { tag: e.target.tagName, cls: String(e.target.className ?? '').slice(0, 50) });
-        // click outside an OPEN drawer dismisses it
-        if (drawer.classList.contains('open') && !e.target.closest?.('#cart-drawer') && !e.target.closest?.('[data-cart-open]')) {
-          drawer.classList.remove('open');
+        // cart button toggles the drawer: first tap opens, second tap closes
+        if (e.target.closest?.('[data-cart-open]')) {
+          if (drawer.classList.contains('open')) drawer.classList.remove('open');
+          else openCart();
           return;
         }
-        if (e.target.closest?.('[data-cart-open]')) { openCart(); return; }
         if (e.target.closest?.('.cart-close')) { drawer.classList.remove('open'); return; }
+        // product and donation clicks write the cart and keep or open the
+        // drawer. They must run BEFORE the outside-click dismiss at the
+        // bottom, or a tap on the already-open page would dismiss instead
+        // of updating the cart.
         const quick = e.target.closest?.('[data-quick-order]');
         if (quick) {
           // Quick-order only exists on a booking chain (the staff-shown menu).
@@ -213,6 +216,11 @@
               note.hidden = false;
               go.disabled = false;
             });
+          return;
+        }
+        // everything else: tapping outside an OPEN drawer dismisses it
+        if (drawer.classList.contains('open') && !e.target.closest?.('#cart-drawer')) {
+          drawer.classList.remove('open');
         }
       });
 
